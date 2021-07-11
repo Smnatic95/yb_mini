@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "全部评价",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "my-comment": "/subpkg/my-comment/my-comment"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "物流信息",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "common-logistics": "/subpkg/logistics-template/common-logistics"
+  }
+}

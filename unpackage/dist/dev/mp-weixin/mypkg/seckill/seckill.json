@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "秒杀",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "goods-item": "/components/goods-item/goods-item"
+  }
+}

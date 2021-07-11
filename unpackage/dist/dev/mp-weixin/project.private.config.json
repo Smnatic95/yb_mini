@@ -1,0 +1,108 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/cart/cart",
+          "pathName": "pages/cart/cart",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "subpkg/goods_detail/goods_detail",
+          "pathName": "subpkg/goods_detail/goods_detail",
+          "query": "id=%5Bobject%20Object%5D",
+          "scene": null
+        },
+        {
+          "name": "pages/cate/cate",
+          "pathName": "pages/cate/cate",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "mypkg/public-welfare/public-welfare",
+          "pathName": "mypkg/public-welfare/public-welfare",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/settle/settle",
+          "pathName": "pages/settle/settle",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "subpkg/home-more/home-more",
+          "pathName": "subpkg/home-more/home-more",
+          "query": "type=hot",
+          "scene": null
+        },
+        {
+          "name": "mypkg/seckill/seckill",
+          "pathName": "mypkg/seckill/seckill",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "subpkg/search/search",
+          "pathName": "subpkg/search/search",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/my/my",
+          "pathName": "pages/my/my",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "mypkg/card/card",
+          "pathName": "mypkg/card/card",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "mypkg/address/address",
+          "pathName": "mypkg/address/address",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "mypkg/address-edit/address-edit",
+          "pathName": "mypkg/address-edit/address-edit",
+          "query": "type=add",
+          "scene": null
+        },
+        {
+          "name": "pages/login/login",
+          "pathName": "pages/login/login",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "components/edit-user/edit-user",
+          "pathName": "components/edit-user/edit-user",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "subpkg/orders/orders",
+          "pathName": "subpkg/orders/orders",
+          "query": "index=2",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

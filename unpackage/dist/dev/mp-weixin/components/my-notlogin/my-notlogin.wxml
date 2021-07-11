@@ -1,0 +1,1 @@
+<view class="page"><button class="number-btn" plain="{{true}}" open-type="getPhoneNumber" data-event-opts="{{[['getphonenumber',[['getPhoneNumber',['$event']]]]]}}" bindgetphonenumber="__e"><my-logincontent vue-id="5d963f92-1" bind:__l="__l"></my-logincontent></button></view>

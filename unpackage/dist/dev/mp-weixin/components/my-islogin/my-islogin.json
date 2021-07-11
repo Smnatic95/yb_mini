@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "my-logincontent": "/components/my-logincontent/my-logincontent"
+  },
+  "component": true
+}

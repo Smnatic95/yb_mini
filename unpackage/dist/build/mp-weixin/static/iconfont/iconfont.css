@@ -1,0 +1,42 @@
+@font-face {
+  font-family: 'iconfont';  /* project id 2480269 */
+  src: url('https://at.alicdn.com/t/font_2480269_71es4e2wvhq.eot');
+  src: url('https://at.alicdn.com/t/font_2480269_71es4e2wvhq.eot?#iefix') format('embedded-opentype'),
+  url('https://at.alicdn.com/t/font_2480269_71es4e2wvhq.woff2') format('woff2'),
+  url('https://at.alicdn.com/t/font_2480269_71es4e2wvhq.woff') format('woff'),
+  url('https://at.alicdn.com/t/font_2480269_71es4e2wvhq.ttf') format('truetype'),
+  url('https://at.alicdn.com/t/font_2480269_71es4e2wvhq.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-50:before {
+  content: "\e632";
+}
+
+.icon-xinxi2:before {
+  content: "\e623";
+}
+
+.icon-qiapian:before {
+  content: "\e621";
+}
+
+.icon-che:before {
+  content: "\e61b";
+}
+
+.icon-right:before {
+  content: "\e603";
+}
+
+.icon-xiugai1:before {
+  content: "\e608";
+}
+

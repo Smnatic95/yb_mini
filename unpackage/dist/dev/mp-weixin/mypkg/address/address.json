@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "收货地址",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "uni-swipe-action": "/uni_modules/uni-swipe-action/components/uni-swipe-action/uni-swipe-action",
+    "uni-swipe-action-item": "/uni_modules/uni-swipe-action/components/uni-swipe-action-item/uni-swipe-action-item",
+    "address-item": "/components/address-item/address-item",
+    "uni-icons": "/uni_modules/uni-icons/components/uni-icons/uni-icons"
+  }
+}

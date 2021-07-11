@@ -1,0 +1,1 @@
+<block wx:if="{{!token}}"><my-notlogin vue-id="704e9d00-1" bind:__l="__l"></my-notlogin></block><block wx:else><my-islogin vue-id="704e9d00-2" bind:__l="__l"></my-islogin></block>

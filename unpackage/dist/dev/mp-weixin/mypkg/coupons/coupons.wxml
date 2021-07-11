@@ -1,0 +1,1 @@
+<view class="page"><block wx:for="{{userCouponsList}}" wx:for-item="item" wx:for-index="i" wx:key="i"><view class="scroll-item"><view class="left"><view>￥<text>{{item.price}}</text></view><view>{{"满"+item.min_price+"可用"}}</view></view><view class="right"><view>会员减10元优惠券</view><view>不限时</view></view></view></block></view>

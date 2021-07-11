@@ -1,0 +1,1 @@
+<view class="comment_detail-page"><view class="goods"><view class="pic"><image src="../../static/goods1.png" mode></image></view><view class="text"><text class="title">原本成年猫粮</text><text class="intro">天然五谷更健康</text></view></view><my-comment vue-id="52d96f2c-1" bind:__l="__l"></my-comment></view>
