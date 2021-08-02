@@ -2,6 +2,7 @@
   "navigationBarTitleText": "收货地址",
   "enablePullDownRefresh": false,
   "usingComponents": {
+    "uni-notice-bar": "/uni_modules/uni-notice-bar/components/uni-notice-bar/uni-notice-bar",
     "uni-swipe-action": "/uni_modules/uni-swipe-action/components/uni-swipe-action/uni-swipe-action",
     "uni-swipe-action-item": "/uni_modules/uni-swipe-action/components/uni-swipe-action-item/uni-swipe-action-item",
     "address-item": "/components/address-item/address-item",

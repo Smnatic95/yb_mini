@@ -14,7 +14,8 @@
       </uni-forms-item>
 
       <uni-forms-item label="性别" name="sex">
-        <picker @change="sexCange" v-model="userInfo.sex" :range="sexArr"
+        <open-data type="userGender"></open-data>
+       <picker @change="sexCange" v-model="userInfo.sex" :range="sexArr"
           :style="{color:userInfo.sex==3?'#C0C8D3':'#3c3c3c'}">
           <view class="uni-input">{{sexArr[userInfo.sex]}}</view>
         </picker>
@@ -24,12 +25,16 @@
         <uni-easyinput type="number" v-model="userInfo.mobile" placeholder="请输入手机号" placeholder-style="color:#C0C8D3" />
       </uni-forms-item>
 
+
       <!--  <uni-forms-item label="微信号" name="wx">
         <uni-easyinput type="text" v-model="userInfo.wx" placeholder="请输入微信号" placeholder-style="color:#C0C8D3" />
       </uni-forms-item> -->
 
 
       <button @click="editUser">修改</button>
+
+      <open-data type="userGender"></open-data>
+
     </uni-forms>
   </view>
 </template>

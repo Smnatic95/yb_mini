@@ -5,7 +5,7 @@
       <!-- 搜索框 -->
       <view class="search">
         <view class="logo">
-          <image src="/static/images/logo.png" mode="heightFix"></image>
+          <image src="https://7n.oripetlife.com/logo.png" mode="heightFix"></image>
         </view>
         <view class="search-box" @click="gotoSearch">
           <icon type="search" size="20" />
@@ -17,7 +17,7 @@
       <swiper :indicator-dots="true" autoplay circular class="banner-box">
         <swiper-item v-for="i in 4" :key='i' @click="showPopup">
           <view class="banner" style="background-color:skyblue;">
-            <image src="/static/pics/banner1.jpg" mode="widthFix"></image>
+            <image src="https://7n.oripetlife.com/banner1.jpg" mode="widthFix"></image>
           </view>
         </swiper-item>
       </swiper>
@@ -31,7 +31,7 @@
       </view>
       <swiper :autoplay="true" vertical autoplay circular :interval="3000" :duration="1000">
         <swiper-item @click="showPopup">
-          <view class="swiper-item">1111111</view>
+          <view class="swiper-item">{{parent_ids}}</view>
         </swiper-item>
         <swiper-item @click="showPopup">
           <view class="swiper-item">2222222</view>
@@ -48,7 +48,7 @@
         <uni-grid-item>
           <view class="container" @click="gotoSeckill">
             <view class="pic">
-              <image src="/static/avatar.png"></image>
+              <image src="/static/images/coupon.png"></image>
             </view>
             <view class="text">秒杀活动</view>
           </view>
@@ -56,15 +56,15 @@
         <uni-grid-item>
           <view class="container" @click="gotoPublic">
             <view class="pic">
-              <image src="/static/avatar.png"></image>
+              <image src="/static/images/coupon.png"></image>
             </view>
             <view class="text">公益勋章</view>
           </view>
         </uni-grid-item>
         <uni-grid-item>
-          <view class="container">
+          <view class="container" @click="gotoLottery">
             <view class="pic">
-              <image src="/static/avatar.png"></image>
+              <image src="/static/images/coupon.png"></image>
             </view>
             <view class="text">抽奖活动</view>
           </view>
@@ -72,9 +72,17 @@
         <uni-grid-item>
           <view class="container" @click="gotoCardActive">
             <view class="pic">
-              <image src="/static/avatar.png"></image>
+              <image src="/static/images/coupon.png"></image>
             </view>
             <view class="text">年卡活动</view>
+          </view>
+        </uni-grid-item>
+        <uni-grid-item>
+          <view class="container" @click="gotoCount">
+            <view class="pic">
+              <image src="/static/images/coupon.png"></image>
+            </view>
+            <view class="text">计算器</view>
           </view>
         </uni-grid-item>
       </uni-grid>
@@ -99,7 +107,7 @@
             <view class="item-name">{{item.name}}</view>
             <!-- <view class="item-name">titletitletitletitletitletitletitletitletitletitletitle</view> -->
             <view class="bottom">
-              <image src="../../static/huiyuanjia.png" mode=""></image>
+              <image src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
               <view class="item-price">￥{{item.market_price}}</view>
               <!-- <view class="item-sales">￥{{item.price}}</view> -->
             </view>
@@ -126,7 +134,7 @@
               <view class="left" @click="gotoGoodsDetail(item[0])">
                 <view class="name">{{item[0].name}}</view>
                 <view class="intro">简介简介简介简介简介简介简介简介简介</view>
-                <image class="icon" src="../../static/huiyuanjia.png" mode=""></image>
+                <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
                 <view class="dis-price">
                   <text style="font-size: 12px;">
                   </text>{{item[0].market_price}}
@@ -148,7 +156,7 @@
 
                         <text style="font-size: 12px;"></text>{{item[1].market_price}}
                       </view>
-                      <image class="icon" src="../../static/huiyuanjia.png" mode=""></image>
+                      <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
                       <!-- <view class="price">￥{{item[1].price}}</view> -->
                     </view>
                     <view class="pic">
@@ -163,7 +171,7 @@
                     <view class="text">
 
                       <view class="dis-price">
-                        <image class="icon" src="../../static/huiyuanjia.png" mode=""></image>
+                        <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
                         <text style="font-size: 12px;"></text>{{item[2].market_price}}
                       </view>
                       <!-- <view class="price">￥{{item[2].price}}</view> -->
@@ -198,7 +206,7 @@
       <view class="popup-box">
         <scroll-view scroll-y="true">
           <view class="scroll-item">
-            <image src="/static/pics/banner1-active.jpg" mode="widthFix"></image>
+            <image src="https://7n.oripetlife.com/banner1-active.jpg" mode="widthFix"></image>
           </view>
         </scroll-view>
       </view>
@@ -208,13 +216,15 @@
 </template>
 
 <script>
-  import badgeMix from '@/mixins/tabbar-badge.js'
+  // import badgeMix from '@/mixins/tabbar-badge.js'
   import {
     mapState
   } from 'vuex'
+  import badgeMix from '@/mixins/tabbar-badge.js'
+  import shareMix from '@/mixins/share-app.js'
 
   export default {
-    mixins: [badgeMix], // 导入公共js
+    mixins: [badgeMix, shareMix], // 导入公共js
     data() {
       return {
         active: 0,
@@ -226,6 +236,7 @@
           [],
           []
         ],
+        parent_id: '',
       };
     },
     computed: {
@@ -237,6 +248,7 @@
       this.getGoodsList()
     },
     methods: {
+
       // 热门榜单
       async getHotList() {
         const {
@@ -293,6 +305,7 @@
         const arr2 = this.goodsListAll.filter(x => x.stock == 0)
 
         this.goodsList = [...arr1, ...arr2]
+        // console.log(this.goodsList.length)
 
         // this.goodsList = [...this.goodsListAll]
       },
@@ -319,8 +332,9 @@
       },
       gotoGoodsDetail(item) {
         // const goods_id = item.id
+        console.log(item)
         uni.navigateTo({
-          url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}&goods_img=${item.img}`,
+          url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}&goods_img=${item.img}&weight=${item.weight}`,
         })
       },
       gotoHomeMore(type) {
@@ -348,9 +362,26 @@
         uni.navigateTo({
           url: '/mypkg/public-welfare/public-welfare'
         })
-      }
+      },
+      gotoLottery() {
+        uni.navigateTo({
+          url: '/mypkg/lottery/lottery'
+        })
+      },
+      gotoCount(){
+        uni.navigateTo({
+          url: '/mypkg/count/count'
+        })
+      },
+    },
+    
+    onPullDownRefresh() {
+      this.getHotList()
+      this.getNewList()
+      this.getGoodsList()
+      uni.stopPullDownRefresh()
+    },
 
-    }
   }
 </script>
 
@@ -400,19 +431,22 @@
     swiper {
       height: 150px;
       margin: 0 15px;
-      border-radius:5rpx !important;
+      border-radius: 5rpx !important;
       overflow: hidden !important;
-      swiper-item{
-        border-radius:5px;
-          overflow: hidden;
-      }
-      .banner{
-        height: 150px;
-        border-radius:5px;
+
+      swiper-item {
+        border-radius: 5px;
         overflow: hidden;
       }
+
+      .banner {
+        height: 150px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
       image {
-        width:100%;
+        width: 100%;
       }
     }
   }
@@ -420,7 +454,7 @@
   // 轮播
   .banner {
     // bor
-   
+
   }
 
   // 通告栏
@@ -724,6 +758,8 @@
 
   // 分类
   .scroll-box {
+    position: sticky;
+    top: 0;
     padding: 0 15px;
     background-color: #FFFFFF;
 
@@ -763,11 +799,11 @@
       width: 100%;
       height: 100%;
       // border-radius: 10px !important;
-        // overflow: hidden !important;
-      
+      // overflow: hidden !important;
+
 
       .scroll-item {
-      // border-radius: 10px !important;
+        // border-radius: 10px !important;
         // overflow: hidden !important;
       }
     }

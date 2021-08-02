@@ -11,12 +11,13 @@
     <view class="pet-box" v-else>
       <!-- 宠物信息 -->
       <view class="top">
-        <view class="info">
+        <view class="info" @click="gotoAddPet('edit')">
           <view class="avatar">
-            <image src="/static/avatar.png"></image>
+            <image :src="select_pet.avatar"></image>
           </view>
           <view class="text">
-            <view class="name">{{petList[0].name}}<image src="/static/images/male.png"></image>
+            <view class="name">{{select_pet.name}}
+              <image src="/static/images/male.png"></image>
             </view>
             <view class="time">3年6个月</view>
           </view>
@@ -112,13 +113,13 @@
           <view class="pet-item" v-for="(item,i) in petList" :key="i" @click="changePet(item)">
             <view class="box">
               <view class="avatar">
-                <image src="/static/avatar.png"></image>
+                <image :src="item.avatar"></image>
               </view>
               <view class="name">{{item.name}}</view>
             </view>
           </view>
 
-          <view class="pet-item" @click="gotoAddPet">
+          <view class="pet-item" @click="gotoAddPet('add')">
             <view class="box">
               <view class="avatar">
                 <image src="/static/images/add-icon.png"></image>
@@ -134,14 +135,14 @@
     <uni-drawer class="record-drawer" ref="showRecord" mode="bottom" :mask-click="true">
       <view class="record-icons">
         <!-- <scroll-view class="record-icon" scroll-x="true" scroll-left="0"> -->
-        <view class="icon-item" @click="gotoRecord('weight')">
+        <!-- <view class="icon-item" @click="gotoRecord('weight')">
           <image src="/static/images/re-weight.png" mode=""></image>
           <text>记录体重</text>
-        </view>
-        <view class="icon-item" @click="gotoRecord('bath')">
+        </view> -->
+        <!-- <view class="icon-item" @click="gotoRecord('bath')">
           <image src="/static/images/re-bath.png" mode=""></image>
           <text>记录洗澡</text>
-        </view>
+        </view> -->
         <view class="icon-item" @click="gotoRecord('worm')">
           <image src="/static/images/re-worm.png" mode=""></image>
           <text>记录驱虫</text>
@@ -168,24 +169,25 @@
 
   export default {
     data() {
-      return {};
+      return {
+        // select_pet:{}
+        pet: {}
+      };
     },
     computed: {
-      ...mapState('pet',['petList']),
-      
-      petList() {
-        let data = uni.getStorageSync('petList')
-        if (data) return JSON.parse(data)
-        return []
+      ...mapState('pet', ['petList']),
+
+      select_pet() {
+        if (!this.pet.name) return this.petList[0]
+        return this.pet
       }
     },
-    onLoad() {
-      // console.log(this.petList)
-    },
+    onLoad() {},
     methods: {
-      gotoAddPet() {
+      gotoAddPet(type) {
+        if (type === 'edit') uni.setStorageSync('select_pet', JSON.stringify(this.select_pet))
         uni.navigateTo({
-          url: '/mypkg/add_pet/add_pet'
+          url: '/mypkg/add_pet/add_pet?type=' + type
         })
       },
       showChangePet() {
@@ -193,6 +195,8 @@
       },
       changePet(item) {
         console.log(item)
+        this.pet = item
+        this.$refs.showChangePet.close();
       },
       showRecord() {
         this.$refs.showRecord.open();
@@ -201,7 +205,11 @@
         uni.navigateTo({
           url: '/mypkg/record/record?type=' + type
         })
-      }
+      },
+      // 编辑宠物信息
+      gotoEditPet() {
+
+      },
     }
   }
 </script>

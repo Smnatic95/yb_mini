@@ -10,9 +10,9 @@
           <view class="intro">简介简介简介简介</view>
           <view class="price-col">
             <!-- <text class="icon">￥</text> -->
-            <image src="../../static/huiyuanjia.png" mode=""></image>
+            <image src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
             <text class="price">{{item.market_price}}</text>
-            <!-- <image src="../../static/huiyuanjia.png" mode=""></image> -->
+            <!-- <image src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image> -->
             <text class="price-dis">￥<text>{{item.price}}</text></text>
 
             <view class="cart" v-if="item.stock>0" @click="handleAddCart(item)">
@@ -49,10 +49,10 @@
 
       // 跳转到商品详情页面
       gotoGoodsDetail(item) {
-        console.log(item.stock)
+        console.log(item)
         const goods_id = item.id
         uni.navigateTo({
-          url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}&goods_img=${item.img}`,
+          url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}&goods_img=${item.img}&weight=${item.weight}`,
         })
       },
 
@@ -61,14 +61,18 @@
         console.log(item)
         const goods = {
           goods_id: item.id,
-          goods_name: '原本成猫粮',
-          goods_intro: '猫来了联名款',
-          goods_img: 'https://7n.oripetlife.com/'+item.img,
-            goods_price: '179.00',
+          goods_name: item.name,
+          goods_intro: item.introduction,
+          goods_img: 'https://7n.oripetlife.com/' + item.img,
+          // goods_price: '179.00',
+          market_price: item.market_price,
+          price: item.price,
           goods_count: 1,
+          weight:item.weight,
           is_checked: true,
         }
         this.addToCart(goods)
+        uni.$showMsg("商品添加成功~")
       }
 
     }

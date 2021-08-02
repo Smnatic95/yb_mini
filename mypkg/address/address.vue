@@ -1,5 +1,7 @@
 <template>
   <view class="page">
+    
+    <uni-notice-bar single="true" text="右滑可编辑地址"></uni-notice-bar>
 
     <uni-swipe-action>
       <uni-swipe-action-item v-for="(item,i) in address_list" :key='i'>
@@ -9,7 +11,7 @@
             <view class="edit" @click="editAddress(item)">
               <view class="iconfont icon-xiugai"></view>
             </view>
-            <view class="remove" @click="deleteAddressHandler(item.id)">
+            <view class="remove" @click="deleteAddressHandler(item.address_id)">
               <uni-icons type="trash" size="20" color=""></uni-icons>
             </view>
           </view>
@@ -44,49 +46,81 @@
       this.from = option.from
       this.type = option.type
 
-      this.getAreas()
+      // this.getAreas()
+      this.getAddressList()
     },
 
     computed: {
-      ...mapState('address', ['address_list']),
+      ...mapState('address', ['address_list', 'default_address_id']),
     },
 
     methods: {
-      ...mapMutations('address', ['delAddress']),
+      ...mapMutations('address', ['delAddress', 'updateAddress', 'updateDefaultAddress']),
 
-      // 修改地址
+      // 跳转修改地址
       editAddress(address) {
         // console.log(address)
+        if (address.address_id == this.default_address_id) {
+          address.is_default = true
+        } else {
+          address.is_default = false
+        }
         uni.setStorageSync('user_address', JSON.stringify(address))
         uni.navigateTo({
           url: '/mypkg/address-edit/address-edit?type=edit'
         })
       },
 
-      // 省市区列表
-      async getAreas() {
-        if (uni.getStorageSync('areas')) return
+      async getAddressList() {
+        const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
         const {
           data: res
-        } = await uni.$http.get('areas/')
-        // console.log(res)
-        if (res.code !== 200) return uni.$showMsg(res.errmsg)
-        const arr = res.options
-        arr.forEach(item => {
-          item.text = item.label
-          if (item.children) {
-            item.children.forEach(item2 => {
-              item2.text = item2.label
-              if (item2.children) {
-                item2.children.forEach(item3 => {
-                  item3.text = item3.label
-                })
-              }
-            })
-          }
+        } = await uni.$http.get('address_info/' + mobile + '/')
+        if (res.code !== 200) return uni.$showMsg(res.msg)
+        res.data.forEach(item => {
+          item.address = []
+          item.address.push({
+            text: item.province,
+            value: (item.province_id).toString()
+          })
+          item.address.push({
+            text: item.city,
+            value: (item.city_id).toString()
+          })
+          item.address.push({
+            text: item.district,
+            value: (item.district_id).toString()
+          })
         })
-        uni.setStorageSync('areas', JSON.stringify(arr))
+        // console.log(res.data)
+        this.updateAddress(res.data)
+        this.updateDefaultAddress(res.default_address)
       },
+
+      // // 省市区列表
+      // async getAreas() {
+      //   if (uni.getStorageSync('areas')) return
+      //   const {
+      //     data: res
+      //   } = await uni.$http.get('areas/')
+      //   // console.log(res)
+      //   if (res.code !== 200) return uni.$showMsg(res.errmsg)
+      //   const arr = res.options
+      //   arr.forEach(item => {
+      //     item.text = item.label
+      //     if (item.children) {
+      //       item.children.forEach(item2 => {
+      //         item2.text = item2.label
+      //         if (item2.children) {
+      //           item2.children.forEach(item3 => {
+      //             item3.text = item3.label
+      //           })
+      //         }
+      //       })
+      //     }
+      //   })
+      //   uni.setStorageSync('areas', JSON.stringify(arr))
+      // },
 
       // 添加地址
       addAddress() {
@@ -95,17 +129,24 @@
           url: '/mypkg/address-edit/address-edit?type=add'
         })
       },
-      
+
       // 删除地址
-      deleteAddressHandler(id){
+      async deleteAddressHandler(id) {
+        if (id == this.default_address_id) return uni.$showMsg('默认地址不允许删除')
+        
+        const {
+          data: res
+        } = await uni.$http.delete(`address/${id}/`)
+        if (res.code !== 200) return uni.$showMsg(res.msg)
+        uni.$showMsg(res.msg)
         this.delAddress(id)
       },
 
       // 结算页面切换收货地址
       addressCheckedHandler(e) {
+        console.log(this.from)
+        console.log(e)
         if (this.from === 'settle') {
-          console.log(e)
-
           uni.setStorageSync('user_checked_address', JSON.stringify(e))
           uni.navigateBack(-1)
         }
@@ -117,10 +158,14 @@
 
 <style lang="scss">
   .page {
-    padding-top: 30rpx;
+    // padding-top: 30rpx;
   }
 
   @import '../../static/iconfont/iconfont.css';
+  
+  uni-notice-bar{
+    text-align: center;
+  }
 
   .address-item {
     background-color: #FFFFFF;

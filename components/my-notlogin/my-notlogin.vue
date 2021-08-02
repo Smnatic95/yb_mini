@@ -12,8 +12,10 @@
     mapState,
     mapMutations
   } from 'vuex'
+  import phoneMix from '@/mixins/get-phone.js'
 
   export default {
+    mixins: [phoneMix],
     name: "my-notlogin",
     data() {
       return {};
@@ -23,44 +25,8 @@
     },
     methods: {
       ...mapMutations('user', ['undateToken', 'updateUserInfo']),
-
-      async getPhoneNumber(e) {
-        const [err, res] = await uni.login().catch(err => err)
-        if (e.detail.errMsg == "getPhoneNumber:ok") {
-          const {
-            data: res1
-          } = await uni.$http.post('login/', {
-            code: res.code,
-            encryptedData: e.detail.encryptedData,
-            iv: e.detail.iv,
-            // sessionKey: res1.data.session_key,
-          })
-          console.log(res1)
-
-          // const {
-          //   data: res2
-          // } = await uni.$http.get('user_phone/' + res1.user_list[0].mobile + '/')
-          // console.log(res2)
-
-          if (res1.code !== 200) {
-            this.undateToken(false)
-            uni.$showMsg('授权失败！请重试')
-          } else {
-            this.undateToken(true)
-            this.updateUserInfo(res1.user_list[0])
-          }
-        }
-
-        // if (e.detail.iv) {
-        //   this.undateToken(true)
-        // } else {
-        //   this.undateToken(false)
-        // }
-
-      },
-
-
     }
+
   }
 </script>
 

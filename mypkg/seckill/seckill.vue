@@ -1,7 +1,7 @@
 <template>
   <view class="page">
     <view class="pic-box">
-      <image src="/static/bg.png" mode="widthFix"></image>
+      <image src="/static/images/bg1.png" mode="widthFix"></image>
     </view>
 
     <view class="time-box">

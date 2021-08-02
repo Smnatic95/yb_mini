@@ -103,8 +103,8 @@
 .icon-gouwuche:before {
   content: "\e63f";
 }
-.page {
-  padding-top: 30rpx;
+uni-notice-bar {
+  text-align: center;
 }
 .address-item {
   background-color: #FFFFFF;

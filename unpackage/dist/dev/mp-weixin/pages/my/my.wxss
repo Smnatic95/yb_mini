@@ -282,7 +282,8 @@ button[plain] {
   color: #905100;
   width: 550rpx;
 }
-.user .vip-box text, .user .vip-box view {
+.user .vip-box text,
+.user .vip-box view {
   line-height: 15px;
 }
 .user .vip-box view {
@@ -449,6 +450,9 @@ button[plain] {
 .pet-box .pet-info .avatar {
   width: 100rpx;
   height: 100rpx;
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  overflow: hidden;
 }
 .pet-box .pet-info .avatar image {
   width: 100%;

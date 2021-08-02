@@ -220,11 +220,12 @@ image {
           align-items: center;
 }
 .box1 .content .user .avatar {
-  width: 80rpx;
-  height: 80rpx;
+  width: 100rpx;
+  height: 100rpx;
   margin-right: 10px;
   border-radius: 50%;
   overflow: hidden;
+  background-color: #fff;
 }
 .box1 .content .user .avatar image {
   width: 100%;
@@ -245,9 +246,21 @@ image {
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
-  margin-top: 74rpx;
+  margin-top: 54rpx;
   font-size: 24rpx;
   color: #ae5a2a;
+}
+.box1 .text button {
+  height: 50rpx;
+  line-height: 50rpx;
+  margin: 0;
+  font-size: 24rpx;
+  color: #ae5a2a;
+  background-color: #FFFFFF;
+  border-radius: 25rpx;
+}
+.box1 .text button::after {
+  border: 0;
 }
 .box1 .text > view {
   padding: 0 20rpx;

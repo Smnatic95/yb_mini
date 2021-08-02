@@ -1,59 +1,122 @@
 <template>
   <view class="page">
-    <view class="scroll-item" v-for="(item,i) in userCouponsList" :key='i'>
-      <view class="left">
-        <view>￥<text>{{item.price}}</text></view>
-        <view>满{{item.min_price}}可用</view>
-      </view>
-      <view class="right">
-        <view>会员减10元优惠券</view>
-        <view>不限时</view>
-        <!-- <view v-else>不可用</view> -->
-      </view>
+
+    <view class="no-coupon" v-if="couponsList.length<=0">
+      <image src="https://7n.oripetlife.com/no-coupon.png" mode="widthFix"></image>
     </view>
+
+    <block v-else>
+      <view class="pic">
+        <image src="/static/images/bg1.png" mode=""></image>
+      </view>
+      <view class="scroll-item" v-for="(item,i) in couponsList" :key='item.coupon_id'>
+        <view class="left">
+          <view>￥<text>{{item.price}}</text></view>
+          <view>满{{item.min_price}}可用</view>
+        </view>
+        <view class="right">
+          <view>{{item.coupon_name}}</view>
+          <view>不限时</view>
+          <!-- <view v-else>不可用</view> -->
+        </view>
+      </view>
+    </block>
+
   </view>
 </template>
 
 <script>
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   export default {
     data() {
-      return {
-        userCouponsList: [{
-            name: '优惠券-10元',
-            price: 10,
-            min_price: 100
-          }, {
-            name: '优惠券-20元',
-            price: 20,
-            min_price: 200
-          }, {
-            name: '优惠券-30元',
-            price: 30,
-            min_price: 300
-          }, {
-            name: '优惠券-40元',
-            price: 40,
-            min_price: 400
-          }, {
-            name: '优惠券-50元',
-            price: 50,
-            min_price: 500
-          },
-          {
-            name: '优惠券-60元',
-            price: 60,
-            min_price: 600
-          },
-        ],
-      };
+      return {};
+    },
+    computed: {
+      ...mapState('cart', ['is_vip', 'couponsList']),
+    },
+    onLoad() {
+      this.getCouponslList()
+    },
+    methods: {
+      ...mapMutations('cart', ['updateCouponsList']),
+
+      async getCouponslList() {
+        const {
+          mobile
+        } = JSON.parse(uni.getStorageSync('userInfo'))
+        const {
+          data: res
+        } = await uni.$http.get(`user_coupon/${mobile}/`)
+        if (res.code !== 200) return uni.$showMsg(res.msg)
+        // console.log(res)
+        let arr = res.lists
+        if (res.lists.length > 0) {
+          res.lists.forEach(item => {
+            if (item.coupon_id == 1) { // 转介绍
+              item.price = 30
+              item.min_price = 100
+            } else if (item.coupon_id == 2) { // 新客
+              item.price = 10
+              item.min_price = 10
+            } else if (item.coupon_id == 3) { // 会员福利
+              item.price = 10
+              item.min_price = 60
+            } else if (item.coupon_id == 4) { // 不发
+              item.price = 50
+              item.min_price = 50
+            } else if (item.coupon_id == 5) { // 答题
+              item.price = 10
+              item.min_price = 60
+            } else if (item.coupon_id == 6) { // 买一送一
+              item.price = 0
+              item.min_price = 0
+            } else if (item.coupon_id == 7) { // 会员福利
+              item.price = 20
+              item.min_price = 300
+            }
+          })
+        }
+        arr = res.lists
+        this.updateCouponsList(arr)
+      },
+
     }
+
   }
 </script>
 
 <style lang="scss">
   .page {
     // padding-top: 10px;
-    padding: 30px 10px 20px;
+    padding: 10px 10px 20px;
+  }
+
+  .no-coupon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 100px;
+
+    // height: 80;
+    image {
+      width: 80%;
+    }
+  }
+
+  .pic {
+    width: 100%;
+    height: 250rpx;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+
+    image {
+      width: 100%;
+    }
   }
 
   .scroll-item {

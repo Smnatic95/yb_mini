@@ -5,7 +5,8 @@
     <view class="user-box">
       <view class="left">
         <view class="avatar">
-          <image src="https://picsum.photos/id/305/200/200" mode=""></image>
+          <!-- <image src="https://picsum.photos/id/305/200/200" mode=""></image> -->
+            <open-data v-if="token" type="userAvatarUrl" mode="aspectFill"></open-data>
         </view>
         <view class="name">
           <view class="name">用户
@@ -26,7 +27,7 @@
       <view class="medal-item" v-for="item in 2" :key='item'>
         <image src="/static/bg.png" mode=""></image>
       </view>
-      
+
       <view class="medal-item" v-for="item in 3" :key='item'>
         <image src="/static/bg.png" mode=""></image>
         <!-- 遮罩层 -->
@@ -34,7 +35,7 @@
           <image src="/static/images/suo.png" mode="heightFix"></image>
         </view>
       </view>
-      
+
     </view>
 
     <uni-popup ref="popup" type="center">
@@ -61,6 +62,9 @@
     },
     computed: {
       ...mapState('address', ['is_public_address']),
+      token() {
+        return JSON.parse(uni.getStorageSync('token'))
+      }
     },
     methods: {
       ...mapMutations('address', ['updatePublicAddress']),
@@ -105,6 +109,7 @@
         margin-right: 10px;
         border-radius: 50%;
         overflow: hidden;
+        background-color: #FFFFFF;
 
         image {
           width: 100%;
@@ -190,7 +195,8 @@
       overflow: hidden;
 
       background-color: #1CBBB4;
-      image{
+
+      image {
         width: 100%;
       }
 

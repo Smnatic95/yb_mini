@@ -214,15 +214,15 @@
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
-  padding: 24rpx 0;
+  padding: 24rpx 0 10rpx;
 }
 .order-component .order-box .order-info .id {
-  font-size: 30rpx;
+  font-size: 14px;
   font-weight: 500;
   color: #999999;
 }
 .order-component .order-box .order-info .state {
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 500;
 }
 .order-component .goods {
@@ -249,8 +249,8 @@
   overflow: hidden;
 }
 .order-component .goods .pic image {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
 }
 .order-component .goods .text {
   -webkit-box-flex: 1;
@@ -291,6 +291,14 @@
   float: right;
   font-weight: 500;
   color: #C0C8D3;
+}
+.order-component .time-box {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #999999;
+}
+.order-component .time-box > view {
+  margin-bottom: 5px;
 }
 .order-component .btns-box {
   display: -webkit-box;

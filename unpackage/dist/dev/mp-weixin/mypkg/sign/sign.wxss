@@ -206,8 +206,9 @@ image {
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   width: 690rpx;
-  height: 700rpx;
   padding-left: 30rpx;
+  padding-top: 15rpx;
+  padding-bottom: 40rpx;
   background: #FFFFFF;
   border-radius: 8rpx;
   -webkit-box-sizing: border-box;
@@ -227,68 +228,34 @@ image {
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
-  width: 138rpx;
-  height: 150rpx;
-  margin-top: 30rpx;
-  margin-right: 26rpx;
-  padding: 10rpx 0;
-  font-size: 24rpx;
-  color: #8F99A7;
-  background: #F6F6F6;
+  width: 83rpx;
+  height: 85rpx;
+  margin-top: 15rpx;
+  margin-right: 10rpx;
+  padding: 5rpx 0;
+  font-size: 26rpx;
+  color: #333;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   border-radius: 4px;
+}
+.sign-box .sign-item .date.active {
+  width: 46rpx;
+  height: 46rpx;
+  line-height: 46rpx;
+  text-align: center;
+  border-radius: 23rpx;
+  background-color: #FFA424;
+  color: #FFFFFF;
 }
 .sign-box .sign-item image {
   width: 50rpx;
   height: 50rpx;
 }
 .sign-box .sign-item .code {
-  font-size: 24rpx;
+  font-size: 20rpx;
   font-weight: 500;
   color: #294D7C;
-}
-.sign-box .sign-item:last-child {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-          flex-direction: row;
-  width: 302rpx;
-}
-.sign-box .sign-item:last-child image {
-  width: 74rpx;
-  height: 74rpx;
-}
-.sign-box .sign-item:last-child .right {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: end;
-  -webkit-align-items: flex-end;
-          align-items: flex-end;
-}
-.sign-box .sign-item:last-child .code {
-  margin-right: -5rpx;
-  font-size: 32rpx;
-}
-.sign-box .sign-item.active {
-  color: #FFA424;
-  background: #FEE7D6;
-  border-radius: 4px;
-}
-.sign-box .sign-item.active .date {
-  opacity: 0.54;
-}
-.sign-box .sign-item.active .code {
-  color: #FFA424;
-  opacity: 1;
 }
 .sign-box .clearfix::after {
   content: "";

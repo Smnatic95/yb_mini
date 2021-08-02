@@ -17,18 +17,22 @@
           <view class="price-col">
             <text class="icon">￥</text>
             <text class="price">{{goodsInfo.market_price}}</text>
-            <image src="../../static/huiyuanjia.png"></image>
+            <image src="https://7n.oripetlife.com/huiyuanjia.png"></image>
             <text class="price-dis">￥<text>{{goodsInfo.price}}</text></text>
           </view>
         </view>
         <view class="icon-right">
-          <view class="icon">
-            <image src="../../static/images/shoucang.png"></image>
-            <!-- <image src="../../static/images/shoucang-active.png"></image> -->
+          <view class="icon" @click="collectChanged">
+            <image v-if="!is_collect" src="../../static/images/shoucang.png"></image>
+            <image v-else src="../../static/images/shoucang-active.png"></image>
           </view>
-          <view class="icon">
-            <image src="../../static/share.png"></image>
-          </view>
+          <button open-type='share'>
+            <!-- <view class="icon"> -->
+            <!-- <button> -->
+            <image src="https://7n.oripetlife.com/share.png"></image>
+            <!-- </button> -->
+            <!-- </view> -->
+          </button>
         </view>
       </view>
 
@@ -122,17 +126,13 @@
           <view class="cart" @click="gotoCart">
             <view class="iconfont icon-shoppingcart"></view>
             <view class="text">购物袋</view>
+            <uni-badge :text="num" type="error" size='small'></uni-badge>
           </view>
           <view class="btns">
             <!-- <block > -->
             <button class='btn1' @click="addToCartHandler">加入购物车</button>
-            <button class='btn2' v-if="token">立即购买</button>
+            <button class='btn2' v-if="token" @click="showPopup">立即购买</button>
             <button class='btn2' v-else open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">立即购买</button>
-            <!-- </block> -->
-            <!-- <block v-else>
-              <button class='btn1'>加入购物车</button>
-              <button class='btn2' open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">立即购买</button>
-            </block> -->
           </view>
         </view>
       </view>
@@ -202,6 +202,13 @@
         </view>
       </uni-popup>
 
+      <uni-popup ref="popup" type="bottom" background-color="#fff">
+        <view class="settle-box">
+          <goods-item :goods="goods" :showRadio="false" @num-change='numberChangeHandler'></goods-item>
+          <button @click="onSettle">立即购买</button>
+        </view>
+      </uni-popup>
+
     </view>
   </view>
 </template>
@@ -209,24 +216,54 @@
 <script>
   import {
     mapState,
-    mapMutations
+    mapMutations,
+    mapGetters,
+    createNamespacedHelpers
   } from 'vuex'
+  const {
+    mapState: mapStateUser,
+    mapMutations: mapMutationsUser
+  } = createNamespacedHelpers("user")
+  const {
+    mapState: mapStateCart,
+    mapMutations: mapMutationsCart
+  } = createNamespacedHelpers("cart")
+  // import badgeMix from '@/mixins/tabbar-badge.js'
+  import shareMix from '@/mixins/share-app.js'
+  import phoneMix from '@/mixins/get-phone.js'
 
   export default {
+    mixins: [shareMix, phoneMix], // 导入公共js
     data() {
       return {
         goods_id: '',
         goods_stock: '',
         goods_img: '',
+        weight: '',
         goodsInfo: {},
+        is_collect: false,
+        num: 0,
+
+        goods: {},
       };
     },
     computed: {
-      ...mapState('user', ['token']),
+      ...mapStateUser(['token']),
+      ...mapGetters('cart', ['total']),
     },
+    watch: {
+      total: {
+        handler(newVal) {
+          this.num = newVal
+        }
+      }
+    },
+    onShow() {},
     onLoad(option) {
-      console.log(this.token)
+      this.num = this.total
+      console.log('传过来的id===',option)
       this.goods_id = option.id
+      this.weight = option.weight
       if (option.goods_stock == 0) {
         this.buttonGroup.forEach(item => {
           item.backgroundColor = '#ccc'
@@ -236,23 +273,127 @@
       this.goods_img = option.goods_img
 
       this.getGoodsDetail()
+      this.collectCheck()
+    },
+    computed: {
+      ...mapStateCart(['cart_list']),
     },
     methods: {
-      ...mapMutations('cart', ['addToCart']),
+      ...mapMutationsCart(['addToCart', 'updateGoodsCount', 'undateGoodsState', 'updateAllChecked']),
+      ...mapMutationsUser(['undateToken', 'updateUserInfo']),
+
 
       handleContact(e) {
         console.log(e)
+      },
+
+      // 立即购买
+      showPopup() {
+        if(!this.goods_stock) return
+        this.goods = {
+          goods_id: this.goods_id,
+          goods_name: this.goodsInfo.name,
+          goods_intro: this.goodsInfo.introduction,
+          goods_img: 'https://7n.oripetlife.com/' + this.goods_img,
+          price: this.goodsInfo.price,
+          market_price: this.goodsInfo.market_price,
+          goods_count: 1,
+          weight: this.weight,
+          is_checked: true,
+        }
+        const findRes = this.cart_list.find(x => x.goods_id == this.goods_id)
+        if(findRes){
+          this.updateGoodsCount(this.goods)
+        }else{
+          this.addToCart(this.goods)
+        }
+
+        this.$refs.popup.open('bottom')
+      },
+      // 切换数量
+      numberChangeHandler(e) {
+        this.goods.goods_count = e.goods_count
+        this.updateGoodsCount(e)
+      },
+      onSettle() {
+        this.updateAllChecked(false)
+        this.goods.is_checked = true
+        this.undateGoodsState(this.goods)
+        this.$refs.popup.close()
+        uni.navigateTo({
+          url: '/pages/settle/settle'
+        })
       },
 
       // 商品详情
       async getGoodsDetail() {
         const {
           data: res
-        } = await uni.$http.get('sku_detail/' + this.goods_id + '/')
-        // console.log(res)
+        } = await uni.$http.get(`sku_detail/${this.goods_id}/`)
         if (res.code !== 200) return uni.$showMsg(res.msg)
         this.goodsInfo = res.lists[0]
-        console.log(this.goodsInfo)
+      },
+
+      // 收藏状态
+      async collectCheck() {
+        if (!this.token) return
+        const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
+        const {
+          data: res
+        } = await uni.$http.get(`user_collect_true/${mobile}/${this.goods_id}/`)
+        // console.log(res)
+        if (res.code !== 200) return uni.$showMsg(res.msg)
+        this.is_collect = res.flag
+      },
+
+      // 点击收藏
+      async collectChanged() {
+        const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
+        const collect_list = {
+          phone_id: mobile,
+          sku_id: this.goods_id
+        }
+        if (!this.is_collect) { // 收藏
+          var {
+            data: res
+          } = await uni.$http.put(`user_collect/`, {
+            collect_list
+          })
+        } else { // 取消
+          var {
+            data: res
+          } = await uni.$http.delete(`user_collect/`, {
+            collect_list
+          })
+        }
+
+        if (res.code !== 200) return uni.$showMsg(res.msg)
+        uni.$showMsg(res.msg)
+        this.is_collect = !this.is_collect
+      },
+
+      // 加购
+      addToCartHandler() {
+        if(!this.goods_stock) return
+        const goods = {
+          goods_id: this.goods_id,
+          goods_name: this.goodsInfo.name,
+          goods_intro: this.goodsInfo.introduction,
+          goods_img: 'https://7n.oripetlife.com/' + this.goods_img,
+          price: this.goodsInfo.price,
+          market_price: this.goodsInfo.market_price,
+          goods_count: 1,
+          weight: this.weight,
+          is_checked: true,
+        }
+        this.addToCart(goods)
+        uni.$showMsg("商品添加成功~")
+      },
+
+      gotoCart() {
+        uni.switchTab({
+          url: '/pages/cart/cart'
+        })
       },
 
       // 服务说明 弹出层
@@ -271,28 +412,10 @@
           url: '/subpkg/comments_list/comments_list?id=' + goods_id
         })
       },
-      gotoCart() {
-        uni.switchTab({
-          url: '/pages/cart/cart'
-        })
-      },
 
 
+    },
 
-      // 加购
-      addToCartHandler() {
-        const goods = {
-          goods_id: this.goods_id,
-          goods_name: '原本成猫粮',
-          goods_intro: '猫来了联名款',
-          goods_img: 'https://7n.oripetlife.com/' + this.goods_img,
-          goods_price: '179.00',
-          goods_count: 1,
-          is_checked: true,
-        }
-        this.addToCart(goods)
-      },
-    }
   }
 </script>
 
@@ -396,9 +519,36 @@
         content: '';
       }
 
+      button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        background-color: transparent;
+
+        &::after {
+          content: '';
+          border: 0;
+          border-radius: 0;
+          width: 0;
+          height: 0;
+        }
+
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
       .icon {
-        width: 40rpx;
-        height: 40rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 20px;
+        height: 20px;
+
 
         image {
           width: 100%;
@@ -618,6 +768,7 @@
       background-color: #FFFFFF;
 
       .cart {
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -628,6 +779,13 @@
 
         .iconfont {
           margin-bottom: 2px;
+        }
+
+        uni-badge {
+          position: absolute;
+          right: 0;
+          top: 0;
+          transform: translateY(-20%);
         }
       }
 
@@ -788,6 +946,27 @@
         .right {
           color: #444;
         }
+      }
+    }
+  }
+
+  .settle-box {
+    padding: 30px 0 40px;
+    margin-top: 10px;
+    background-color: #FFFFFF;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+
+    button {
+      height: 50px;
+      margin: 20px 15px 0;
+      line-height: 50px;
+      color: #FFFFFF;
+      background-color: #ffa424;
+      border-radius: 25px;
+
+      &::after {
+        border: 0;
       }
     }
   }

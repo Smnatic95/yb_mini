@@ -4,9 +4,10 @@
 </template>
 
 <script>
-  import badgeMix from '@/mixins/tabbar-badge.js'
+  // import badgeMix from '@/mixins/tabbar-badge.js'
   import {
     mapState,
+    mapMutations,
     createNamespacedHelpers
   } from 'vuex'
   const {
@@ -15,26 +16,43 @@
   const {
     mapState: mapStatePet
   } = createNamespacedHelpers("pet")
+  import badgeMix from '@/mixins/tabbar-badge.js'
+  import shareMix from '@/mixins/share-app.js'
 
   export default {
-    mixins: [badgeMix], // 导入公共js
+    mixins: [badgeMix, shareMix], // 导入公共js
     data() {
       return {
         user_info: {},
-        // token:true,
       };
     },
     onShow() {},
-    onLoad() {
-      console.log(this.token)
-    },
+    onLoad() {},
 
     computed: {
       ...mapStateUser(['userInfo', 'token']),
       ...mapStatePet(['petList']),
     },
 
-    methods: {}
+    methods: {
+      ...mapMutations('user', ['undateToken', 'updateUserInfo'])
+    },
+
+    async onPullDownRefresh() {
+      // console.log(111)
+      const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
+      // console.log(mobile)
+      if (!mobile) return uni.stopPullDownRefresh()
+      const {
+        data: res
+      } = await uni.$http.get(`user_phone/${mobile}/`)
+      if (res.code !== 200) return uni.$showMsg(res.msg)
+      uni.stopPullDownRefresh()
+      console.log(res)
+      this.undateToken(true)
+      this.updateUserInfo(res.user_list[0])
+    }
+
   }
 </script>
 
@@ -223,11 +241,13 @@
       font-size: 14px;
       color: #905100;
       width: 550rpx;
-      
-      text,view{
+
+      text,
+      view {
         line-height: 15px;
         // height: 14px;
       }
+
       view {
         font-size: 12px;
       }
@@ -384,6 +404,9 @@
       .avatar {
         width: 100rpx;
         height: 100rpx;
+        background-color: #FFFFFF;
+        border-radius: 50%;
+        overflow: hidden;
 
         image {
           width: 100%;

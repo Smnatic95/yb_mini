@@ -1,17 +1,23 @@
 <template>
   <view class="page">
     <uni-forms :value="addPetForm" ref="form">
+      
+      <uni-forms-item label="宠物头像" name="avatar">
+        <view class="avatar" @click="chosseImg">
+          <image :src="addPetForm.avatar"></image>
+        </view>
+      </uni-forms-item>
 
       <uni-forms-item label="宠物类型" name="type">
         <radio-group @change="radioChange">
           <label class="radio" @click="radioClick(1)">
-            <image v-if="!isCatChecked" src="/static/images/cat.png" mode=""></image>
-            <image v-else src="/static/images/cat-active.png" mode=""></image>
+            <image v-if="!isCatChecked" src="/static/images/cat.png"></image>
+            <image v-else src="/static/images/cat-active.png"></image>
             猫猫
           </label>
           <label class="radio" @click="radioClick(2)">
-            <image v-if="isCatChecked" src="/static/images/dog.png" mode=""></image>
-            <image v-else src="/static/images/dog-active.png" mode=""></image>
+            <image v-if="isCatChecked" src="/static/images/dog.png"></image>
+            <image v-else src="/static/images/dog-active.png"></image>
             狗狗
           </label>
         </radio-group>
@@ -71,9 +77,11 @@
         format: true
       })
       return {
+        page_type: 'add', // 页面类型
         addPetForm: {
-          type: 1,
+          type: 1, // 宠物类型
           name: '',
+          avatar: '',
           breed: '0',
           sex: '0',
           birthday: '',
@@ -98,13 +106,48 @@
         return this.getDate(new Date())
       }
     },
-    onLoad() {
+    onLoad(option) {
+      this.page_type = option.type
+      if (this.page_type === 'add') {
+        uni.setNavigationBarTitle({
+          title: '添加宠物'
+        })
+      } else {
+        uni.setNavigationBarTitle({
+          title: '编辑宠物'
+        })
+        this.addPetForm = JSON.parse(uni.getStorageSync('select_pet'))
+      }
+
       this.addPetForm.birthday = this.date
-      console.log(this.date)
+    },
+    onUnload() {
+      uni.removeStorageSync('select_pet')
     },
     methods: {
-      ...mapMutations('pet', ['addPet']),
+      ...mapMutations('pet', ['addPet','editPet']),
 
+      submitForm() {
+        var form = this.addPetForm
+        let petList = []
+        for (let key in form) {
+          if (form[key] === '0' || form[key] === '') return uni.$showMsg('宠物信息输入不完整')
+        }
+        if (this.page_type === 'add') {
+          this.addPet(form)
+        }else{
+          this.editPet(form)
+        }
+      },
+      chosseImg() {
+        console.log(111)
+        uni.chooseImage({
+          count: 1, //限制图片上传的数量,做多9张
+          success: res => { //上传成功的回调
+            this.addPetForm.avatar = res.tempFilePaths
+          }
+        })
+      },
       radioClick(val) {
         this.addPetForm.type = val
       },
@@ -136,18 +179,7 @@
       stateCange(e) {
         this.addPetForm.state = e.target.value
       },
-      submitForm() {
-        var form = this.addPetForm
-        let petList = []
-        for (let key in form) {
-          if (form[key] === '0' || form[key] === '') return uni.$showMsg('宠物信息输入不完整')
-        }
-        this.addPet(form)
 
-        // uni.navigateTo({
-        //   url: '/mypkg/pet/pet'
-        // })
-      }
     }
   }
 </script>
@@ -227,6 +259,20 @@
       height: 60rpx;
       margin-left: 30rpx;
       margin-right: 10rpx;
+    }
+  }
+
+  .avatar {
+    float: right;
+    width: 112rpx;
+    height: 112rpx;
+    margin: -20rpx 0;
+    border-radius: 50%;
+    overflow: hidden;
+
+    image {
+      width: 100%;
+      height: 100%;
     }
   }
 </style>

@@ -2,8 +2,6 @@
   "navigationBarTitleText": "开通会员",
   "enablePullDownRefresh": false,
   "usingComponents": {
-    "uni-popup": "/uni_modules/uni-popup/components/uni-popup/uni-popup",
-    "sale-code": "/components/sale-code/sale-code",
     "sign-popup": "/mypkg/sign-popup/sign-popup"
   }
 }

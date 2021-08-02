@@ -1,5 +1,5 @@
 {
-  "enablePullDownRefresh": false,
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "my-notlogin": "/components/my-notlogin/my-notlogin",
     "my-islogin": "/components/my-islogin/my-islogin"

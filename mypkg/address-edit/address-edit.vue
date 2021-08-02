@@ -46,12 +46,12 @@
     data() {
       return {
         pageTitle: '修改地址',
-        user_address: '',
+        user_address: {},
         is_checked: true,
       };
     },
     computed: {
-      ...mapState('address', ['areas', 'address_list']),
+      ...mapState('address', ['areas', 'address_list', 'default_address_id']),
     },
     onLoad(option) {
       switch (option.type) {
@@ -65,76 +65,109 @@
       uni.setNavigationBarTitle({
         title: this.pageTitle
       })
-
-      // console.log(this.areas)
-
+      // 修改地址数据
       this.user_address = JSON.parse(uni.getStorageSync('user_address') || "{}")
-
-      // this.getArea()
     },
+
     methods: {
-      ...mapMutations('address', ['addAddress', 'updateAddress']),
-
-      // 默认地址
-      deaultChange() {
-        if (this.pageTitle === '修改地址') {
-          this.user_address.is_default = !this.user_address.is_default
-        } else {
-
-        }
-      },
-      areaChange(e) {
-        // console.log(e.detail.value)
-        this.user_address.area = e.detail.value
-        console.log(this.user_address)
-      },
-
-
+      ...mapMutations('address', ['addAddress', 'updateAddress', 'editAddress', 'updateDefaultAddress']),
 
       // 提交
-      submitForm() {
+      async submitForm() {
         // 校验
         const form = {
           ...this.user_address
         }
-        // console.log(form)
-        if (!form.receiver || !form.mobile || !(form.area || form.address) || !form.detail_address) return uni.$showMsg(
-          '地址信息填写不完整')
-        // if (form.mobile[0] != 1 || form.mobile.length !== 11) return uni.$showMsg('手机号格式不正确')
+        if (!form.receiver || !form.mobile || !(form.area || form.address) || !form.detail_address) return uni
+          .$showMsg(
+            '地址信息填写不完整')
+        if (form.mobile[0] != 1 || form.mobile.length !== 11) return uni.$showMsg('手机号格式不正确')
 
+        // console.log(form)
         if (this.pageTitle === '修改地址') {
-          const address = {
-            id: form.id,
+          console.log(form)
+          // 修改地址
+          const address_list = {
             receiver: form.receiver,
             mobile: form.mobile,
-            // address: form.address,
-            // area: form.area,
-            address: form.address,
+            address: [form.address[0].value, form.address[1].value, form.address[2].value, ],
             detail_address: form.detail_address,
-            is_default: form.is_default,
           }
-          this.updateAddress(address)
+          console.log(address_list)
+          const {
+            data: res
+          } = await uni.$http.put(`address/${form.address_id}/`, {
+            address_list
+          })
+          if (res.code !== 200) return uni.$showMsg(res.msg)
+          uni.$showMsg(res.msg)
+
+          const address = {
+            ...address_list
+          }
+          address.address_id = form.address_id
+          address.address = form.address
+          this.editAddress(address)
+          setTimeout(() => {
+            uni.navigateBack(-1)
+          }, 1500)
         } else {
-          // form.address = []
-          // form.area.forEach(item => {
-          //   form.address.push(item.value)
-          // })
-          const address = {
-            id: this.address_list.length + 1,
+          // 添加地址
+          const address_list = {
+            phone_id: JSON.parse(uni.getStorageSync('userInfo')).mobile,
             receiver: form.receiver,
             mobile: form.mobile,
-            // address: form.address,
-            // area: form.area,
-            address: form.area,
-            detail_address: form.detail_address,
-            is_default: form.is_default ? form.is_default : false,
+            address: [form.area[0].value, form.area[1].value, form.area[2].value],
+            detail_address: form.detail_address
           }
-          // return  console.log(form)
-          // console.log(address)
-          // return
+          const {
+            data: res
+          } = await uni.$http.post(`address_create/`, {
+            address_list
+          })
+          if (res.code !== 200) return uni.$showMsg(res.msg)
+          uni.$showMsg(res.msg)
+
+          const address = {
+            ...address_list
+          }
+          address.address = form.area
           this.addAddress(address)
+          setTimeout(() => {
+            uni.navigateBack(-1)
+          }, 1500)
         }
-      }
+      },
+
+      // 默认地址
+      async deaultChange() {
+        // if (this.pageTitle === '修改地址') {
+        if (this.user_address.is_default) return uni.$showMsg('默认地址不能为空')
+
+        this.user_address.is_default = !this.user_address.is_default
+
+        const id = this.user_address.address_id
+        const {
+          data: res
+        } = await uni.$http.get(`address_default/${id}/`)
+        if (res.code !== 200) return uni.$showMsg(res.msg)
+        uni.$showMsg(res.msg)
+        this.updateDefaultAddress(id)
+        setTimeout(() => {
+          uni.navigateBack(-1)
+        }, 1500)
+        // } else {
+
+        // }
+      },
+
+      areaChange(e) {
+        console.log(e.detail.value)
+        this.user_address.area = e.detail.value
+        this.user_address.address = e.detail.value
+        // console.log(this.user_address)
+      },
+
     }
   }
 </script>

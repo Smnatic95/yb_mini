@@ -56,6 +56,7 @@
   margin-right: 10px;
   border-radius: 50%;
   overflow: hidden;
+  background-color: #FFFFFF;
 }
 .user-box .left .avatar image {
   width: 100%;

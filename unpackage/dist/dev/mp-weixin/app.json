@@ -44,7 +44,10 @@
         "coupons/coupons",
         "seckill/seckill",
         "card-active/card-active",
-        "public-welfare/public-welfare"
+        "public-welfare/public-welfare",
+        "collect/collect",
+        "lottery/lottery",
+        "count/count"
       ]
     }
   ],

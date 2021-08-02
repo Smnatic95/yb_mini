@@ -13,19 +13,26 @@
       <view class="order-box" v-for="item in orderList1" :key='item.order_id'>
         <!-- 订单号 -->
         <view class="order-info">
-          <view class="id">订单号:{{item.order_id}}</view>
+          <view class="id">订单号：{{item.order_id}}</view>
           <view class="state">
             <text style="color: #80C5CD;" v-show="item.status==0">待支付</text>
             <text style="color: #80C5CD;" v-show="item.status==1">待收货</text>
             <text style="color: #80C5CD;" v-show="item.status==2">已完成</text>
             <text style="color: #FFA424;" v-show="item.status==3">已退款</text>
-            <text style="color: #FFA424;" v-show="item.status==0&&!item.tracking_number">未发货</text>
+            <text style="color: #FFA424;" v-show="item.status==0&&item.tracking_number">未发货</text>
           </view>
+        </view>
+
+        <view class="time-box">
+          <view class="price">优惠券：{{item.coupon}}</view>
+          <view class="price">邮费：￥{{item.freight}}</view>
+          <view class="price">实付总价：￥{{(Number(item.price)+Number(item.freight)-Number(item.coupon)).toFixed(2)}}</view>
+          <view class="time">创建时间：{{item.create_time}}</view>
         </view>
         <!-- 商品详情 -->
         <view class="goods" v-for="(item2,i2) in item.order_goods" :key='i2'>
           <view class="pic">
-            <image :src="'https://7n.oripetlife.com/'+item2.img" mode=""></image>
+            <image :src="'https://7n.oripetlife.com/'+item2.image" mode=""></image>
           </view>
           <view class="text">
             <view>
@@ -38,6 +45,8 @@
             </view>
           </view>
         </view>
+
+
 
         <view class="btns-box">
           <button @click="gotoTrick">查看物流</button>
@@ -82,12 +91,14 @@
         orderList1: [],
       };
     },
-    onLoad() {
+    onLoad(option) {
+      console.log(option)
+      this.active = Number(option.index)
+      this.type = this.tabsItem[this.active].id
       this.getOrderList()
     },
     methods: {
       activeChaned(i, id) {
-        console.log(i)
         this.active = i
         this.type = id
         this.getOrderList()
@@ -98,11 +109,12 @@
         const {
           mobile
         } = JSON.parse(uni.getStorageSync('userInfo'))
-        // console.log(mobile)
+
+        // this.type = 2
+
         const {
           data: res
-        } = await uni.$http.get('order_user/' + mobile + '/' + this.type + '/')
-        // console.log(res)
+        } = await uni.$http.get(`order_user/${mobile}/${this.type}/`)
         if (res.code !== 200) return uni.$showMsg(res.msg)
         this.orderList1 = res.lists
         console.log(this.orderList1)
@@ -149,16 +161,16 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 24rpx 0;
+        padding: 24rpx 0 10rpx;
 
         .id {
-          font-size: 30rpx;
+          font-size: 14px;
           font-weight: 500;
           color: #999999;
         }
 
         .state {
-          font-size: 32rpx;
+          font-size: 30rpx;
           font-weight: 500;
         }
       }
@@ -180,8 +192,8 @@
         overflow: hidden;
 
         image {
-          width: 80%;
-          height: 80%;
+          width: 100%;
+          height: 100%;
         }
       }
 
@@ -224,6 +236,18 @@
             color: #C0C8D3;
           }
         }
+      }
+    }
+
+    .time-box {
+      // display: flex;
+      // justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #999999;
+
+      >view {
+        margin-bottom: 5px;
       }
     }
 

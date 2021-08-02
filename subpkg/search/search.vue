@@ -33,7 +33,7 @@
 
     <!-- 搜索结果 -->
     <view class="search-list" v-if="goodsList.length>0">
-      <view class="item" @click="gotoGoodsDetail" v-for="item in goodsList" :key='item.id'>
+      <view class="item" @click="gotoGoodsDetail(item)" v-for="item in goodsList" :key='item.id'>
         <view class="pic">
           <image :src="'https://7n.oripetlife.com/'+item.image" mode=""></image>
         </view>
@@ -118,13 +118,18 @@
 
         this.searchValue = keyword
 
-        const {
-          data: res
-        } = await uni.$http.post('query_sku_name/', {
-          query: keyword
-        })
+        const {data: res} = await uni.$http.post('query_sku_name/', {query: keyword})
         this.suggestList = []
-        this.goodsList = res.lists
+        let goodsList = res.lists
+
+        for (let i = 0; i < goodsList.length; i++) {
+          if (goodsList[i]['id'] === 32 || goodsList[i]['id'] === 33 || goodsList[i]['id'] === 34) {
+            goodsList[i]['market_price'] = String((Number(goodsList[i]['market_price']) * 4).toFixed(2))
+            goodsList[i]['price'] = String((Number(goodsList[i]['price']) * 4).toFixed(2))
+          }
+        }
+        this.goodsList = goodsList;
+
         console.log(this.search_history)
       },
       search(e) {
@@ -165,9 +170,9 @@
       },
 
 
-      gotoGoodsDetail() {
+      gotoGoodsDetail(item) {
         uni.navigateTo({
-          url: '/subpkg/goods_detail/goods_detail'
+          url: '/subpkg/goods_detail/goods_detail?id='+item.id+'&goods_stock='+item.stock
         })
       }
     }

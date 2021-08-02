@@ -9,18 +9,19 @@
 
     <!-- 地址 -->
     <view @click='gotoAddress'>
-      <address-item v-if="user_checked_address.id" :address="user_checked_address"></address-item>
+      <address-item v-if="user_checked_address.receiver" :address="user_checked_address"></address-item>
       <view class="add-address" v-else>+ 添加地址</view>
     </view>
 
     <!-- 商品列表 -->
     <block v-for="(item,i) in cart_list" :key='i'>
-      <goods-item :goods="item" v-show='item.is_checked' :showRadio="false" :showNumBox='false' :showNum='true'>
+      <goods-item :goods="item" :is_vip="is_vip" v-show='item.is_checked' :showRadio="false" :showNumBox='false'
+        :showNum='true'>
       </goods-item>
     </block>
     <view class="sub">
       <view>共{{checkedCount}}件</view>
-      <view>小计:￥<text>{{checkedGoodsAmount}}</text></view>
+      <view>小计:￥<text>{{is_vip?checkedGoodsAmount_vip:checkedGoodsAmount}}</text></view>
     </view>
 
     <!-- 优惠券 -->
@@ -55,8 +56,8 @@
     <!-- 优惠券弹出层 -->
     <uni-popup ref="popup" type="bottom">
       <view class="top">优惠券</view>
-      <scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" v-if="userCouponsList.length>0">
-        <view class="scroll-item" v-for="(item,i) in userCouponsList" :key='i' @click="couponChanged(item)">
+      <scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" v-if="couponsList.length>0">
+        <view class="scroll-item" v-for="(item,i) in couponsList" :key='i' @click="couponChanged(item)">
           <view class="left">
             <view>￥<text>{{item.price}}</text></view>
             <view>满{{item.min_price}}可用</view>
@@ -69,7 +70,7 @@
         </view>
       </scroll-view>
       <view class="no-coupon" v-else>
-        <image src="/static/images/no-coupon.png" mode="widthFix"></image>
+        <image src="https://7n.oripetlife.com/no-coupon.png" mode="widthFix"></image>
       </view>
     </uni-popup>
 
@@ -85,11 +86,13 @@
   } from 'vuex'
   const {
     mapGetters: mapGettersCart,
-    mapState: mapStateCart
+    mapState: mapStateCart,
+    mapMutations: mapMutationsCart
   } = createNamespacedHelpers('cart')
   const {
     // mapGetters: mapGettersAddress,
-    mapState: mapStateAddress
+    mapState: mapStateAddress,
+    mapMutations: mapMutationsAddress
   } = createNamespacedHelpers('address')
 
   export default {
@@ -97,73 +100,48 @@
       return {
         addressType: 1, // 地址类型
         postage: 10,
+        is_vip: '',
         coupon: 0,
-        user_checked_address: {},
-        // checkedAddress: {},
-        userCouponsList: [{
-            name: '优惠券-10元',
-            price: 10,
-            min_price: 100
-          },
-          {
-            name: '优惠券-20元',
-            price: 20,
-            min_price: 200
-          }, {
-            name: '优惠券-30元',
-            price: 30,
-            min_price: 300
-          }, {
-            name: '优惠券-40元',
-            price: 40,
-            min_price: 400
-          }, {
-            name: '优惠券-50元',
-            price: 50,
-            min_price: 500
-          }, {
-            name: '优惠券-60元',
-            price: 60,
-            min_price: 600
-          },
-        ],
-        // userCouponsList: [],
+        coupon_id: 0,
+        user_checked_address: {}, // 收货地址
       };
     },
-    onLoad(option) {
-      console.log(this.user_checked_address)
-    },
-    onShow() {
-      this.checkedAddress()
-      this.couponChanged()
-    },
-    onUnload() {
-      uni.removeStorageSync('user_checked_address')
-    },
-
     computed: {
-      ...mapStateCart(['cart_list']),
-      ...mapStateAddress(['address_list', 'is_public_address']),
-      ...mapGettersCart(['checkedCount', 'checkedGoodsAmount']),
+      ...mapStateCart(['cart_list', 'couponsList', ]),
+      ...mapStateAddress(['address_list', 'is_public_address', 'default_address_id']),
+      ...mapGettersCart(['checkedCount', 'checkedGoodsAmount', 'checkedGoodsAmount_vip']),
 
       // 合计
       totalPrice() {
-        return (Number(this.checkedGoodsAmount) + Number(this.postage) - Number(this.coupon)).toFixed(2)
+        return (Number(this.is_vip ? this.checkedGoodsAmount_vip : this.checkedGoodsAmount) + Number(this.postage) -
+          Number(this.coupon)).toFixed(2)
       },
-
-      // // 优惠券
-      // coupon(val) {
-      //   console.log(val)
-      //   const filterRes = this.userCouponsList.filter(item => item.min_price <= this.checkedGoodsAmount)
-      //   if (filterRes.length == 0) return 0
-      //   // console.log(filterRes)
-      //   return 30
-      // }
-
     },
-
+    onShow() {
+      this.is_vip = JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false
+      this.checkedAddress()
+      this.couponChanged()
+      this.addGift()
+    },
+    onUnload() {
+      uni.removeStorageSync('user_checked_address')
+      this.deleteGift()
+    },
     methods: {
-      ...mapMutations('address', ['editCheckedAddress']),
+      ...mapMutationsAddress(['editCheckedAddress', ]),
+      ...mapMutationsCart(['addGift', 'deleteGift']),
+
+      // 收货地址
+      checkedAddress() {
+        var checked_address_stroge = uni.getStorageSync('user_checked_address')
+        if (checked_address_stroge) {
+          this.user_checked_address = JSON.parse(checked_address_stroge)
+          console.log(this.user_checked_address)
+        } else {
+          this.user_checked_address = this.address_list.filter(x => x.address_id == this.default_address_id)[0]
+        }
+        this.countPosterPrice()
+      },
 
       // 展示优惠券弹出层
       showCouponsPopup() {
@@ -174,45 +152,147 @@
       couponChanged(item) {
         if (!item) {
           // 初始化
-          const filterRes = this.userCouponsList.filter(item => item.min_price <= this.checkedGoodsAmount)
-          // console.log(filterRes.length)
-          if (filterRes.length == 0) return this.coupon = 10
-          // console.log(filterRes)
+          const filterRes = this.couponsList.filter(item => item.min_price <= this.checkedGoodsAmount)
+          if (filterRes.length == 0) return this.coupon = 0
           filterRes.forEach((item, i) => {
-            // console.log(filterRes[i].price)
-            // if (filterRes[i].price < filterRes[i + 1].price) this.coupon = filterRes[i + 1].price
-            if (item.price > this.coupon) this.coupon = item.price
+            if (item.price > this.coupon) {
+              this.coupon = item.price
+              this.coupon_id = item.coupon_id
+            }
           })
-          // return this.coupon = 30
         } else {
           // 切换
           if (this.checkedGoodsAmount >= item.min_price) {
             this.coupon = item.price
+            this.coupon_id = item.coupon_id
+            console.log(item)
             this.$refs.popup.close()
           } else {
             this.coupon = 0
+            this.coupon_id = 0
             return uni.$showMsg(`商品总价小于${item.min_price}元`)
           }
-
-        }
-      },
-
-      // 收货地址
-      checkedAddress() {
-        var checked_address_stroge = uni.getStorageSync('user_checked_address')
-        if (checked_address_stroge) {
-          this.user_checked_address = JSON.parse(checked_address_stroge)
-        } else {
-          this.user_checked_address = this.address_list.filter(x => x.is_default)[0]
         }
       },
 
       // 提交订单
       onSubmit() {
-        // this.editCheckedAddress()
         console.log(this.user_checked_address)
-        //   console.log(this.defaultAddress)
+        if (!(this.user_checked_address && this.user_checked_address.address_id)) return uni.$showMsg('请选择收货地址！')
+        this.payWX()
       },
+      async payWX() {
+        const goods_list = []
+        this.cart_list.filter(x => x.is_checked).forEach(x => {
+          goods_list.push({
+            id: x.goods_id,
+            price: x.price,
+            market_price: x.market_price,
+            num: x.goods_count,
+            total_price: (this.is_vip ? x.market_price : x.price) * x.goods_count
+          })
+        })
+        const form = {
+          address_id: this.user_checked_address.address_id,
+          coupon_price: this.coupon,
+          type: this.coupon_id,
+          posterPrice: this.postage,
+          user_id: uni.getStorageSync('id'),
+          parent_id: uni.getStorageSync('parent_id'),
+          goods_list: goods_list
+        }
+        // console.log(form)
+        const {
+          data: res
+        } = await uni.$http.post('wx_order/', form)
+        var res1 = await uni.$http.get('wx_payment/' + res.order_id + '/')
+        const params = res1.data.params
+        const [err2, res2] = await uni.requestPayment({
+          "timeStamp": String(params.timeStamp),
+          "nonceStr": params.nonceStr,
+          "package": "prepay_id=" + params.prepay_id,
+          "signType": "MD5",
+          "paySign": params.sign,
+        })
+        console.log(err2, res2)
+      },
+
+      // 计算邮费
+      countPosterPrice() {
+        console.log(this.cart_list.filter(x=>x.is_checked))
+        // console.log(this.user_checked_address)
+        const province_id = this.user_checked_address.address[0].value - 0
+        // console.log(province_id)
+
+        // 新疆 西藏 1kg+15
+        let arr1 = [650000, 540000]
+        let area1 = arr1.some(item => item === province_id)
+        // 甘肃 内蒙 宁夏 青海 貓砂+40
+        let arr2 = [620000, 150000, 640000, 630000]
+        let area2 = arr2.some(item => item === province_id)
+        // 猫砂+30
+        let arr3 = [230000, 220000, 210000, 520000, 460000, 450000, 530000]
+        let area3 = arr3.some(item => item === province_id)
+
+
+        // 猫砂
+        let maosha = this.cart_list.filter(x=>x.is_checked).some(item => item.type == 4)
+        // 试吃
+        let shichi = this.cart_list.filter(x=>x.is_checked).some(item => item.type == 7 || item.type == 8)
+
+        let price = 0
+        if (area1) {
+          // 新疆 西藏
+          let sum_weight = 0
+          this.cart_list.filter(x=>x.is_checked).forEach(item => {
+            sum_weight += (item.weight - 0) * item.goods_count
+          })
+          // console.log(sum_weight);
+          sum_weight = Math.ceil(sum_weight)
+          // console.log(sum_weight);
+          price = sum_weight * 15
+        } else {
+          // console.log(this.cart_list.filter(x=>x.is_checked));
+          let ms_num = 0
+          this.cart_list.filter(x=>x.is_checked).forEach(item => {
+            if (item.type == 4) ms_num = item.goods_count
+          })
+          if (area2) {
+            if (province_id == 150000) {
+              var sum = 0
+              this.cart_list.filter(x=>x.is_checked).forEach(item => {
+                sum += item.goods_count
+              })
+              if (this.totalPrice < 60 && sum < 4) {
+                console.log(this.totalPrice)
+                price = 10
+              } else if ((this.totalPrice - 30) < 60 && sum < 4) {
+                // 转介绍优惠券
+                if (this.payForm.coupon === 1) {
+                  price = 10
+                } else if (!this.payForm.coupon) {
+                  price = 0
+                }
+              }
+            }
+          }
+          // if (shichi) {
+          //   // 试吃
+          //   // 是否有其它产品
+          //   let flag = !this.cart_list.some(item => item.type != 7 && item.type != 8)
+          //   if (flag) {
+          //     price = 10
+          //     var sum = 0
+          //     this.cart_list.forEach(item => {
+          //       sum += item.goods_count
+          //     })
+          //     if (sum >= 4) price = 0
+          //   }
+          // }
+        }
+        this.postage = price
+      },
+
 
       gotoAddress(type) {
         if (type === 1) {
@@ -226,17 +306,16 @@
           })
           this.addressType = 1
         }
-      }
+      },
+
     },
 
   }
 </script>
 
 <style lang="scss">
-
-
   .page {
-    padding: 10px 0;
+    padding: 10px 0 100px;
 
     >button {
       margin: 0 10px 10px;

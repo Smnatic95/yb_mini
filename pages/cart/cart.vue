@@ -25,7 +25,7 @@
     </view>
 
     <view class="cart-pic" v-if="cart_list.length<=0">
-      <image src="/static/images/cart1.png" mode="heightFix"></image>
+      <image src="https://7n.oripetlife.com/cart1.png" mode="heightFix"></image>
     </view>
 
     <view class="goods-list" v-else>
@@ -33,7 +33,8 @@
         <view class="mb" v-for="(item,i) in cart_list" :key='i'>
           <uni-swipe-action-item :right-options="options1" @click="swipeActionClickhandler(item)">
             <!-- 商品项组件 -->
-            <goods-item :goods='item' @num-change='numberChangeHandler' @radio-click='radioClickHandler'></goods-item>
+            <goods-item :goods='item' :is_vip='is_vip' @num-change='numberChangeHandler'
+              @radio-click='radioClickHandler'></goods-item>
           </uni-swipe-action-item>
         </view>
       </uni-swipe-action>
@@ -50,13 +51,13 @@
           <view class="total-price">
             合计：
             <text>￥</text>
-            <text class="price">{{checkedGoodsAmount}}</text>
+            <text class="price">{{is_vip?checkedGoodsAmount_vip:checkedGoodsAmount}}</text>
           </view>
           <!-- <view class="postage">不含运费</view> -->
         </view>
         <button type="default" v-if="token" @click="gotoSettle">结算({{checkedCount}})</button>
-         <button type="default" v-else open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">结算({{checkedCount}})</button>
-        <!-- <button type="default" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">结算({{checkedCount}})</button> -->
+        <button type="default" v-else open-type="getPhoneNumber"
+          @getphonenumber="getPhone">结算({{checkedCount}})</button>
       </view>
     </view>
 
@@ -73,12 +74,24 @@
   import {
     mapState,
     mapMutations,
-    mapGetters
+    mapGetters,
+    createNamespacedHelpers
   } from 'vuex'
+  const {
+    mapState: mapStateUser,
+    mapMutations: mapMutationsUser
+  } = createNamespacedHelpers("user")
+  const {
+    mapState: mapStateCart,
+    mapMutations: mapMutationsCart
+  } = createNamespacedHelpers("cart")
+
   import badgeMix from '@/mixins/tabbar-badge.js'
+  import shareMix from '@/mixins/share-app.js'
+  import phoneMix from '@/mixins/get-phone.js'
 
   export default {
-    mixins: [badgeMix], // 导入公共js
+    mixins: [badgeMix, shareMix, phoneMix], // 导入公共js
     data() {
       return {
         options1: [{
@@ -88,37 +101,32 @@
           }
         }],
         hotList: [],
-        token: false,
+        is_vip: ''
       }
     },
-
     computed: {
-      ...mapState('cart', ['cart_list']),
-      ...mapGetters('cart', ['checkedCount', 'total', 'checkedGoodsAmount']),
+      ...mapStateCart(['cart_list']),
+      ...mapStateUser(['token']),
+      ...mapGetters('cart', ['checkedCount', 'total', 'checkedGoodsAmount', 'checkedGoodsAmount_vip']),
 
       // 全选按钮选中状态
       isFullChecked() {
         return (this.total === this.checkedCount) && (this.total !== 0)
       },
     },
-
-    catch: {
-      total(val) {
-        console.log(val)
-      }
-    },
-
     onLoad() {
       this.getHotList()
     },
-    // onShow() {
-    //   this.setBadge()
-    // },
+    onShow() {
+      this.is_vip = JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false
+      // console.log(this.is_vip)
+    },
 
     methods: {
-      ...mapMutations('cart', ['addToCart', 'updateGoodsCount', 'removeGoodsById', 'undateGoodsState',
-        'updateAllChecked', 'clearCart'
+      ...mapMutationsCart(['addToCart', 'updateGoodsCount', 'removeGoodsById', 'undateGoodsState',
+        'updateAllChecked', 'clearCart',
       ]),
+      ...mapMutationsUser(['undateToken', 'updateUserInfo']),
 
       // 热门榜单
       async getHotList() {
@@ -173,19 +181,20 @@
 
       // 结算
       gotoSettle() {
-        // if (!this.token) {
-        //   return uni.redirectTo({
-        //     url: '/pages/login/login'
-        //   })
-        // }
         if (this.checkedCount <= 0) return
         uni.navigateTo({
           url: '/pages/settle/settle'
         })
       },
-      getPhoneNumber(e) {
-        console.log(e)
-        if (e.detail.errMsg === "getPhoneNumber:ok") this.token = true
+
+      getPhone(e) {
+        this.getPhoneNumber(e)
+        setTimeout(() => {
+          console.log(this.token)
+          if (this.token) {
+            this.gotoSettle()
+          }
+        }, 1500)
       }
 
 

@@ -2,7 +2,7 @@
   "pages": [{
       "path": "pages/home/home",
       "style": {
-        "enablePullDownRefresh": false
+        "enablePullDownRefresh": true
       }
     }, {
       "path": "pages/users/users",
@@ -12,7 +12,7 @@
     }, {
       "path": "pages/my/my",
       "style": {
-        "enablePullDownRefresh": false
+        "enablePullDownRefresh": true
       }
     }, {
       "path": "pages/login/login",
@@ -145,7 +145,7 @@
     }, {
       "path": "add_pet/add_pet",
       "style": {
-        "navigationBarTitleText": "新增宠物",
+        "navigationBarTitleText": "",
         "enablePullDownRefresh": false
       }
     }, {
@@ -204,8 +204,26 @@
         "navigationBarTitleText": "年卡",
         "enablePullDownRefresh": false
       }
+    }, {
+      "path": "public-welfare/public-welfare",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    }, {
+      "path": "collect/collect",
+      "style": {
+        "navigationBarTitleText": "收藏",
+        "enablePullDownRefresh": false
+      }
+    }, {
+      "path": "lottery/lottery",
+      "style": {
+        "navigationBarTitleText": "抽奖",
+        "enablePullDownRefresh": false
+      }
     }    ,{
-                    "path" : "public-welfare/public-welfare",
+                    "path" : "count/count",
                     "style" :                                                                                    
                 {
                     "navigationBarTitleText": "",

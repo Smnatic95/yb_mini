@@ -3,15 +3,19 @@
   <view class="address-item" @click="addressChecked">
     <view class="receiver">
       <view class="name">{{address.receiver}}</view>
-      <view class="default">{{address.is_default?'默认':''}}</view>
+      <view class="default">{{address.address_id==default_address_id?'默认':''}}</view>
     </view>
     <view class="mobile">{{address.mobile}}</view>
-    <view class="address">{{address.address[0].text}}{{address.address[1].text}}{{address.address[2].text}}{{address.detail_address}}</view>
+    <view class="address">
+      {{address.address[0].text}}{{address.address[1].text}}{{address.address[2].text}}{{address.detail_address}}</view>
   </view>
 
 </template>
 
 <script>
+  import {
+    mapState
+  } from 'vuex'
   export default {
     name: "address-item",
     props: {
@@ -19,6 +23,9 @@
         type: Object,
         default: {}
       },
+    },
+    computed: {
+      ...mapState('address', ['default_address_id']),
     },
     data() {
       return {};

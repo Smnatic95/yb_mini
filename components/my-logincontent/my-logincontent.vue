@@ -1,17 +1,16 @@
 <template>
   <view class="page">
-    <!-- <button class="number-btn" plain open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"> -->
     <view class="mask">
-      <image src="/static/bg.png"></image>
+      <image src="https://7n.oripetlife.com/bg.png"></image>
     </view>
 
     <view class="user">
       <view class="top">
         <view class="user1">
-          <view class="avatar-box" @click="gotoEditUser">
+          <view class="avatar-box">
             <view class="avatar">
               <open-data v-if="token&&!userInfo.avatarUrl" type="userAvatarUrl" mode="aspectFill"></open-data>
-              <image v-else :src="userInfo.avatarUrl" mode=""></image>
+              <image v-else :src="userInfo.avatarUrl"></image>
             </view>
           </view>
           <view class="info-box">
@@ -22,7 +21,7 @@
           </view>
         </view>
         <view class="sign" @click="gotoSign">
-          <image src="/static/images/sign.png" mode=""></image>
+          <image src="/static/images/sign.png"></image>
           <view>
             签到
             <uni-icons type="arrowright" size="16" color="#FFA424"></uni-icons>
@@ -84,38 +83,38 @@
     <view class="order-box">
       <view class="title">
         <text class="left">我的订单</text>
-        <view class="right" @click="gotoOrders(0)">查看全部订单
+        <view class="right" @click="gotoOrders(2)">查看全部订单
           <uni-icons type="arrowright" size="14" color=""></uni-icons>
         </view>
       </view>
       <uni-grid :column="5" :showBorder="false" :square="false" highlight>
         <uni-grid-item>
-          <view class="grid-item" @click="gotoOrders(1)">
-            <image src=/static/images/stay.png mode=""></image>
+          <view class="grid-item" @click="gotoOrders(0)">
+            <image src=/static/images/stay.png></image>
             <text>待支付</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoOrders(1)">
-            <image src=/static/images/card.png mode=""></image>
+            <image src=/static/images/card.png></image>
             <text>待发货</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoOrders(2)">
-            <image src=/static/images/che.png mode=""></image>
+            <image src=/static/images/che.png></image>
             <text>待收货</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoOrders(3)">
-            <image src=/static/images/xinxi.png mode=""></image>
+            <image src=/static/images/xinxi.png></image>
             <text>已完成</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoOrders(4)">
-            <image src=/static/images/qian.png mode=""></image>
+            <image src=/static/images/qian.png></image>
             <text>退款/退货</text>
           </view>
         </uni-grid-item>
@@ -125,14 +124,14 @@
     <view class="pet-box">
       <view class="title">
         <view class="left">我的宠物</view>
-        <view class="right" @click="gotoAddPet" v-show="petList.length>0"> + 添加宠物</view>
+        <view class="right" @click="gotoAddPet('add')" v-show="petList.length>0"> + 添加宠物</view>
       </view>
 
       <swiper :indicator-dots="true" autoplay circular :interval="3000" :duration="1000" v-if="petList.length>0">
         <swiper-item v-for="(item,i) in petList" :key='i'>
-          <view class="pet-info">
+          <view class="pet-info" @click="gotoAddPet('edit',item)">
             <view class="avatar">
-              <image src="/static/avatar.png"></image>
+              <image :src="item.avatar"></image>
             </view>
             <text class="name">{{item.name}}</text>
           </view>
@@ -150,7 +149,7 @@
       </swiper>
 
       <view class="addpet-btn" v-else>
-        <button @click="gotoAddPet">+ 添加宠物</button>
+        <button @click="gotoAddPet('add')">+ 添加宠物</button>
       </view>
 
     </view>
@@ -160,96 +159,103 @@
       <uni-grid :column="4" :showBorder="false" :square="false" highlight>
         <uni-grid-item>
           <view class="grid-item" @click="gotoCard">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>我的年卡</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoIntegral">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>我的积分</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoBalance">
             <!-- <button class="phone-btn"> -->
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>我的余额</text>
             <!-- </button> -->
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoCoupons">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>优惠券</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoPet">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>我的宠物</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoAddress">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>收货地址</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
-          <view class="grid-item" @click="gotoAddress">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+          <view class="grid-item" @click="gotoCollect">
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>我的收藏</text>
           </view>
         </uni-grid-item>
-        <uni-grid-item>
+        <!-- <uni-grid-item>
           <view class="grid-item" @click="gotoEditUser">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>个人资料</text>
           </view>
-        </uni-grid-item>
+        </uni-grid-item> -->
         <uni-grid-item>
           <view class="grid-item">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>订阅设置</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
-          <view class="grid-item">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'
-              mode=""></image>
+          <view class="grid-item" @click="logOut">
+            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            </image>
             <text>退出登录</text>
           </view>
         </uni-grid-item>
       </uni-grid>
     </view>
 
-
-    <!-- </button> -->
-
-
-    <!-- </view> -->
-
-    <!-- <view style="height: 50px;"></view> -->
+    <!-- logout popup -->
+    <!-- <button @click="open">打开弹窗</button> -->
+    <uni-popup ref="popup" type="dialog">
+      <uni-popup-dialog message="成功消息" content='确认退出？' :duration="2000" :before-close="true" @close="close"
+        @confirm="confirm">确认退出？</uni-popup-dialog>
+    </uni-popup>
 
   </view>
-
 </template>
 
 <script>
   import {
     mapState,
-    mapMutations
+    mapMutations,
+    createNamespacedHelpers
   } from 'vuex'
+  const {
+    mapState:mapStateUser,
+    mapMutations:mapMutationsUser
+  } =createNamespacedHelpers('user')
+  const {
+    mapState:mapStatePet,
+    // mapMutations:mapMutationsUser
+  } =createNamespacedHelpers('pet')
 
   export default {
     name: "my-islogin",
@@ -257,12 +263,27 @@
       return {};
     },
     computed: {
-      ...mapState('user', ['token', 'userInfo'])
+      ...mapStateUser(['token', 'userInfo']),
+      ...mapStatePet(['petList']),
     },
     methods: {
-      ...mapMutations('user', ['undateToken', 'updateUserInfo']),
+      ...mapMutationsUser(['undateToken', 'updateUserInfo']),
 
-
+      // 退出登录
+      logOut() {
+        this.$refs.popup.open('top')
+      },
+      close() {
+        this.$refs.popup.close()
+      },
+      confirm(value) {
+        this.$refs.popup.close()
+        this.undateToken(false)
+        uni.removeStorageSync('parent_id')
+        this.updateUserInfo({})
+        uni.$showMsg('退出成功！')
+      },
+      
       // 跳转修改用户信息
       gotoEditUser() {
         uni.navigateTo({
@@ -284,7 +305,7 @@
           url: '/mypkg/balance/balance'
         })
       },
-      gotoCard() {
+      gotoCard() { // 年卡
         uni.navigateTo({
           url: '/mypkg/card/card'
         })
@@ -299,9 +320,10 @@
           url: '/mypkg/pet/pet'
         })
       },
-      gotoAddPet() {
+      gotoAddPet(type,pet) {
+        if(type==='edit') uni.setStorageSync('select_pet',JSON.stringify(pet))
         uni.navigateTo({
-          url: '/mypkg/add_pet/add_pet'
+          url: '/mypkg/add_pet/add_pet?type='+type
         })
       },
       gotoRecord(type) {
@@ -322,6 +344,11 @@
       gotoCoupons() {
         uni.navigateTo({
           url: '/mypkg/coupons/coupons'
+        })
+      },
+      gotoCollect() {
+        uni.navigateTo({
+          url: '/mypkg/collect/collect'
         })
       }
 

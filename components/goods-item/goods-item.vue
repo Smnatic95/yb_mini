@@ -4,7 +4,7 @@
       @click="radioClick(goods)" />
     <view class="goods">
       <view class="pic-box">
-        <image :src="goods.goods_img" mode=""></image>
+        <image :src="goods.goods_img"></image>
       </view>
       <view class="right">
         <view class="goods-info">
@@ -18,7 +18,7 @@
         </view>
         <view class="goods-price">
           <view class="price">
-            ￥<text>{{goods.goods_price}}</text>
+            ￥<text>{{is_vip?goods.market_price:goods.price}}</text>
             <!-- <view class="price-ori">￥<text>{{}}</text></view> -->
           </view>
           <uni-number-box v-if="showNumBox" :min="1" :value='goods.goods_count' @change="numberChangeHandler">
@@ -58,9 +58,15 @@
         type: Boolean,
         default: false
       },
+      is_vip: {
+        type: Boolean,
+        default: false
+      },
     },
     data() {
-      return {};
+      return {
+        // is_vip: ''
+      };
     },
     methods: {
       ...mapMutations('cart', ['updateGoodsCount', 'removeGoodsById']),

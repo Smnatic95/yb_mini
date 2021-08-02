@@ -8,13 +8,16 @@
       <view class="content">
         <view class="user">
           <view class="avatar">
-            <image :src="userInfo.avatar"></image>
+            <!-- <image :src="userInfo.avatar"></image> -->
+            <open-data type="userAvatarUrl" mode="aspectFill"></open-data>
           </view>
-          <view class="uname">{{userInfo.username}}</view>
+          <view class="uname">
+            <open-data type="userNickName" style="color: #333;"></open-data>
+          </view>
         </view>
         <view class="text">
           <text>开通会员即享权益</text>
-          <view>联系顾问开通</view>
+          <button open-type="contact">联系客服开通</button>
         </view>
       </view>
     </view>
@@ -44,17 +47,26 @@
 
     <view class="coupons-box">
       <view class="title">
-        <view class="">优惠券</view>
-        <view class="">开通即自动领取</view>
+        <view >优惠券</view>
+        <view >开通即自动领取</view>
       </view>
 
       <scroll-view class="scroll-view_H" scroll-x="true">
-        <view class="scroll-view-item_H " v-for="item in 2" :key='item'>
+        <view class="scroll-view-item_H">
           <view class="container">
             <view class="price">10</view>
             <view class="text">
               <view class="text1">会员优惠券</view>
-              <view class="text2">满200元可用</view>
+              <view class="text2">满60元可用</view>
+            </view>
+          </view>
+        </view>
+        <view class="scroll-view-item_H">
+          <view class="container">
+            <view class="price">20</view>
+            <view class="text">
+              <view class="text1">会员优惠券</view>
+              <view class="text2">满300元可用</view>
             </view>
           </view>
         </view>
@@ -62,12 +74,12 @@
     </view>
 
     <view class="btn-box">
-      <button @click="showPopup">联系顾问开通</button>
+      <button  open-type="contact">联系客服开通</button>
     </view>
 
-    <uni-popup ref="popup" type="center">
+   <!-- <uni-popup ref="popup" type="center">
       <sale-code></sale-code>
-    </uni-popup>
+    </uni-popup> -->
 
   </view>
 </template>
@@ -133,11 +145,12 @@
         align-items: center;
 
         .avatar {
-          width: 80rpx;
-          height: 80rpx;
+          width: 100rpx;
+          height: 100rpx;
           margin-right: 10px;
           border-radius: 50%;
           overflow: hidden;
+          background-color: #fff;
 
           image {
             width: 100%;
@@ -157,10 +170,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 74rpx;
+      margin-top: 54rpx;
 
       font-size: 24rpx;
       color: #ae5a2a;
+      
+      button{
+        height: 50rpx;
+        line-height: 50rpx;
+        margin: 0;
+        font-size: 24rpx;
+        color: #ae5a2a;
+        background-color: #FFFFFF;
+        border-radius: 25rpx;
+        &::after{
+          border: 0;
+        }
+      }
 
       >view {
         // width: 73px;
@@ -279,6 +305,8 @@
     }
 
     .scroll-view_H {
+      // display: flex;
+      // justify-content: space-around;
       white-space: nowrap;
       // padding-left: 10px;
 
@@ -286,6 +314,7 @@
         display: inline-block;
         margin: 13px 10px 13px 0;
         width: 179px;
+        // width: 50%;
         height: 74px;
 
         .container {

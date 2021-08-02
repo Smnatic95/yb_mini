@@ -25,8 +25,11 @@
 /* 透明度 */
 /* 文章场景相关 */
 .integral-page {
+  padding-bottom: 50px;
   background-color: #f6f6f6;
   min-height: 100vh;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .integral-top,
 .integral-item {
@@ -94,5 +97,31 @@
   font-size: 28rpx;
   font-weight: 500;
   color: #8F99A7;
+}
+.scroll-box {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  padding: 0 15px;
+  margin-bottom: 10px;
+  background-color: #FFFFFF;
+}
+.scroll-box .scroll-view_H {
+  white-space: nowrap;
+  width: 100%;
+}
+.scroll-box .scroll-view_H .scroll-view-item_H {
+  display: inline-block;
+  padding: 12px 0;
+  width: 20%;
+  text-align: center;
+  font-size: 16px;
+  font-family: PingFang SC;
+  font-weight: 500;
+  color: #8F99A7;
+}
+.scroll-box .scroll-view_H .scroll-view-item_H.active {
+  color: #294D7C;
+  font-weight: blod;
 }
 

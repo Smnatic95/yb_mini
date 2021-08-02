@@ -24,18 +24,19 @@
             <view class="goods-title" @click="gotoGoodsDetail(item)">{{item.name}}</view>
             <view class="goods-price">
               <view class="price" @click="gotoGoodsDetail(item)">
-                <image class="icon" src="../../static/huiyuanjia.png"></image>
+                <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png"></image>
                 <text style="font-size: 12px;"></text>{{item.market_price}}
 
                 <text class="price-dis">￥<text>{{item.price}}</text></text>
 
               </view>
-              <view class="cart" v-if="item.stock>0" @click="addCart(1)">
+              <view class="cart" v-if="item.stock>0" @click="addCart(item)">
                 <uni-icons type="cart" size="14" color="#fff"></uni-icons>
               </view>
               <view class="out" v-else>售空</view>
             </view>
           </view>
+
         </view>
 
         <view style="height: 100px;"></view>
@@ -47,10 +48,9 @@
       <view class="cart" @click="showPopup">
         <image src="/static/images/cart.png" mode="widthFix"></image>
       </view>
-      <view class="price" @click="showPopup">￥{{checkedGoodsAmount}}</view>
+      <view class="price" @click="showPopup">￥{{is_vip?checkedGoodsAmount_vip:checkedGoodsAmount}}</view>
       <view class="settle" v-if="token" @click="gotoSettle">去结算({{checkedCount}})</view>
-      <button class="settle" v-else open-type="getPhoneNumber"
-        @getphonenumber="getPhoneNumber">去结算({{checkedCount}})</button>
+      <button class="settle" v-else open-type="getPhoneNumber" @getphonenumber="getPhone">去结算({{checkedCount}})</button>
     </view>
 
     <!-- 购物袋弹出层 -->
@@ -64,7 +64,8 @@
           </view>
         </view>
         <block v-for="(item,i) in cart_list" :key='i'>
-          <goods-item :goods='item' v-if="item.is_checked" :showRadio="false" showClearBtn></goods-item>
+          <goods-item :goods='item' :is_vip="is_vip" v-if="item.is_checked" :showRadio="false" showClearBtn>
+          </goods-item>
         </block>
         <view style="height: 100px;"></view>
       </scroll-view>
@@ -86,11 +87,12 @@
   const {
     mapState: mapStateHome
   } = createNamespacedHelpers('home')
-
   import badgeMix from '@/mixins/tabbar-badge.js'
+  import shareMix from '@/mixins/share-app.js'
+  import phoneMix from '@/mixins/get-phone.js'
 
   export default {
-    mixins: [badgeMix], // 导入公共js
+    mixins: [badgeMix, shareMix, phoneMix], // 导入公共js
     data() {
       return {
         options1: [{
@@ -106,13 +108,17 @@
 
         goodsListAll: [],
         goodsList: [],
+        is_vip: '',
       };
+    },
+    onShow() {
+      this.is_vip = JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false
     },
 
     computed: {
       ...mapStateHome(['scrollList']),
       ...mapStateCart(['cart_list']),
-      ...mapGetters('cart', ['checkedGoodsAmount', 'checkedCount'])
+      ...mapGetters('cart', ['checkedCount', 'total', 'checkedGoodsAmount', 'checkedGoodsAmount_vip']),
     },
 
     onLoad() {
@@ -147,6 +153,7 @@
 
         this.goodsList = [...arr1, ...arr2]
       },
+
       activeChanged(item, i) {
         this.active = i
         if (!item.type && item.type != 0) return this.getGoodsList()
@@ -155,7 +162,6 @@
         const arr2 = arr.filter(x => x.stock == 0)
         this.goodsList = [...arr1, ...arr2]
       },
-
 
       showPopup() {
         if (!this.cartPopup) {
@@ -166,18 +172,24 @@
           this.cartPopup = false
         }
       },
+
       // 点击加入购物车
-      addCart(id) {
+      addCart(item) {
+        console.log(item)
         const goods = {
-          goods_id: id,
-          goods_name: '原本成猫粮',
-          goods_intro: '猫来了联名款',
-          goods_pic: '/static/goods.png',
-          goods_price: '179.00',
+          goods_id: item.id,
+          goods_name: item.name,
+          goods_intro: item.intro,
+          goods_img: 'https://7n.oripetlife.com/' + item.img,
+          // goods_price: item.price,
+          market_price: item.market_price,
+          price: item.price,
           goods_count: 1,
+          weight: item.weight,
           is_checked: true,
         }
         this.addToCart(goods)
+        uni.$showMsg("商品添加成功~")
       },
       clearCartHandler() {
         this.clearCart()
@@ -186,7 +198,7 @@
       // 跳转商品详情页面
       gotoGoodsDetail(item) {
         uni.navigateTo({
-          url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}`,
+          url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}&weight=${item.weight}`,
         })
       },
       gotoSearch() {
@@ -195,13 +207,20 @@
         })
       },
       gotoSettle() {
-        // console.log(this.checkedCount)
-        // return
         if (this.checkedCount <= 0) return
         uni.navigateTo({
           url: '/pages/settle/settle'
         })
       },
+      getPhone(e) {
+        this.getPhoneNumber(e)
+        setTimeout(() => {
+          console.log(this.token)
+          if (this.token) {
+            this.gotoSettle()
+          }
+        }, 1500)
+      }
 
 
 

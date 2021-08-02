@@ -365,6 +365,9 @@
   color: #8F99A7;
 }
 .scroll-box {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
   padding: 0 15px;
   background-color: #FFFFFF;
 }

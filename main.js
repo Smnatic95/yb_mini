@@ -8,7 +8,8 @@ import {
 } from '@escook/request-miniprogram'
 uni.$http = $http
 
-$http.baseUrl = 'http://192.168.1.9:8080/'
+// 'https://7n.oripetlife.com/'
+$http.baseUrl = 'http://192.168.1.28:8080/'
 // 请求拦截器
 $http.beforeRequest = function(options) {
   uni.showLoading({
@@ -20,7 +21,7 @@ $http.afterRequest = function() {
   uni.hideLoading()
 }
 
-// 封装提示消息
+// 消息提示
 uni.$showMsg = function(title = '加载失败', duration = 1500, icon = 'none') {
   uni.showToast({
     title: title,

@@ -25,7 +25,33 @@
 /* 透明度 */
 /* 文章场景相关 */
 .page {
-  padding: 30px 10px 20px;
+  padding: 10px 10px 20px;
+}
+.no-coupon {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  width: 100%;
+  padding-top: 100px;
+}
+.no-coupon image {
+  width: 80%;
+}
+.pic {
+  width: 100%;
+  height: 250rpx;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.pic image {
+  width: 100%;
 }
 .scroll-item {
   display: -webkit-box;
