@@ -26,7 +26,7 @@
           <!--  <view class="cart" v-if="item.stock>0" @click="addCart(1)">
             <uni-icons type="cart" size="14" color="#fff"></uni-icons>
           </view>
-          <view class="out" v-else>售空12</view> -->
+          <view class="out" v-else>售空</view> -->
         </view>
       </view>
     </view>
