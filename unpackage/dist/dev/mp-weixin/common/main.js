@@ -18,7 +18,8 @@ var _requestMiniprogram = __webpack_require__(/*! @escook/request-miniprogram */
 uni.$http = _requestMiniprogram.$http;
 
 // 'https://7n.oripetlife.com/'
-_requestMiniprogram.$http.baseUrl = 'http://192.168.1.28:8080/';
+// $http.baseUrl = 'http://192.168.1.28:8080/'
+_requestMiniprogram.$http.baseUrl = ' http://192.168.1.52:8080/';
 // 请求拦截器
 _requestMiniprogram.$http.beforeRequest = function (options) {
   uni.showLoading({
