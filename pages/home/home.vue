@@ -256,7 +256,17 @@
         } = await uni.$http.get('user_hots_skus/')
         // console.log(res)
         if (res.code !== 200) return uni.$showMsg(res.msg)
-        // this.hotList = res.lists
+        this.hotList = res.lists
+
+        // 四袋装
+        this.hotList.forEach(item => {
+          if (item.id === 32 || item.id === 33 || item.id === 34) {
+            item.market_price = (Number(item.market_price) * 4).toFixed(2)
+            item.price = (Number(item.price) * 4).toFixed(2)
+          }
+        })
+
+
 
         // 售空
         const arr1 = res.lists.filter(x => x.stock > 0)
@@ -374,7 +384,7 @@
         })
       },
     },
-    
+
     onPullDownRefresh() {
       this.getHotList()
       this.getNewList()
