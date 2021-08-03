@@ -187,13 +187,23 @@ var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(
   (0, _vuex.mapMutations)('user', ['updateCollect', 'deleteCollect'])), {}, {
 
     // 热门榜单
-    getCollectList: function getCollectList() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var mobile, _yield$uni$$http$get, res;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
+    getCollectList: function getCollectList() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var mobile, _yield$uni$$http$get, res, collectL_list, i;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
                 mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile;_context.next = 3;return (
 
 
-                  uni.$http.get("user_collect_list/".concat(mobile, "/")));case 3:_yield$uni$$http$get = _context.sent;res = _yield$uni$$http$get.data;if (!(
-                res.code !== 200)) {_context.next = 7;break;}return _context.abrupt("return", uni.$showMsg(res.msg));case 7:
-                _this.updateCollect(res.collect_list);case 8:case "end":return _context.stop();}}}, _callee);}))();
+                  uni.$http.get("user_collect_list/".concat(mobile, "/")));case 3:_yield$uni$$http$get = _context.sent;res = _yield$uni$$http$get.data;
+
+                _this.suggestList = [];
+                collectL_list = res.collect_list;
+
+                for (i = 0; i < collectL_list.length; i++) {
+                  if (collectL_list[i]['id'] === 32 || collectL_list[i]['id'] === 33 || collectL_list[i]['id'] === 34) {
+                    collectL_list[i]['market_price'] = String((Number(collectL_list[i]['market_price']) * 4).toFixed(2));
+                    collectL_list[i]['price'] = String((Number(collectL_list[i]['price']) * 4).toFixed(2));
+                  }
+                }if (!(
+                res.code !== 200)) {_context.next = 10;break;}return _context.abrupt("return", uni.$showMsg(res.msg));case 10:
+                _this.updateCollect(collectL_list);case 11:case "end":return _context.stop();}}}, _callee);}))();
     },
 
     // 点击收藏
