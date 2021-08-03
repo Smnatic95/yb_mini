@@ -185,7 +185,7 @@
         const goods_list = []
         this.cart_list.filter(x => x.is_checked).forEach(x => {
           goods_list.push({
-            id: x.goods_id,
+            id: Number(x.goods_id),
             price: x.price,
             market_price: x.market_price,
             num: x.goods_count,
@@ -201,10 +201,7 @@
           parent_id: uni.getStorageSync('parent_id'),
           goods_list: goods_list
         }
-        // console.log(form)
-        const {
-          data: res
-        } = await uni.$http.post('wx_order/', form)
+        const { data: res } = await uni.$http.post('wx_order/', form)
         var res1 = await uni.$http.get('wx_payment/' + res.order_id + '/')
         const params = res1.data.params
         const [err2, res2] = await uni.requestPayment({
