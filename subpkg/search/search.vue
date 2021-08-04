@@ -128,6 +128,7 @@ export default {
       for (let i = 0; i < goodsList.length; i++) {
         if (goodsList[i]['id'] === 32 || goodsList[i]['id'] === 33 || goodsList[i]['id'] === 34) {
           goodsList[i]['market_price'] = String((Number(goodsList[i]['market_price']) * 4).toFixed(2))
+          goodsList[i]['price'] = String((Number(goodsList[i]['price']) * 4).toFixed(2))
         }
       }
       this.goodsList = goodsList;
