@@ -16,11 +16,16 @@
     <view class="top">
       <view class="left">
         <uni-icons type="shop" size="18"></uni-icons>
-        <text class="top-text">购物袋</text>
+        <text class="top-text title">购物袋</text>
+        <text class="count">({{cart_list.length}})</text>
       </view>
-      <view class="right" @click="clearCart">
+      <!-- <view class="right" @click="clearCart">
         <uni-icons type="trash" size="15" color=""></uni-icons>
         <text class="top-text">清空</text>
+      </view> -->
+      <view class="right manageCart" :class="{ active:isManange }" @click="manageCart">
+        <view class="top-text">管理</view>
+        <view class="icon_delete" v-if="isManange">X</view>
       </view>
     </view>
 
@@ -40,13 +45,27 @@
       </uni-swipe-action>
     </view>
 
-    <!-- 结算按钮 -->
+    <!-- 底部栏 -->
     <view class="settle-box">
       <view class="left">
-        <radio :checked='isFullChecked' @click="allCheckedClick" color="tomato" style="transform:scale(0.7)" />
-        <text>全选</text>
+        
+        <radio-group name="allcheck" @click="allCheckedClick" v-if="cart_list.length>0">
+          <label class="radio">
+            <radio :checked='isFullChecked' color="tomato" style="transform:scale(0.7)" />
+            <text>全选</text>
+          </label>
+        </radio-group>
+        
+        <radio-group name="allcheck" @click="allCheckedClick1" v-else>
+          <label class="radio">
+            <radio :checked='isFullChecked1' color="tomato" style="transform:scale(0.7)" />
+            <text>全选</text>
+          </label>
+        </radio-group>
+        
       </view>
-      <view class="right">
+      <!--结算-->
+      <view class="right" v-if="!isManange">
         <view class="total-box">
           <view class="total-price">
             合计：
@@ -59,6 +78,11 @@
         <button type="default" v-else open-type="getPhoneNumber"
           @getphonenumber="getPhone">结算({{checkedCount}})</button>
       </view>
+      <!--删除-->
+      <view class="right onManage" v-else>
+        <button type="default" @click="deleteGoods">删除</button>
+      </view>
+
     </view>
 
     <!-- 猜你喜欢-->
@@ -66,6 +90,11 @@
       <view class="title">猜你喜欢</view>
       <home-goodsitem :goodsList="hotList"></home-goodsitem>
     </view>
+
+    <uni-popup ref="deletedialog" type="dialog">
+      <uni-popup-dialog cancelText="我再想想" confirmText="删除" :content="deeteToa" @confirm="deleteconfirm" title="提示">
+      </uni-popup-dialog>
+    </uni-popup>
 
   </view>
 </template>
@@ -101,25 +130,28 @@
           }
         }],
         hotList: [],
-        is_vip: ''
+        is_vip: '',
+        isManange: false,
+        isFullChecked1: false
       }
     },
     computed: {
       ...mapStateCart(['cart_list']),
       ...mapStateUser(['token']),
       ...mapGetters('cart', ['checkedCount', 'total', 'checkedGoodsAmount', 'checkedGoodsAmount_vip']),
-
       // 全选按钮选中状态
       isFullChecked() {
-        return (this.total === this.checkedCount) && (this.total !== 0)
+        return this.total === this.checkedCount && this.total > 0;
       },
+      deeteToa() {
+        return `确认将这${this.checkedCount}个宝贝删除？`
+      }
     },
     onLoad() {
-      this.getHotList()
+      this.getHotList();
     },
     onShow() {
-      this.is_vip = JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false
-      // console.log(this.is_vip)
+      this.is_vip = JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false;
     },
 
     methods: {
@@ -163,6 +195,10 @@
         })
       },
 
+      allCheckedClick1() {
+        this.isFullChecked1 = !this.isFullChecked1;
+      },
+
       // 切换数量
       numberChangeHandler(e) {
         this.updateGoodsCount(e)
@@ -176,12 +212,14 @@
 
       // 更新全选按钮的选中状态
       allCheckedClick() {
-        this.updateAllChecked(!this.isFullChecked)
+        this.updateAllChecked(!this.isFullChecked);
       },
 
       // 结算
       gotoSettle() {
-        if (this.checkedCount <= 0) return
+        if (this.checkedCount <= 0) {
+          return uni.$showMsg('您还没有选择宝贝哦！')
+        }
         uni.navigateTo({
           url: '/pages/settle/settle'
         })
@@ -195,17 +233,56 @@
             this.gotoSettle()
           }
         }, 1500)
+      },
+      manageCart() {
+        this.isManange = !this.isManange;
+      },
+      deleteGoods() {
+        let choosedGoods = this.cart_list.filter(item => item.is_checked);
+        if (!choosedGoods.length) {
+          return uni.$showMsg('您还没有选择宝贝哦！')
+        } else {
+          this.$refs.deletedialog.open();
+        }
+      },
+      deleteconfirm() {
+        this.$refs.deletedialog.close();
+        let choosedGoods = this.cart_list.filter(item => item.is_checked);
+        choosedGoods.forEach((item) => {
+          this.removeGoodsById(item.goods_id);
+        })
+        uni.$showMsg('删除成功', 1000)
       }
-
-
-
-
+    },
+    watch:{
+      isFullChecked(){
+       this.isFullChecked1 = this.isFullChecked;
+      }
     }
 
   }
 </script>
 
 <style lang="scss">
+  
+  label{
+    display: flex;
+    align-items: center;
+  }
+  
+  .uni-popup__error {
+    color: black !important;
+  }
+
+  .uni-dialog-button .uni-dialog-button-text {
+    color: gray;
+  }
+
+  .uni-border-left .uni-dialog-button-text {
+    color: #FE0741 !important;
+  }
+
+
   .info-box {
     display: flex;
     justify-content: space-around;
@@ -227,18 +304,60 @@
     background-color: #FFFFFF;
 
     .left {
+      display: flex;
+      align-items: center;
+
       uni-icons {
         padding: 0 10px;
       }
 
       .top-text {
-        font-size: 16px;
+        height: 34rpx;
+        font-size: 34rpx;
+        line-height: 34rpx;
       }
+
+      .count {
+        font-size: 28rpx;
+        height: 28rpx;
+        line-height: 28rpx;
+        margin-left: 5rpx;
+      }
+
     }
 
     .right {
       font-size: 15px;
       color: #8c8c8c;
+
+
+      &.manageCart {
+        line-height: 50rpx;
+        height: 50rpx;
+        padding: 0 20rpx;
+        border: 1px solid #fff;
+        border-radius: 30rpx;
+        font-size: 28rpx;
+      }
+
+      &.manageCart.active {
+        color: #E84E0E;
+        border: 1px solid #E0C6BA;
+        display: flex;
+        align-items: center;
+
+        .top-text {
+          font-weight: 600;
+          margin-right: 6rpx;
+        }
+
+        .icon_delete {
+          font-size: 24rpx;
+          height: 24rpx;
+          line-height: 24rpx;
+        }
+
+      }
 
       uni-icons {
         padding: 0 3px;
@@ -292,6 +411,12 @@
       align-items: center;
       font-size: 24rpx;
       box-sizing: border-box;
+
+      &.onManage {
+        button {
+          background: linear-gradient(to right, #FF0359, #FA1A04);
+        }
+      }
 
       .total-box {
         display: flex;

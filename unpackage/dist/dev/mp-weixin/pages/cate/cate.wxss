@@ -147,7 +147,7 @@
           justify-content: space-between;
   font-weight: bold;
   font-size: 18px;
-  color: #294D7C;
+  color: var(--color-money);
 }
 .scroll-box .scroll-right .scroll-view-item .goods-info .goods-price .cart {
   display: inline-block;
@@ -209,7 +209,8 @@
   width: 60px;
 }
 .btns-box .cart image {
-  width: 100%;
+  width: 60px;
+  height: 60px;
 }
 .btns-box .price {
   position: absolute;

@@ -164,8 +164,8 @@
   border-radius: 6px;
 }
 .search-list .item .pic image {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
 }
 .search-list .item .text {
   display: -webkit-box;

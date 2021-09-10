@@ -27,6 +27,145 @@
 .page {
   padding-top: 20rpx;
 }
+.bread-drawer {
+  width: 100vw;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 30rpx 20rpx;
+}
+.bread-drawer .bread-item {
+  display: inline-block;
+  margin-left: 20rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  padding: 0 20rpx;
+  background-color: #2A4E7C;
+  color: #fff;
+  border-radius: 15rpx;
+  font-size: 28rpx;
+}
+.bread-drawer .bread-item:first-of-type {
+  margin-left: 0;
+}
+.btns_import {
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  margin-bottom: 10rpx;
+  padding: 20rpx;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+.btns_import .box_btn {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  margin-left: 20rpx;
+  border-left: 1px solid #ccc;
+  padding-left: 20rpx;
+}
+.btns_import .box_btn:first-of-type {
+  margin-left: 0;
+  border: none;
+  padding-left: 0;
+}
+.btns_import .box_btn .icon-import {
+  width: 70rpx;
+  height: 70rpx;
+}
+.btns_import .box_btn .btn_import {
+  line-height: 70rpx;
+  height: 70rpx;
+  margin: 0;
+  padding: 0;
+  color: #FFAE84;
+}
+.pet-drawer {
+  white-space: nowrap;
+  width: 100%;
+  padding-top: 50rpx;
+}
+.pet-drawer .pet-item {
+  display: inline-block;
+  width: 140rpx;
+}
+.pet-drawer .pet-item .box {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  width: 100%;
+}
+.pet-drawer .pet-item:first-child {
+  margin-left: 30rpx;
+}
+.pet-drawer .pet-item:last-child {
+  margin-bottom: 45rpx;
+  margin-right: 30rpx;
+}
+.pet-drawer .pet-item .avatar {
+  margin-top: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  width: 90rpx;
+  height: 90rpx;
+  margin-bottom: 16rpx;
+  background-color: #F6F6F6;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.pet-drawer .pet-item .avatar image {
+  width: 100%;
+  height: 100%;
+}
+.pet-drawer .pet-item .name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #000104;
+}
+.tabs {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  height: 80rpx;
+}
+.tabs .tab {
+  margin-left: 40rpx;
+  line-height: 80rpx;
+  color: #5f595c;
+  font-size: 30rpx;
+  -webkit-transition: font-size .06s linear;
+  transition: font-size .06s linear;
+}
+.tabs .tab:first-of-type {
+  margin-left: 0;
+}
+.tabs .tab.active {
+  color: #000;
+  font-size: 34rpx;
+  font-weight: bold;
+}
 .uni-forms-item {
   background-color: #FFFFFF;
   border-bottom: 1px solid #F6F6F6;

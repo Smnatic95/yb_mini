@@ -33,7 +33,7 @@
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
           justify-content: space-between;
-  padding: 0 15px;
+  padding: 0 30rpx;
   background-color: #FFFFFF;
 }
 .goods-box .goods-item {
@@ -76,6 +76,15 @@
   font-weight: 500;
   color: #C0C8D3;
 }
+.goods-box .goods-item .text .price-col {
+  margin-top: 10rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+          align-items: flex-end;
+}
 .goods-box .goods-item .text .price-col .icon {
   font-size: 20rpx;
   font-weight: bold;
@@ -85,7 +94,9 @@
   font-size: 34rpx;
   font-family: DIN;
   font-weight: bold;
-  color: #294D7C;
+  color: tomato;
+  height: 34rpx;
+  line-height: 34rpx;
 }
 .goods-box .goods-item .text .price-col image {
   margin-right: 6rpx;

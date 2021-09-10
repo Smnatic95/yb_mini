@@ -2,15 +2,22 @@ import Vue from 'vue'
 import App from './App'
 import store from './store/store.js'
 
+
+Vue.filter("tofixed2",(data)=>{
+  return data.toFixed(2);
+})
+
 // 配置网络请求
 import {
   $http
 } from '@escook/request-miniprogram'
 uni.$http = $http
 
-// 'https://7n.oripetlife.com/'
-// $http.baseUrl = 'http://192.168.1.28:8080/'
-$http.baseUrl = ' http://192.168.1.52:8080/'
+ // uni.$baseUrl = 'http://192.168.1.103:8080/';
+uni.$baseUrl = 'https://ybmini.oripetlife.com/';
+uni.$baseUrl1 = 'https://7n.oripetlife.com/';
+
+$http.baseUrl = uni.$baseUrl;
 // 请求拦截器
 $http.beforeRequest = function(options) {
   uni.showLoading({
@@ -30,6 +37,22 @@ uni.$showMsg = function(title = '加载失败', duration = 1500, icon = 'none') 
     icon: icon
   })
 }
+
+
+var globalMixin = {
+  methods:{
+    viewNavigate(url) {
+      uni.navigateTo({
+        url,
+        fail(err) {
+          console.log(url + '跳转出错' ,err)
+        }
+      })
+    }
+  }
+}
+
+Vue.mixin(globalMixin)
 
 Vue.config.productionTip = false
 

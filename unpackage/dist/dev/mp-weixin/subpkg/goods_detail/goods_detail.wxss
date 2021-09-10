@@ -103,6 +103,25 @@
 .icon-gouwuche:before {
   content: "\e63f";
 }
+@font-face {
+    font-family: "iconfont"; /* Project id 2784195 */
+    src: url('//at.alicdn.com/t/font_2784195_zuhl7af868f.woff2?t=1630545382314') format('woff2'),
+         url('//at.alicdn.com/t/font_2784195_zuhl7af868f.woff?t=1630545382314') format('woff'),
+         url('//at.alicdn.com/t/font_2784195_zuhl7af868f.ttf?t=1630545382314') format('truetype');
+}
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.icon-miaosha:before {
+    content: "\eebb";
+}
+.icon-duihao:before {
+    content: "\e61c";
+}
 .container {
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
@@ -576,7 +595,7 @@ swiper {
   bottom: env(safe-area-inset-bottom);
 }
 .popup-box {
-  height: 500px;
+  height: 80vh;
   border-radius: 10px;
   background-color: #FFFFFF;
 }
@@ -632,21 +651,35 @@ swiper {
   color: #444;
 }
 .settle-box {
-  padding: 30px 0 40px;
-  margin-top: 10px;
+  min-height: 70vh;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 30rpx 0 100rpx;
+  margin-top: 10rpx;
   background-color: #FFFFFF;
-  border-radius: 10px 10px 0 0;
+  border-radius: 20rpx 20rpx 0 0;
   overflow: hidden;
+  position: relative;
 }
 .settle-box button {
-  height: 50px;
-  margin: 20px 15px 0;
-  line-height: 50px;
+  position: absolute;
+  width: 95%;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  bottom: 20rpx;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   color: #FFFFFF;
   background-color: #ffa424;
   border-radius: 25px;
+  font-size: 32rpx;
 }
 .settle-box button::after {
   border: 0;
+}
+.settle-box.addcar button {
+  background-color: #294D7C;
 }
 

@@ -175,7 +175,8 @@ var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(
   data: function data() {
     return {
       // collectList: [], // 收藏列表
-    };
+      topImg: uni.$baseUrl1 + 'yb-top-image-4.jpg' };
+
   },
   onLoad: function onLoad() {
     this.getCollectList();

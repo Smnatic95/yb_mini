@@ -1,9 +1,9 @@
 export default {
 
-  onLoad() {
-    let page = getCurrentPages()
-    const parentId = uni.getStorageSync('parent_id')
-    uni.setStorageSync('parent_id', parentId ? parentId : page[0].options.parent_id)
+  onLoad(options) {
+    const parentId = uni.getStorageSync('parent_id');
+    console.log('页面参数的parent_id:', options.parent_id, '本地parent_id:', parentId);
+    uni.setStorageSync('parent_id', parentId ? parentId : options.parent_id);
   },
 
   // methods: {
@@ -25,7 +25,7 @@ export default {
     }
     var obj = {
       title: '原本宠物生活',
-      imageUrl:'/static/pics/share.jpg',
+      imageUrl: '/static/pics/share.jpg',
       path: '/pages/home/home?parent_id=' + p_id,
     }
     if (e.from == 'button') {

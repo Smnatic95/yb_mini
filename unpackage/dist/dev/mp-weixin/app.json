@@ -47,7 +47,11 @@
         "public-welfare/public-welfare",
         "collect/collect",
         "lottery/lottery",
-        "count/count"
+        "count/count",
+        "peta/peta",
+        "count-success/count-success",
+        "score-goods/score-goods",
+        "crop-pic/crop-pic"
       ]
     }
   ],

@@ -100,11 +100,14 @@ var render = function() {
   var l0 = _vm.__map(_vm.orderList1, function(item, __i0__) {
     var $orig = _vm.__get_orig(item)
 
-    var g0 = (
-      Number(item.price) +
-      Number(item.freight) -
-      Number(item.coupon)
-    ).toFixed(2)
+    var g0 =
+      _vm.orderList1 && _vm.orderList1.length
+        ? (
+            Number(item.price) +
+            Number(item.freight) -
+            Number(item.coupon)
+          ).toFixed(2)
+        : null
     return {
       $orig: $orig,
       g0: g0
@@ -216,7 +219,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _myOrders = _interopRequireDefault(__webpack_require__(/*! ../my-orders/my-orders.vue */ 133));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default =
+
+
+
+
+
+
+
+var _myOrders = _interopRequireDefault(__webpack_require__(/*! ../my-orders/my-orders.vue */ 133));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default =
 
 {
   components: {
@@ -229,7 +239,7 @@ var _myOrders = _interopRequireDefault(__webpack_require__(/*! ../my-orders/my-o
         id: 0 },
       {
         type: '待发货',
-        id: 4 },
+        id: 1 },
       {
         type: '待收货',
         id: 1 },
@@ -240,13 +250,12 @@ var _myOrders = _interopRequireDefault(__webpack_require__(/*! ../my-orders/my-o
         type: '退款/退货',
         id: 3 }],
 
-      active: 0,
+      active: null,
       type: 0,
-      orderList1: [] };
+      orderList1: null };
 
   },
   onLoad: function onLoad(option) {
-    console.log(option);
     this.active = Number(option.index);
     this.type = this.tabsItem[this.active].id;
     this.getOrderList();
@@ -257,23 +266,77 @@ var _myOrders = _interopRequireDefault(__webpack_require__(/*! ../my-orders/my-o
       this.type = id;
       this.getOrderList();
     },
-
     getOrderList: function getOrderList() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var _JSON$parse, mobile, _yield$uni$$http$get, res;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
-                _this.orderList1 = [];_JSON$parse =
+                _this.orderList1 = null;_JSON$parse =
 
 
-                JSON.parse(uni.getStorageSync('userInfo')), mobile = _JSON$parse.mobile;
-
-                // this.type = 2
-                _context.next = 4;return (
+                JSON.parse(uni.getStorageSync('userInfo')), mobile = _JSON$parse.mobile;_context.next = 4;return (
 
 
                   uni.$http.get("order_user/".concat(mobile, "/").concat(_this.type, "/")));case 4:_yield$uni$$http$get = _context.sent;res = _yield$uni$$http$get.data;if (!(
                 res.code !== 200)) {_context.next = 8;break;}return _context.abrupt("return", uni.$showMsg(res.msg));case 8:
-                _this.orderList1 = res.lists;
-                console.log(_this.orderList1);
-                // uni.setStorageSync('orderList', JSON.stringify(this.orderList1))
-              case 10:case "end":return _context.stop();}}}, _callee);}))();} } };exports.default = _default;
+                res.lists = res.lists || [];
+                //待发货
+                if (_this.active == 1) {
+                  res.lists = res.lists.filter(function (item) {return !item.tracking_number;});
+                }
+                //待收货
+                if (_this.active == 2) {
+                  res.lists = res.lists.filter(function (item) {return item.tracking_number;});
+                }
+
+                res.lists = res.lists.sort(function (a, b) {
+                  return new Date(b.create_time).getTime() - new Date(a.create_time).getTime();
+                });
+
+                console.log(res);
+                _this.orderList1 = res.lists;case 14:case "end":return _context.stop();}}}, _callee);}))();
+    },
+    gotoPay: function gotoPay(item) {var _this2 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {var res1, params, _yield$uni$requestPay, _yield$uni$requestPay2, err2, res2, _yield$uni$$http$get2, res3;return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:_context2.next = 2;return (
+
+                  uni.$http.get('wx_payment/' + item.order_id + '/'));case 2:res1 = _context2.sent;
+                params = res1.data.params;
+                console.log(params);
+                //吊起微信支付
+                _context2.next = 7;return uni.requestPayment({
+                  "timeStamp": String(params.timeStamp),
+                  "nonceStr": params.nonceStr,
+                  "package": "prepay_id=" + params.prepay_id,
+                  "signType": "MD5",
+                  "paySign": params.sign });case 7:_yield$uni$requestPay = _context2.sent;_yield$uni$requestPay2 = _slicedToArray(_yield$uni$requestPay, 2);err2 = _yield$uni$requestPay2[0];res2 = _yield$uni$requestPay2[1];
+
+                console.log('微信支付结果', err2, res2);_context2.next = 14;return (
+
+
+                  uni.$http.get('wxeck_order/' + item.order_id + '/'));case 14:_yield$uni$$http$get2 = _context2.sent;res3 = _yield$uni$$http$get2.data;
+                uni.$showMsg(res3.msg);
+                if (res3.code === 200) {
+                  _this2.active = 1;
+                  _this2.type = 1;
+                  _this2.getOrderList();
+                } else if (res3.code === 400) {
+                  console.log('支付失败');
+                }case 18:case "end":return _context2.stop();}}}, _callee2);}))();
+    },
+    copyTrackingNumber: function copyTrackingNumber(data) {
+      uni.setClipboardData({
+        data: data,
+        success: function success() {
+          uni.$showMsg('物流单号复制成功');
+        } });
+
+    },
+    confirmG: function confirmG(order) {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {var _yield$uni$$http$get3, res;return _regenerator.default.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:_context3.next = 2;return (
+
+
+                  uni.$http.get('order_true/' + order.order_id + '/'));case 2:_yield$uni$$http$get3 = _context3.sent;res = _yield$uni$$http$get3.data;
+                uni.$showMsg(res.msg);
+                if (res.code == 200) {
+                  _this3.active = 3;
+                  _this3.type = 2;
+                  _this3.getOrderList();
+                }case 6:case "end":return _context3.stop();}}}, _callee3);}))();
+    } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

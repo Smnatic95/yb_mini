@@ -222,16 +222,41 @@
         "navigationBarTitleText": "抽奖",
         "enablePullDownRefresh": false
       }
-    }    ,{
-                    "path" : "count/count",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+    }, {
+      "path": "count/count",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+
+    }, {
+      "path": "peta/peta",
+      "style": {
+        "navigationBarTitleText": "我的宠物",
+        "enablePullDownRefresh": false
+      }
+    }, {
+      "path": "count-success/count-success",
+      "style": {
+        "navigationBarTitleText": "宠物喂食报告",
+        "enablePullDownRefresh": false
+      }
+    }, {
+      "path": "score-goods/score-goods",
+      "style": {
+        "navigationBarTitleText": "积分商品",
+        "enablePullDownRefresh": false
+      }
+    }, {
+      "path": "crop-pic/crop-pic",
+      "style": {
+        "navigationBarTitleText": "图片裁剪",
+        "enablePullDownRefresh": false,
+        "usingComponents": {
+          "image-cropper": "/wxcomponents/image-cropper/image-cropper"
+        }
+      }
+    }]
   }],
 
   "tabBar": {

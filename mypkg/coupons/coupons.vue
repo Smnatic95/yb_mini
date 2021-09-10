@@ -1,13 +1,14 @@
 <template>
   <view class="page">
 
-    <view class="no-coupon" v-if="couponsList.length<=0">
+    <view class="no-coupon" v-if="!couponsList.length">
       <image src="https://7n.oripetlife.com/no-coupon.png" mode="widthFix"></image>
     </view>
 
     <block v-else>
+
       <view class="pic">
-        <image src="/static/images/bg1.png" mode=""></image>
+        <image :src="topBg" mode=""></image>
       </view>
       <view class="scroll-item" v-for="(item,i) in couponsList" :key='item.coupon_id'>
         <view class="left">
@@ -16,10 +17,10 @@
         </view>
         <view class="right">
           <view>{{item.coupon_name}}</view>
-          <view>不限时</view>
-          <!-- <view v-else>不可用</view> -->
+          <view class="box-create_time">发放时间：{{item.create_time}}(有效时间30天)</view>
         </view>
       </view>
+
     </block>
 
   </view>
@@ -32,7 +33,9 @@
   } from 'vuex'
   export default {
     data() {
-      return {};
+      return {
+        topBg: uni.$baseUrl1 + 'yb-top-image-5.jpg'
+      };
     },
     computed: {
       ...mapState('cart', ['is_vip', 'couponsList']),
@@ -51,9 +54,9 @@
           data: res
         } = await uni.$http.get(`user_coupon/${mobile}/`)
         if (res.code !== 200) return uni.$showMsg(res.msg)
-        // console.log(res)
-        let arr = res.lists
-        if (res.lists.length > 0) {
+        res.lists = res.lists || [];
+        let arr = res.lists;
+        if (res.lists.length) {
           res.lists.forEach(item => {
             if (item.coupon_id == 1) { // 转介绍
               item.price = 30
@@ -79,7 +82,7 @@
             }
           })
         }
-        arr = res.lists
+        arr = res.lists;
         this.updateCouponsList(arr)
       },
 
@@ -109,7 +112,7 @@
 
   .pic {
     width: 100%;
-    height: 250rpx;
+    height: 480rpx;
     margin-bottom: 10px;
     border-radius: 10px;
     overflow: hidden;

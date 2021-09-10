@@ -6,33 +6,101 @@ export default {
     gift_list: [], // 赠品列表
     is_vip: JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false,
     couponsList: JSON.parse(uni.getStorageSync('couponsList') || "[]"),
+    giftsTogoods: [
+      {
+        goods_id: 10,
+        gifts: [{
+          id: 306,
+          count: 1
+        }, {
+          id: 320,
+          count: 2
+        }]
+      },
+
+      {
+        goods_id: 11,
+        gifts: [{
+          id: 310,
+          count: 1
+        }, {
+          id: 320,
+          count: 2
+        }]
+      },
+
+      {
+        goods_id: 77,
+        gifts: [{
+          id: 303,
+          count: 1
+        }, {
+          id: 320,
+          count: 2
+        }]
+      },
+
+      {
+        goods_id: 32,
+        gifts: [{
+          id: 306,
+          count: 4
+        }, {
+          id: 320,
+          count: 8
+        }]
+      },
+
+      {
+        goods_id: 33,
+        gifts: [{
+          id: 310,
+          count: 4
+        }, {
+          id: 320,
+          count: 8
+        }]
+      },
+
+      {
+        goods_id: 34,
+        gifts: [{
+          id: 303,
+          count: 4
+        }, {
+          id: 320,
+          count: 8
+        }]
+      }
+    ]
   }),
 
   mutations: {
     // 加入购物车
     addToCart(state, goods) {
-      // console.log(goods.goods_id)
+      goods.goods_count = goods.goods_count || 1;
       const findRes = state.cart_list.find(item => item.goods_id == goods.goods_id)
       if (!findRes) {
         state.cart_list.unshift(goods)
       } else {
-        findRes.goods_count++
-        findRes.is_checked = true
+        findRes.goods_count += goods.goods_count;
+        findRes.is_checked = true;
+        console.log('购物车中id为' + findRes.goods_id + '的商品数量更改为' + findRes.goods_count);
       }
-      uni.setStorageSync('goods_list', JSON.stringify(state.cart_list))
+      uni.setStorageSync('goods_list', JSON.stringify(state.cart_list));
     },
 
     // 更新加购数量
     updateGoodsCount(state, goods) {
       const findRes = state.cart_list.find(x => x.goods_id == goods.goods_id)
       if (!findRes) return
-      findRes.goods_count = goods.goods_count
+      findRes.goods_count = goods.goods_count;
+      console.log('购物车中id为' + findRes.goods_id + '的商品数量更新为' + findRes.goods_count);
       uni.setStorageSync('goods_list', JSON.stringify(state.cart_list))
     },
 
     // 根据id删除购物车商品
     removeGoodsById(state, id) {
-      console.log(id)
       state.cart_list = state.cart_list.filter(x => x.goods_id != id)
       uni.setStorageSync('goods_list', JSON.stringify(state.cart_list))
     },
@@ -71,121 +139,81 @@ export default {
 
     // 添加赠品
     addGift(state) {
+      //先清除赠品
+      state.cart_list = state.cart_list.filter(x =>{
+        return !state.gift_list.some( (gift)=>{
+           return gift.id==x.goods_id;
+        } )
+      })
+      
+      let giftsTogoods = state.giftsTogoods;
+      //遍历商品
       state.cart_list.forEach(item1 => {
-        if ((item1.goods_id == 10 || item1.goods_id == 11 | item1.goods_id == 77 || item1.goods_id == 32 || item1
-            .goods_id == 33 || item1.goods_id == 34) && item1.is_checked) {
 
-          if (item1.goods_id == 10 || item1.goods_id == 32) {
-            state.gift_list.forEach(item2 => {
-              if (item2.id == 306) {
-                let count = state.cart_list.filter(item3 => (item3.goods_id == 10 || item3.goods_id == 32) &&
-                    item3.is_checked)
-                  .reduce((total, item) => total += (item.goods_id == 10 ? item.goods_count : item.goods_count *
-                    4), 0)
+        if (item1.is_checked) {
 
-                const findRes = state.cart_list.find(item => item.goods_id == 306)
-                if (!findRes) {
+          giftsTogoods.forEach((item2) => {
+            //如果有赠品
+            if (item2.goods_id == item1.goods_id) {
+              //遍历赠品列表
+              item2.gifts.forEach((item3) => {
+                let findGift = state.gift_list.find((gifts) => gifts.id == item3.id),
+                  giftsIngoods = state.cart_list.find((goods) => goods.goods_id == item3.id);
+                console.log(item1.goods_name, '赠送商品:', findGift.name, '赠送数量：', item3.count * item1
+                  .goods_count);
+                if (!giftsIngoods) {
                   state.cart_list.push({
-                    goods_id: item2.id,
-                    goods_name: item2.name,
-                    price: item2.price,
-                    market_price: item2.market_price,
-                    goods_img: '"https://7n.oripetlife.com/' + item2.image,
-                    goods_count: count,
-                    weight:item2.weight,
-                    is_checked: true,
+                    goods_id: findGift.id,
+                    goods_name: findGift.name,
+                    price: findGift.price,
+                    market_price: findGift.market_price,
+                    goods_img: uni.$baseUrl1 + findGift.image,
+                    goods_count: item3.count * item1.goods_count,
+                    weight: findGift.weight,
+                    is_checked: true
                   })
+                } else {
+                  giftsIngoods.goods_count += (item3.count * item1.goods_count)
                 }
-              }
-            })
-          } else if (item1.goods_id == 11 || item1.goods_id == 33) {
-            state.gift_list.forEach(item2 => {
-              if (item2.id == 310) {
-                let count = state.cart_list.filter(item3 => (item3.goods_id == 11 || item3.goods_id == 33) &&
-                    item3.is_checked)
-                  .reduce((total, item) => total += (item.goods_id == 11 ? item.goods_count : item.goods_count *
-                    4), 0)
-
-                const findRes = state.cart_list.find(item => item.goods_id == 310)
-                if (!findRes) {
-                  state.cart_list.push({
-                    goods_id: item2.id,
-                    goods_name: item2.name,
-                    price: item2.price,
-                    market_price: item2.market_price,
-                    goods_img: '"https://7n.oripetlife.com/' + item2.image,
-                    goods_count: count,
-                    weight:item2.weight,
-                    is_checked: true,
-                  })
-                }
-              }
-            })
-          } else {
-            state.gift_list.forEach(item2 => {
-              if (item2.id == 303) {
-                let count = state.cart_list.filter(item3 => (item3.goods_id == 77 || item3.goods_id == 34) &&
-                    item3.is_checked)
-                  .reduce((total, item) => total += (item.goods_id == 77 ? item.goods_count : item.goods_count *
-                    4), 0)
-
-                const findRes = state.cart_list.find(item => item.goods_id == 303)
-                if (!findRes) {
-                  state.cart_list.push({
-                    goods_id: item2.id,
-                    goods_name: item2.name,
-                    price: item2.price,
-                    market_price: item2.market_price,
-                    goods_img: '"https://7n.oripetlife.com/' + item2.image,
-                    goods_count: count,
-                    weight:item2.weight,
-                    is_checked: true,
-                  })
-                }
-              }
-            })
-          }
-
-          // 伴侣
-          state.gift_list.forEach(item2 => {
-            if (item2.id == 305) {
-              let count = state.cart_list.filter(item3 => (item3.goods_id == 10 || item3.goods_id == 11 | item3
-                  .goods_id == 77 || item3.goods_id == 32 || item3
-                  .goods_id == 33 || item3.goods_id ==
-                  34) && item3.is_checked)
-                .reduce((total, item) => total += ((item.goods_id == 11 || item.goods_id == 10 || item
-                    .goods_id == 77) ? item.goods_count : item.goods_count *
-                  4), 0)
-
-              const findRes = state.cart_list.find(item => item.goods_id == 305)
-              if (!findRes) {
-                state.cart_list.push({
-                  goods_id: item2.id,
-                  goods_name: item2.name,
-                  price: item2.price,
-                  market_price: item2.market_price,
-                  goods_img: '"https://7n.oripetlife.com/' + item2.image,
-                  goods_count: count,
-                  weight:item2.weight,
-                  is_checked: true,
-                })
-              }
+              })
             }
           })
+
         }
+
       })
     },
+    
     // 删除赠品
     deleteGift(state) {
-      state.cart_list = state.cart_list.filter(x => !(x.goods_id == 306 || x.goods_id == 310 || x.goods_id == 303 ||
-        x.goods_id == 305))
+      console.log('删除赠品');
+      state.cart_list = state.cart_list.filter(x =>{
+        return !state.gift_list.some( (gift)=>{
+           return gift.id==x.goods_id;
+        } )
+      })
     },
 
     // 更新vip状态
     updateVip(state, status) {
       state.is_vip = status
       uni.setStorageSync('is_vip', JSON.stringify(state.is_vip))
+    },
+  
+    reloadCart(state){
+      
+      let stateNow = {
+        cart_list: JSON.parse(uni.getStorageSync('goods_list') || "[]"),
+        is_vip: JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false,
+        couponsList: JSON.parse(uni.getStorageSync('couponsList') || "[]")
+      }
+      
+      Object.keys(stateNow).forEach((key) => {
+        state[key] = stateNow[key];
+      })
+
     }
+     
   },
 
   getters: {
@@ -207,10 +235,7 @@ export default {
       return state.cart_list.filter(item => item.is_checked)
         .reduce((total, item) => total += item.goods_count * item.market_price, 0)
         .toFixed(2)
-    },
-
-
-  },
-
+    }
+  }
 
 }

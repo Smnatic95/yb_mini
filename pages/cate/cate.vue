@@ -18,7 +18,7 @@
       <scroll-view class="scroll-right" :scroll-top="scrollTop" scroll-y>
         <view class="scroll-view-item" v-for="item in goodsList" :key='item.id'>
           <view class="goods-pic" @click="gotoGoodsDetail(item)">
-            <image :src="'https://7n.oripetlife.com/'+item.img"></image>
+            <image :src="'https://7n.oripetlife.com/'+item.img" :lazy-load="true"></image>
           </view>
           <view class="goods-info">
             <view class="goods-title" @click="gotoGoodsDetail(item)">{{item.name}}</view>
@@ -26,9 +26,7 @@
               <view class="price" @click="gotoGoodsDetail(item)">
                 <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png"></image>
                 <text style="font-size: 12px;"></text>{{item.market_price}}
-
                 <text class="price-dis">￥<text>{{item.price}}</text></text>
-
               </view>
               <view class="cart" v-if="item.stock>0" @click="addCart(item)">
                 <uni-icons type="cart" size="14" color="#fff"></uni-icons>
@@ -46,7 +44,7 @@
     <!-- 结算按钮 -->
     <view class="btns-box">
       <view class="cart" @click="showPopup">
-        <image src="/static/images/cart.png" mode="widthFix"></image>
+        <image src="/static/images/cart.png" mode="scaleToFill"></image>
       </view>
       <view class="price" @click="showPopup">￥{{is_vip?checkedGoodsAmount_vip:checkedGoodsAmount}}</view>
       <view class="settle" v-if="token" @click="gotoSettle">去结算({{checkedCount}})</view>
@@ -101,14 +99,11 @@
             backgroundColor: '#dd524d'
           }
         }],
-        // scrollList: ['热门推荐', '犬粮', '猫粮', '猫砂', '零食', '营养保健', '其它'],
         active: 0,
-        cartList: [],
         cartPopup: false,
-
         goodsListAll: [],
         goodsList: [],
-        is_vip: '',
+        is_vip: ''
       };
     },
     onShow() {
@@ -122,9 +117,7 @@
     },
 
     onLoad() {
-      this.cartList = JSON.parse(uni.getStorageSync('goods_list') || "[]")
-      // console.log(this.cartList)
-      this.getGoodsList()
+      this.getGoodsList();
     },
 
     methods: {
@@ -249,11 +242,8 @@
       border-radius: 20px;
 
       view {
-        // width: 52px;
-        // height: 18px;
         margin-left: 5px;
         font-size: 13px;
-        // font-family: PingFang SC;
         font-weight: 500;
         color: #C0C8D3 !important;
         z-index: 999;
@@ -264,7 +254,6 @@
 
   .scroll-box {
     display: flex;
-    // border-top: 1px solid #F8F8F8;
 
     .scroll-left,
     .scroll-right {
@@ -343,7 +332,7 @@
             justify-content: space-between;
             font-weight: bold;
             font-size: 18px;
-            color: #294D7C;
+            color: var(--color-money);
 
             .cart {
               // float: right;
@@ -373,8 +362,6 @@
             }
 
             .icon {
-              // margin-top: 20px;
-              // margin-left: 5rpx;
               margin-right: 2px;
               width: 46rpx;
               height: 28rpx;
@@ -420,7 +407,8 @@
       width: 60px;
 
       image {
-        width: 100%;
+        width: 60px;
+        height: 60px;
       }
     }
 
@@ -453,13 +441,8 @@
   uni-popup {
     scroll-view {
       height: 700rpx;
-      // padding-top: 40px;
 
       .top {
-        // position: fixed;
-        // top: 0;
-        // left: 0;
-        // right: 0;
         display: flex;
         justify-content: space-between;
         align-items: center;

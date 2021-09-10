@@ -96,10 +96,13 @@ var components
 try {
   components = {
     uniSearchBar: function() {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar */ "uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar.vue */ 441))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar */ "uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar.vue */ 480))
     },
     uniIcons: function() {
-      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 340))
+      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 372))
+    },
+    homeGoodsitem: function() {
+      return Promise.all(/*! import() | components/home-goodsitem/home-goodsitem */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/home-goodsitem/home-goodsitem")]).then(__webpack_require__.bind(null, /*! @/components/home-goodsitem/home-goodsitem.vue */ 380))
     }
   }
 } catch (e) {
@@ -221,6 +224,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
@@ -248,10 +256,21 @@ var _default =
 
       });
       return arr;
-      console.log(this.newSuggest);
+      // console.log(this.newSuggest)
+    },
+    goodsList1: function goodsList1() {
+      var goodsList1 = this.goodsList;
+      if (goodsList1 && goodsList1.length) {
+        goodsList1.forEach(function (item) {
+          item.img = item.image;
+        });
+        return goodsList1;
+      } else {
+        return [];
+      }
     } },
 
-  onLoad: function onLoad() {},
+
   methods: {
 
     // 搜索建议列表
@@ -263,19 +282,20 @@ var _default =
 
 
                             uni.$http.post('query_sku/', {
-                              query: _this2.searchValue }));case 2:_yield$uni$$http$post = _context.sent;res = _yield$uni$$http$post.data;
+                              query: _this2.searchValue }));case 2:_yield$uni$$http$post = _context.sent;res = _yield$uni$$http$post.data;if (!(
 
-                          console.log(res);if (!(
-                          res.code !== 200)) {_context.next = 8;break;}
+
+                          res.code !== 200)) {_context.next = 7;break;}
                           _this2.suggestList = [];return _context.abrupt("return",
-                          uni.$showMsg(res.msg));case 8:
+                          uni.$showMsg(res.msg));case 7:
 
-                          _this2.suggestList = res.lists;case 9:case "end":return _context.stop();}}}, _callee);})),
+                          _this2.suggestList = res.lists;case 8:case "end":return _context.stop();}}}, _callee);})),
                 700);case 5:case "end":return _context2.stop();}}}, _callee2);}))();
     },
 
     //搜索 商品
     onSearch: function onSearch(keyword) {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {var set, _yield$uni$$http$post2, res, goodsList, i;return _regenerator.default.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:
+
                 // 搜索历史
                 set = new Set(_this3.search_history);
                 set.delete(keyword);
@@ -285,7 +305,11 @@ var _default =
 
                 _this3.searchValue = keyword;_context3.next = 8;return (
 
-                  uni.$http.post('query_sku_name/', { query: keyword }));case 8:_yield$uni$$http$post2 = _context3.sent;res = _yield$uni$$http$post2.data;
+
+
+                  uni.$http.post('query_sku_name/', {
+                    query: keyword }));case 8:_yield$uni$$http$post2 = _context3.sent;res = _yield$uni$$http$post2.data;
+
                 _this3.suggestList = [];
                 goodsList = res.lists;
 
@@ -295,9 +319,8 @@ var _default =
                     goodsList[i]['price'] = String((Number(goodsList[i]['price']) * 4).toFixed(2));
                   }
                 }
-                _this3.goodsList = goodsList;
+                _this3.goodsList = goodsList;case 14:case "end":return _context3.stop();}}}, _callee3);}))();
 
-                console.log(_this3.search_history);case 15:case "end":return _context3.stop();}}}, _callee3);}))();
     },
     search: function search(e) {
       // console.log(e.value)
@@ -308,6 +331,7 @@ var _default =
       this.goodsList = [];
       this.suggestList = [];
     },
+
     // 点击搜索历史
     history: function history(kw) {
       // console.log(kw)
@@ -319,16 +343,17 @@ var _default =
       this.search_history = Array.from(set).reverse();
       uni.setStorageSync('search_history', JSON.stringify(this.search_history));
     },
+
     // 删除搜索历史
     clearHistory: function clearHistory(item) {
-      console.log(item);
+      // console.log(item)
       if (!item) {
         this.search_history = [];
         // uni.setStorageSync('search_history', "[]")
       } else {
         var set = new Set(this.search_history);
         set.delete(item);
-        console.log(set);
+        // console.log(set)
         // set.add(item)
         this.search_history = Array.from(set).reverse();
         // uni.setStorageSync('search_history', JSON.stringify(this.search_history))
@@ -336,10 +361,11 @@ var _default =
       uni.setStorageSync('search_history', JSON.stringify(this.search_history));
     },
 
-
     gotoGoodsDetail: function gotoGoodsDetail(item) {
+      // console.log(item)
+      // return
       uni.navigateTo({
-        url: '/subpkg/goods_detail/goods_detail?id=' + item.id + '&goods_stock=' + item.stock });
+        url: "/subpkg/goods_detail/goods_detail?id=".concat(item.id, "&goods_stock=").concat(item.stock, "&goods_img=").concat(item.image) });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

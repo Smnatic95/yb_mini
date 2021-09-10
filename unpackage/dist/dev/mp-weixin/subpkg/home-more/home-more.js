@@ -96,7 +96,7 @@ var components
 try {
   components = {
     homeGoodsitem: function() {
-      return Promise.all(/*! import() | components/home-goodsitem/home-goodsitem */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/home-goodsitem/home-goodsitem")]).then(__webpack_require__.bind(null, /*! @/components/home-goodsitem/home-goodsitem.vue */ 348))
+      return Promise.all(/*! import() | components/home-goodsitem/home-goodsitem */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/home-goodsitem/home-goodsitem")]).then(__webpack_require__.bind(null, /*! @/components/home-goodsitem/home-goodsitem.vue */ 380))
     }
   }
 } catch (e) {
@@ -167,7 +167,8 @@ var _default =
   data: function data() {
     return {
       pageTitle: '',
-      moreList: [] };
+      moreList: [],
+      topImg: null };
 
   },
 
@@ -175,9 +176,11 @@ var _default =
     this.pageTitle = option.type || '热门推荐';
     switch (option.type) {
       case 'hot':
+        this.topImg = uni.$baseUrl1 + 'yb-top-image-1.jpg';
         this.pageTitle = '热门榜单';
         break;
       case 'new':
+        this.topImg = uni.$baseUrl1 + 'yb-top-image-2.jpg';
         this.pageTitle = '首发新品';
         break;}
 

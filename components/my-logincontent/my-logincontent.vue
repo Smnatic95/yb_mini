@@ -30,15 +30,15 @@
       </view>
 
       <view class="center">
-        <view>
+        <view @click="viewNavigate('/mypkg/balance/balance')">
           <view class="num">{{userInfo.money_vip?userInfo.money_vip:'0'}}</view>
           <view class="type">余额</view>
         </view>
-        <view>
+        <view @click="viewNavigate('/mypkg/integral/integral')">
           <view class="num">{{userInfo.bonus_money?userInfo.bonus_money:'0'}}</view>
           <view class="type">积分</view>
         </view>
-        <view>
+        <view @click="viewNavigate('/mypkg/card/card')">
           <view class="num">{{userInfo.year_sum?userInfo.year_sum:'0'}}</view>
           <view class="type">年卡</view>
         </view>
@@ -124,18 +124,18 @@
     <view class="pet-box">
       <view class="title">
         <view class="left">我的宠物</view>
-        <view class="right" @click="gotoAddPet('add')" v-show="petList.length>0"> + 添加宠物</view>
+        <view class="right" @click="gotoAddPet()" v-show="petList.length>0"> + 添加宠物</view>
       </view>
 
       <swiper :indicator-dots="true" autoplay circular :interval="3000" :duration="1000" v-if="petList.length>0">
         <swiper-item v-for="(item,i) in petList" :key='i'>
-          <view class="pet-info" @click="gotoAddPet('edit',item)">
+          <view class="pet-info" @click="gotoAddPet(item.pet_id)">
             <view class="avatar">
               <image :src="item.avatar"></image>
             </view>
             <text class="name">{{item.name}}</text>
           </view>
-          <view class="remind">
+          <!-- <view class="remind">
             <view class="left" @click="gotoRecord('vaccine')">
               距下次免疫<text>56</text>天
               <uni-icons type="arrowright" size="14" color="#929292"></uni-icons>
@@ -144,12 +144,20 @@
               距下次驱虫<text>56&nbsp;</text>天
               <uni-icons type="arrowright" size="14" color="#929292"></uni-icons>
             </view>
+          </view> -->
+          <view class="remind">
+            <view class="left">
+              生日：{{item.birthday}}
+            </view>
+            <view class="right">
+              体重：{{item.weight}}kg
+            </view>
           </view>
         </swiper-item>
       </swiper>
 
       <view class="addpet-btn" v-else>
-        <button @click="gotoAddPet('add')">+ 添加宠物</button>
+        <button @click="gotoAddPet()">+ 添加宠物</button>
       </view>
 
     </view>
@@ -159,14 +167,14 @@
       <uni-grid :column="4" :showBorder="false" :square="false" highlight>
         <uni-grid-item>
           <view class="grid-item" @click="gotoCard">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            <image src='../../static/images/services/nianka.png'>
             </image>
             <text>我的年卡</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoIntegral">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            <image src='../../static/images/services/jifen.png'>
             </image>
             <text>我的积分</text>
           </view>
@@ -174,7 +182,7 @@
         <uni-grid-item>
           <view class="grid-item" @click="gotoBalance">
             <!-- <button class="phone-btn"> -->
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            <image src='../../static/images/services/banlance.png'>
             </image>
             <text>我的余额</text>
             <!-- </button> -->
@@ -182,28 +190,28 @@
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoCoupons">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            <image src='../../static/images/services/copoun.png'>
             </image>
             <text>优惠券</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoPet">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            <image src='/static/images/services/pet.png'>
             </image>
             <text>我的宠物</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoAddress">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            <image src='/static/images/services/address.png'>
             </image>
             <text>收货地址</text>
           </view>
         </uni-grid-item>
         <uni-grid-item>
           <view class="grid-item" @click="gotoCollect">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            <image src='/static/images/services/collect.png'>
             </image>
             <text>我的收藏</text>
           </view>
@@ -215,16 +223,16 @@
             <text>个人资料</text>
           </view>
         </uni-grid-item> -->
-        <uni-grid-item>
+        <!-- <uni-grid-item>
           <view class="grid-item">
             <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
             </image>
             <text>订阅设置</text>
           </view>
-        </uni-grid-item>
+        </uni-grid-item> -->
         <uni-grid-item>
           <view class="grid-item" @click="logOut">
-            <image src='https://demo40.crmeb.net/uploads/attach/2020/11/20201117/1dfb2b9c571e71c044c5ec60f551b535.png'>
+            <image src='/static/images/services/exit.png'>
             </image>
             <text>退出登录</text>
           </view>
@@ -249,13 +257,13 @@
     createNamespacedHelpers
   } from 'vuex'
   const {
-    mapState:mapStateUser,
-    mapMutations:mapMutationsUser
-  } =createNamespacedHelpers('user')
+    mapState: mapStateUser,
+    mapMutations: mapMutationsUser
+  } = createNamespacedHelpers('user')
   const {
-    mapState:mapStatePet,
+    mapState: mapStatePet,
     // mapMutations:mapMutationsUser
-  } =createNamespacedHelpers('pet')
+  } = createNamespacedHelpers('pet')
 
   export default {
     name: "my-islogin",
@@ -267,8 +275,9 @@
       ...mapStatePet(['petList']),
     },
     methods: {
-      ...mapMutationsUser(['undateToken', 'updateUserInfo']),
-
+      ...mapMutationsUser(['undateToken', 'updateUserInfo', 'reLoadUserInfo']),
+      ...mapMutations('cart',['reloadCart']),
+      ...mapMutations('pet',['updatePetList']),
       // 退出登录
       logOut() {
         this.$refs.popup.open('top')
@@ -277,13 +286,31 @@
         this.$refs.popup.close()
       },
       confirm(value) {
-        this.$refs.popup.close()
-        this.undateToken(false)
-        uni.removeStorageSync('parent_id')
-        this.updateUserInfo({})
-        uni.$showMsg('退出成功！')
+        try {
+          const {
+            keys: storageKeyList
+          } = uni.getStorageInfoSync();
+          let initKeys = ['__DC_STAT_UUID', 'isIphoneX', 'code', 'areas', 'goods_list'],
+            deleteKeys = storageKeyList.filter(item1 => !initKeys.some(item2 => item2 == item1));
+           
+           console.log(deleteKeys) 
+            
+          deleteKeys.forEach((key) => {
+            console.log(key);
+            uni.removeStorageSync(key);
+          })
+          
+          this.reLoadUserInfo();
+          this.reloadCart();
+          this.updatePetList([]);
+          uni.$showMsg('退出成功！');
+          this.$refs.popup.close();
+          
+        } catch (e) {
+          console.log(e);
+        }
       },
-      
+
       // 跳转修改用户信息
       gotoEditUser() {
         uni.navigateTo({
@@ -317,14 +344,19 @@
       },
       gotoPet() {
         uni.navigateTo({
-          url: '/mypkg/pet/pet'
+          url: '/mypkg/peta/peta'
         })
       },
-      gotoAddPet(type,pet) {
-        if(type==='edit') uni.setStorageSync('select_pet',JSON.stringify(pet))
-        uni.navigateTo({
-          url: '/mypkg/add_pet/add_pet?type='+type
-        })
+      gotoAddPet(pet_id) {
+        if (pet_id) {
+          uni.navigateTo({
+            url: '/mypkg/add_pet/add_pet?pet_id=' + pet_id
+          })
+        } else {
+          uni.navigateTo({
+            url: '/mypkg/add_pet/add_pet'
+          })
+        }
       },
       gotoRecord(type) {
         uni.navigateTo({

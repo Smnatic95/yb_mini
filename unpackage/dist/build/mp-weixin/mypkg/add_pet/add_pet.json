@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "新增宠物",
+  "navigationBarTitleText": "",
   "enablePullDownRefresh": false,
   "usingComponents": {
     "uni-forms": "/uni_modules/uni-forms/components/uni-forms/uni-forms",

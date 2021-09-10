@@ -181,7 +181,6 @@
         var d = date.getDate()
         m = m < 10 ? '0' + m : m
         d = d < 10 ? '0' + d : d
-        // console.log(y + '-' + m + '-' + d)
         return y + '-' + m + '-' + d
       },
 
@@ -191,9 +190,8 @@
           data: res
         } = await uni.$http.get(`user_sign_in/${mobile}/`)
         if (res.code !== 200) return
-        this.updateSignList(res.sign_list)
-
-        this.showPopup()
+        this.updateSignList(res.sign_list);
+        this.showPopup();;
       },
 
     }

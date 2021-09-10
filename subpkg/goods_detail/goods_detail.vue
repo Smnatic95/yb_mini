@@ -1,15 +1,14 @@
 <template>
   <view class="container">
     <view class="goods_detail-page">
-
+      <!--商品轮播图-->
       <swiper :indicator-dots="true" :autoplay="true" :interval="3000" circular :duration="1000">
-        <swiper-item v-for="(item,i) in goodsInfo.image" :key='i'>
+        <swiper-item v-for="(item,i) in goodsInfo.image" :key='i' @click="previewSwiperImg(i)">
           <view class="pic">
-            <image :src="`https://7n.oripetlife.com/${item}`"></image>
+            <image :src="item"></image>
           </view>
         </swiper-item>
       </swiper>
-
       <view class="text-box">
         <view class="text-left">
           <view class="title">{{goodsInfo.name}}</view>
@@ -35,7 +34,6 @@
           </button>
         </view>
       </view>
-
       <view class="serve-box">
         <view class="serve-item" @click="showServePopup(1)">
           <view>
@@ -65,14 +63,13 @@
                 <text>品牌</text>
               </view>
               <view class="text-item">
-                <text>功效</text>
+                <text>厂家</text>
               </view>
             </view>
           </view>
           <uni-icons type="arrowright" size="12" color=""></uni-icons>
         </view>
       </view>
-
       <!-- <view class="comment">
         <view class="info">
           <view class="info-left">用户评价（3）</view>
@@ -104,17 +101,16 @@
           </view>
         </scroll-view>
       </view> -->
-
+      <!--商品详情-->
       <view class="details">
         <view class="title">—— 商品详情 ——</view>
-        <view class="pics" v-for="(item,i) in goodsInfo.de_image" :key='i'>
-          <image v-if="item!==null" :src="`https://7n.oripetlife.com/${item}`" mode="widthFix"></image>
+        <view class="pics" v-for="(item,i) in goodsInfo.de_image" :key='i' @click="previewDetailImg(i)">
+          <image v-if="item!==null" :src="item" mode="widthFix"></image>
         </view>
       </view>
-
       <!-- 售空 -->
       <view class="sale-out" v-if="goods_stock==0">已售空~</view>
-
+      <!--底部按钮-->
       <view class="goodsnav">
         <view class="kefu">
           <button open-type="contact" @contact="handleContact">
@@ -129,14 +125,32 @@
             <uni-badge :text="num" type="error" size='small'></uni-badge>
           </view>
           <view class="btns">
-            <!-- <block > -->
-            <button class='btn1' @click="addToCartHandler">加入购物车</button>
-            <button class='btn2' v-if="token" @click="showPopup">立即购买</button>
-            <button class='btn2' v-else open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">立即购买</button>
+
+            <button class='btn1' @click="addToCartHandler_b"
+              :style="{backgroundColor: goods_stock == 0 ? '#ccc': null }">加入购物车</button>
+            <button class='btn2' v-if="token" @click="showPopup"
+              :style="{backgroundColor: goods_stock == 0 ? '#ccc': null }">立即购买</button>
+            <button class='btn2' v-else :style="{backgroundColor: goods_stock == 0 ? '#ccc': null }"
+              open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">立即购买</button>
+
           </view>
         </view>
       </view>
-
+      <!--立即购买弹窗-->
+      <uni-popup ref="popup" type="bottom" background-color="#fff">
+        <view class="settle-box">
+          <goods-item :goods="goods" :showRadio="false" @num-change='numberChangeHandler'></goods-item>
+          <button @click="onSettle">立即购买</button>
+        </view>
+      </uni-popup>
+      <!--加入购物车弹窗-->
+      <uni-popup ref="popup_addCar" type="bottom" background-color="#fff">
+        <view class="settle-box addcar">
+          <goods-item :goods="goods" :showRadio="false" @num-change='numberChangeHandler'></goods-item>
+          <button @click="addToCartHandler()">确定</button>
+        </view>
+      </uni-popup>
+      <!--服务说明弹窗-->
       <uni-popup ref="popup1" type="bottom">
         <view class="popup-box">
           <view class="serve-intro">
@@ -147,7 +161,7 @@
               </view>
               <view class="right">
                 <view class="right1">7天无理由退换</view>
-                <view class="right2">您在满足7天无理由退货申请的前提下，可向顾问申请退换货，请放心购买</view>
+                <view class="right2">在签收商品之日起七天内，未拆封的商品，可申请无理由退货</view>
               </view>
             </view>
             <view class="item">
@@ -165,15 +179,14 @@
               </view>
               <view class="right">
                 <view class="right1">正品保证</view>
-                <view class="right2">100%正品保证，。。。。。。。</view>
+                <view class="right2">100%正品保证</view>
               </view>
-
             </view>
 
           </view>
         </view>
       </uni-popup>
-
+      <!--产品参数弹窗-->
       <uni-popup ref="popup2" type="bottom">
         <view class="popup-box">
           <view class="parameter">
@@ -201,14 +214,6 @@
           </view>
         </view>
       </uni-popup>
-
-      <uni-popup ref="popup" type="bottom" background-color="#fff">
-        <view class="settle-box">
-          <goods-item :goods="goods" :showRadio="false" @num-change='numberChangeHandler'></goods-item>
-          <button @click="onSettle">立即购买</button>
-        </view>
-      </uni-popup>
-
     </view>
   </view>
 </template>
@@ -228,7 +233,6 @@
     mapState: mapStateCart,
     mapMutations: mapMutationsCart
   } = createNamespacedHelpers("cart")
-  // import badgeMix from '@/mixins/tabbar-badge.js'
   import shareMix from '@/mixins/share-app.js'
   import phoneMix from '@/mixins/get-phone.js'
 
@@ -243,8 +247,7 @@
         goodsInfo: {},
         is_collect: false,
         num: 0,
-
-        goods: {},
+        goods: {}
       };
     },
     computed: {
@@ -261,19 +264,13 @@
     onShow() {},
     onLoad(option) {
       this.num = this.total
-      console.log('传过来的id===',option)
       this.goods_id = option.id
       this.weight = option.weight
-      if (option.goods_stock == 0) {
-        this.buttonGroup.forEach(item => {
-          item.backgroundColor = '#ccc'
-        })
-      }
-      this.goods_stock = option.goods_stock
-      this.goods_img = option.goods_img
+      this.goods_stock = option.goods_stock;
+      this.goods_img = option.goods_img;
 
-      this.getGoodsDetail()
-      this.collectCheck()
+      this.getGoodsDetail();
+      this.collectCheck();
     },
     computed: {
       ...mapStateCart(['cart_list']),
@@ -281,69 +278,68 @@
     methods: {
       ...mapMutationsCart(['addToCart', 'updateGoodsCount', 'undateGoodsState', 'updateAllChecked']),
       ...mapMutationsUser(['undateToken', 'updateUserInfo']),
-
-
       handleContact(e) {
         console.log(e)
       },
-
       // 立即购买
       showPopup() {
-        if(!this.goods_stock) return
-        this.goods = {
-          goods_id: this.goods_id,
-          goods_name: this.goodsInfo.name,
-          goods_intro: this.goodsInfo.introduction,
-          goods_img: 'https://7n.oripetlife.com/' + this.goods_img,
-          price: this.goodsInfo.price,
-          market_price: this.goodsInfo.market_price,
-          goods_count: 1,
-          weight: this.weight,
-          is_checked: true,
+        if (!this.checkStock()) {
+          return
         }
-        const findRes = this.cart_list.find(x => x.goods_id == this.goods_id)
-        if(findRes){
-          this.updateGoodsCount(this.goods)
-        }else{
-          this.addToCart(this.goods)
-        }
-
-        this.$refs.popup.open('bottom')
+        this.goods.goods_count = 1;
+        this.$refs.popup.open();
       },
-      // 切换数量
-      numberChangeHandler(e) {
-        this.goods.goods_count = e.goods_count
-        this.updateGoodsCount(e)
-      },
+      //下单
       onSettle() {
-        this.updateAllChecked(false)
-        this.goods.is_checked = true
-        this.undateGoodsState(this.goods)
-        this.$refs.popup.close()
+        if (!this.checkStock()) {
+          return
+        }
+        this.addToCart(this.goods);
+        this.updateGoodsCount(this.goods);
+        this.updateAllChecked(false);
+        this.goods.is_checked = true;
+        this.undateGoodsState(this.goods);
+        this.$refs.popup.close();
         uni.navigateTo({
-          url: '/pages/settle/settle'
+          url: `/pages/settle/settle?goods=${JSON.stringify(this.goods)}`
         })
       },
 
-      // 商品详情
-      async getGoodsDetail() {
-        const {
-          data: res
-        } = await uni.$http.get(`sku_detail/${this.goods_id}/`)
-        if (res.code !== 200) return uni.$showMsg(res.msg)
-        this.goodsInfo = res.lists[0]
+      addToCartHandler_b() {
+        if (!this.checkStock()) {
+          return
+        }
+        this.goods.goods_count = 1;
+        this.$refs.popup_addCar.open();
       },
 
-      // 收藏状态
-      async collectCheck() {
-        if (!this.token) return
-        const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
-        const {
-          data: res
-        } = await uni.$http.get(`user_collect_true/${mobile}/${this.goods_id}/`)
-        // console.log(res)
-        if (res.code !== 200) return uni.$showMsg(res.msg)
-        this.is_collect = res.flag
+      addToCartHandler() {
+        if (!this.checkStock()) {
+          return
+        }
+        const goods = {
+          goods_id: this.goods_id,
+          goods_name: this.goodsInfo.name,
+          goods_intro: this.goodsInfo.introduction,
+          goods_img: uni.$baseUrl1 + this.goods_img,
+          price: this.goodsInfo.price,
+          market_price: this.goodsInfo.market_price,
+          goods_count: this.goods.goods_count,
+          weight: this.weight,
+          is_checked: true,
+        }
+        this.addToCart(goods);
+        uni.$showMsg("添加成功~");
+        this.$refs.popup_addCar.close()
+      },
+
+      checkStock() {
+        if (this.goods_stock == 0) {
+          uni.$showMsg('宝贝售空了,隔段时间再来看看吧');
+          return false
+        } else {
+          return 1
+        }
       },
 
       // 点击收藏
@@ -372,22 +368,56 @@
         this.is_collect = !this.is_collect
       },
 
-      // 加购
-      addToCartHandler() {
-        if(!this.goods_stock) return
-        const goods = {
+      // 收藏状态
+      async collectCheck() {
+        if (!this.token) return
+        const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
+        const {
+          data: res
+        } = await uni.$http.get(`user_collect_true/${mobile}/${this.goods_id}/`)
+        // console.log(res)
+        if (res.code !== 200) return uni.$showMsg(res.msg)
+        this.is_collect = res.flag
+      },
+
+      // 商品详情
+      async getGoodsDetail() {
+        const {
+          data: res
+        } = await uni.$http.get(`sku_detail/${this.goods_id}/`);
+        if (res.code !== 200) return uni.$showMsg(res.msg);
+
+        res.lists[0].de_image = res.lists[0].de_image.filter(item => item);
+        console.log(res.lists[0].de_image)
+        res.lists[0].de_image = res.lists[0].de_image.map(item => {
+          return uni.$baseUrl1 + item
+        })
+        res.lists[0].image = res.lists[0].image.map(item => {
+          return uni.$baseUrl1 + item
+        })
+
+        this.goodsInfo = res.lists[0];
+        this.goods = {
           goods_id: this.goods_id,
           goods_name: this.goodsInfo.name,
           goods_intro: this.goodsInfo.introduction,
-          goods_img: 'https://7n.oripetlife.com/' + this.goods_img,
+          goods_img: uni.$baseUrl1 + this.goods_img,
           price: this.goodsInfo.price,
           market_price: this.goodsInfo.market_price,
           goods_count: 1,
           weight: this.weight,
           is_checked: true,
         }
-        this.addToCart(goods)
-        uni.$showMsg("商品添加成功~")
+        uni.setNavigationBarTitle({
+          title: this.goodsInfo.name,
+          complete(err) {
+            console.log(err);
+          }
+        })
+      },
+
+      numberChangeHandler(e) {
+        this.goods.goods_count = e.goods_count;
       },
 
       gotoCart() {
@@ -412,8 +442,29 @@
           url: '/subpkg/comments_list/comments_list?id=' + goods_id
         })
       },
+      previewDetailImg(index) {
+        let de_image = this.goodsInfo.de_image;
 
+        uni.previewImage({
+          urls: de_image,
+          current: de_image[index],
+          fail(err) {
+            console.log(err)
+          }
+        })
+      },
+      previewSwiperImg(index) {
+        let image = this.goodsInfo.image;
 
+        uni.previewImage({
+          urls: image,
+          current: image[index],
+          fail(err) {
+            console.log(err)
+          }
+        })
+
+      }
     },
 
   }
@@ -883,7 +934,7 @@
 
   // 服务说明 弹出层
   .popup-box {
-    height: 500px;
+    height: 80vh;
     border-radius: 10px;
     background-color: #FFFFFF;
 
@@ -951,23 +1002,39 @@
   }
 
   .settle-box {
-    padding: 30px 0 40px;
-    margin-top: 10px;
+    min-height: 70vh;
+    box-sizing: border-box;
+    padding: 30rpx 0 100rpx;
+    margin-top: 10rpx;
     background-color: #FFFFFF;
-    border-radius: 10px 10px 0 0;
+    border-radius: 20rpx 20rpx 0 0;
     overflow: hidden;
+    position: relative;
 
     button {
-      height: 50px;
-      margin: 20px 15px 0;
-      line-height: 50px;
+      position: absolute;
+      width: 95%;
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      bottom: 20rpx;
+      left: 50%;
+      transform: translateX(-50%);
       color: #FFFFFF;
       background-color: #ffa424;
       border-radius: 25px;
+      font-size: 32rpx;
 
       &::after {
         border: 0;
       }
     }
+
+    &.addcar {
+      button {
+        background-color: #294D7C;
+      }
+    }
+
   }
 </style>

@@ -96,7 +96,7 @@ var components
 try {
   components = {
     uniIcons: function() {
-      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 340))
+      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 372))
     }
   }
 } catch (e) {
@@ -120,23 +120,21 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var l0 = _vm.__map(_vm.balancelList, function(item, i) {
+  var l0 = _vm.__map(_vm.balancelList1, function(item, i) {
     var $orig = _vm.__get_orig(item)
 
-    var m0 = !item.order_goods ? Number(item.total_amount) : null
-    var m1 = !item.order_goods ? Number(item.give_money) : null
-    var g0 = !!item.order_goods
-      ? (
-          Number(item.price) +
-          Number(item.freight) -
-          Number(item.coupon)
-        ).toFixed(2)
+    var f0 = !item.order_goods
+      ? _vm._f("tofixed2")(Number(item.total_amount) + Number(item.give_money))
+      : null
+    var f1 = !!item.order_goods
+      ? _vm._f("tofixed2")(
+          Number(item.price) + Number(item.freight) - Number(item.coupon)
+        )
       : null
     return {
       $orig: $orig,
-      m0: m0,
-      m1: m1,
-      g0: g0
+      f0: f0,
+      f1: f1
     }
   })
 
@@ -232,17 +230,66 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
     return {
       isGoodsShow: false,
-      balancelList: [] };
+      balancelList: [],
+      active_tab: 0 };
 
   },
   computed: {
     total: function total() {
       return JSON.parse(uni.getStorageSync('userInfo')).money_vip;
+    },
+    balancelList1: function balancelList1() {
+      if (this.active_tab == 0) {
+        return this.balancelList;
+      }
+
+      if (this.active_tab == 1) {
+        return this.balancelList.filter(function (item) {
+          return item.total_amount;
+        });
+      }
+
+      if (this.active_tab == 2) {
+        return this.balancelList.filter(function (item) {
+          return !item.total_amount;
+        });
+      }
     } },
 
   onLoad: function onLoad() {
@@ -253,32 +300,37 @@ var _default =
                 _this.balancelList = [];_JSON$parse =
 
 
-                JSON.parse(uni.getStorageSync('userInfo')), mobile = _JSON$parse.mobile;
-                // let url = `year_user/${mobile}/`
-                // if (this.active == 0) url = `year_user/${mobile}/`
-                // if (this.active == 1) url = `year_order/${mobile}/`
-                _context.next = 4;return (
+                JSON.parse(uni.getStorageSync('userInfo')), mobile = _JSON$parse.mobile;_context.next = 4;return (
+
 
                   uni.$http.get("user_recharge/".concat(mobile, "/")));case 4:_yield$uni$$http$get = _context.sent;res = _yield$uni$$http$get.data;if (!(
-
                 res.code !== 200)) {_context.next = 8;break;}return _context.abrupt("return", uni.$showMsg(res.msg));case 8:
+                res.lists = res.lists || [];
                 res.lists.forEach(function (item) {
                   if (item.order_goods) {
                     item.isGoodsShow = false;
                   }
                 });
+                res.lists.forEach(function (item) {
+                  var nbReg = /\d/g;
+                  item.isInit = Boolean(Number(item.create_time.match(nbReg).join('')) < Number(20210202000000));
+                });
                 _this.balancelList = res.lists;
-
-                console.log(_this.balancelList);case 11:case "end":return _context.stop();}}}, _callee);}))();
+                console.log(_this.balancelList);case 13:case "end":return _context.stop();}}}, _callee);}))();
     },
 
     goodsChange: function goodsChange(i) {
-      this.balancelList[i].isGoodsShow = !this.balancelList[i].isGoodsShow;
+      this.balancelList1[i].isGoodsShow = !this.balancelList1[i].isGoodsShow;
     },
+
     gotoOrderDetail: function gotoOrderDetail(type) {
       uni.navigateTo({
         url: '/pages/order-detail/order-detail?type=' + type });
 
+    },
+
+    tabClick: function tabClick(index) {
+      this.active_tab = index;
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

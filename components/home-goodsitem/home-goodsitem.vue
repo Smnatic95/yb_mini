@@ -3,23 +3,19 @@
     <block v-for='item in goodsList' :key='item.id'>
       <view class="goods-item">
         <view class="pic" @click="gotoGoodsDetail(item)">
-          <image :src="'https://7n.oripetlife.com/'+item.img" mode=""></image>
+          <image :src="'https://7n.oripetlife.com/'+item.img" mode="" :lazy-load="true"></image>
         </view>
         <view class="text">
           <view class="title">{{item.name}}</view>
-          <view class="intro">简介简介简介简介</view>
+          <view class="intro">{{item.introduction}}</view>
           <view class="price-col">
-            <!-- <text class="icon">￥</text> -->
             <image src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
             <text class="price">{{item.market_price}}</text>
-            <!-- <image src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image> -->
             <text class="price-dis">￥<text>{{item.price}}</text></text>
-
-            <view class="cart" v-if="item.stock>0" @click="handleAddCart(item)">
+            <!-- <view class="cart" v-if="item.stock>0" @click="handleAddCart(item)">
               <uni-icons type="cart" size="14" color="#fff"></uni-icons>
             </view>
-            <view class="out" v-else>售空</view>
-
+            <view class="out" v-else>售空</view> -->
           </view>
         </view>
       </view>
@@ -49,7 +45,6 @@
 
       // 跳转到商品详情页面
       gotoGoodsDetail(item) {
-        console.log(item)
         const goods_id = item.id
         uni.navigateTo({
           url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}&goods_img=${item.img}&weight=${item.weight}`,
@@ -64,7 +59,6 @@
           goods_name: item.name,
           goods_intro: item.introduction,
           goods_img: 'https://7n.oripetlife.com/' + item.img,
-          // goods_price: '179.00',
           market_price: item.market_price,
           price: item.price,
           goods_count: 1,
@@ -85,16 +79,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    // width: 100%;
-    padding: 0 15px;
+    padding:0 30rpx;
     background-color: #FFFFFF;
 
     .goods-item {
       width: 336rpx;
       margin-bottom: 26px;
-      // padding: 10rpx;
-      // margin: 10rpx;
-
       .pic {
         display: flex;
         justify-content: center;
@@ -131,6 +121,10 @@
         }
 
         .price-col {
+          margin-top: 10rpx;
+          display: flex;
+          align-items: flex-end;
+          
           .icon {
             font-size: 20rpx;
             font-weight: bold;
@@ -141,7 +135,9 @@
             font-size: 34rpx;
             font-family: DIN;
             font-weight: bold;
-            color: #294D7C;
+            color: tomato;
+            height: 34rpx;
+            line-height: 34rpx;
           }
 
           image {

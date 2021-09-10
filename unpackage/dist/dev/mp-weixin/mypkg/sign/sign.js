@@ -96,7 +96,7 @@ var components
 try {
   components = {
     uniPopup: function() {
-      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup/uni-popup")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 355))
+      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup/uni-popup")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 387))
     }
   }
 } catch (e) {
@@ -336,7 +336,6 @@ var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(
       var d = date.getDate();
       m = m < 10 ? '0' + m : m;
       d = d < 10 ? '0' + d : d;
-      // console.log(y + '-' + m + '-' + d)
       return y + '-' + m + '-' + d;
     },
 
@@ -347,8 +346,7 @@ var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(
                   uni.$http.get("user_sign_in/".concat(mobile, "/")));case 3:_yield$uni$$http$get2 = _context3.sent;res = _yield$uni$$http$get2.data;if (!(
                 res.code !== 200)) {_context3.next = 7;break;}return _context3.abrupt("return");case 7:
                 _this3.updateSignList(res.sign_list);
-
-                _this3.showPopup();case 9:case "end":return _context3.stop();}}}, _callee3);}))();
+                _this3.showPopup();;case 10:case "end":return _context3.stop();}}}, _callee3);}))();
     } }) };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

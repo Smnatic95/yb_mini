@@ -96,13 +96,16 @@ var components
 try {
   components = {
     uniForms: function() {
-      return Promise.all(/*! import() | uni_modules/uni-forms/components/uni-forms/uni-forms */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-forms/components/uni-forms/uni-forms")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-forms/components/uni-forms/uni-forms.vue */ 397))
+      return Promise.all(/*! import() | uni_modules/uni-forms/components/uni-forms/uni-forms */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-forms/components/uni-forms/uni-forms")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-forms/components/uni-forms/uni-forms.vue */ 436))
     },
     uniFormsItem: function() {
-      return Promise.all(/*! import() | uni_modules/uni-forms/components/uni-forms-item/uni-forms-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-forms/components/uni-forms-item/uni-forms-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-forms/components/uni-forms-item/uni-forms-item.vue */ 405))
+      return Promise.all(/*! import() | uni_modules/uni-forms/components/uni-forms-item/uni-forms-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-forms/components/uni-forms-item/uni-forms-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-forms/components/uni-forms-item/uni-forms-item.vue */ 444))
     },
     uniEasyinput: function() {
-      return Promise.all(/*! import() | uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue */ 412))
+      return Promise.all(/*! import() | uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue */ 451))
+    },
+    uniDrawer: function() {
+      return __webpack_require__.e(/*! import() | uni_modules/uni-drawer/components/uni-drawer/uni-drawer */ "uni_modules/uni-drawer/components/uni-drawer/uni-drawer").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-drawer/components/uni-drawer/uni-drawer.vue */ 487))
     }
   }
 } catch (e) {
@@ -159,82 +162,284 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 8));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _vuex = __webpack_require__(/*! vuex */ 11);
+
+
+var _getPhone = _interopRequireDefault(__webpack_require__(/*! @/mixins/get-phone.js */ 30));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
+  mixins: [_getPhone.default], // 导入公共js
   data: function data() {
     return {
-      ageArr: ['请选择宠物年龄', '10个月以上', '8-10个月', '6-8个月', '4-6个月', '小于4个月'],
       countForm: {
-        type: 1, // 宠物类型
-        age: '0',
-        weight: "",
-        protein: '',
-        fat: '',
-        starch: '' } };
+        counter_type: 1,
+        pet_type: 1, // 宠物类型
+        pet_age: 0,
+        pet_weight: "",
+        protein: null,
+        fat: null,
+        carbonwater: null },
+
+      breadlist: [{
+        id: 1,
+        name: '黑金猫粮',
+        protein: '42.02',
+        fat: '20.20',
+        carbonwater: '26.00' },
+      {
+        id: 2,
+        name: '幼猫粮',
+        protein: '41.40',
+        fat: '21.20',
+        carbonwater: '26.00' },
+      {
+        id: 3,
+        name: '成猫粮',
+        protein: '41.40',
+        fat: '21.20',
+        carbonwater: '26.00' }] };
 
 
   },
-  computed: {
+  computed: _objectSpread(_objectSpread(_objectSpread({
     isCatChecked: function isCatChecked() {
-      if (this.countForm.type === 1) return true;
-      return false;
+      return this.countForm.pet_type == 1;
     } },
+  (0, _vuex.mapState)('pet', ['petList'])),
+  (0, _vuex.mapState)('user', ['userInfo'])), {}, {
+    ageArr: function ageArr() {
+      if (this.countForm.pet_type == 1) {
+        return ['请选择宠物年龄', '小于4个月', '4-6个月', '6-8个月', '8-10个月', '10个月以上'];
+      } else {
+        return ['请选择宠物年龄', '小于4个月', '4-6个月', '6-10个月', '10个月以上'];
+      }
+    } }),
 
+  onLoad: function onLoad(options) {
+    var parentId = uni.getStorageSync('parent_id');
+    console.log('页面参数的parent_id:', options.parent_id, '本地parent_id:', parentId);
+    uni.setStorageSync('parent_id', parentId ? parentId : options.parent_id);
+  },
   methods: {
+    chooseBread: function chooseBread(item) {
+      console.log(item);
+      this.countForm.protein = item.protein;
+      this.countForm.fat = item.fat;
+      this.countForm.carbonwater = item.carbonwater;
+      this.$refs.breadList.close();
+    },
     radioClick: function radioClick(val) {
-      this.countForm.type = val;
+      this.countForm.pet_age = 0;
+      this.countForm.pet_type = val;
+    },
+    tabClick: function tabClick(val) {
+      this.countForm.counter_type = val;
+    },
+    importpetData: function importpetData() {
+      this.$refs.PetList.open();
+    },
+    importBreadData: function importBreadData() {
+      this.$refs.breadList.open();
+    },
+    choosePet: function choosePet(pet) {
+      this.$refs.PetList.close();
+      var pet_age = ((new Date().getTime() - new Date(pet.birthday).getTime()) / 1000 / 60 / 60 / 24 / 30).toFixed(2);
+      console.log(pet_age);
+      if (pet.type == 1) {
+        if (pet_age < 4) {
+          pet_age = 1;
+        } else if (pet_age > 4 && pet_age <= 6) {
+          pet_age = 2;
+        } else if (pet_age > 6 && pet_age <= 8) {
+          pet_age = 3;
+        } else if (pet_age > 8 && pet_age <= 10) {
+          pet_age = 4;
+        } else if (pet_age > 10) {
+          pet_age = 5;
+        }
+      } else {
+        if (pet_age < 4) {
+          pet_age = 1;
+        } else if (pet_age > 4 && pet_age <= 6) {
+          pet_age = 2;
+        } else if (pet_age > 6 && pet_age <= 10) {
+          pet_age = 3;
+        } else if (pet_age > 10) {
+          pet_age = 4;
+        }
+      }
+      console.log(pet_age);
+      this.countForm.pet_age = pet_age;
+      this.countForm.pet_weight = pet.weight;
+      this.countForm.pet_type = pet.type;
+    },
+    ageCange: function ageCange(e) {
+      this.countForm.pet_age = e.detail.value;
+    },
+    submitForm: function submitForm() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var form, key, complicatedKey, _yield$uni$$http$post, res;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.prev = 0;
+
+                form = {};
+                for (key in _this.countForm) {
+                  form[key] = _this.countForm[key];
+                }
+                //简单版
+                if (form.counter_type == 1) {
+                  complicatedKey = ['protein', 'fat', 'carbonwater'];
+                  complicatedKey.forEach(function (key) {
+                    delete form[key];
+                  });
+                }
+                //是数字的字符串转化为数字
+                _context.t0 = _regenerator.default.keys(form);case 5:if ((_context.t1 = _context.t0()).done) {_context.next = 16;break;}key = _context.t1.value;if (
+                form[key]) {_context.next = 9;break;}return _context.abrupt("return",
+                uni.$showMsg('信息不完整'));case 9:if (
+
+                isNaN(Number(form[key]))) {_context.next = 13;break;}
+                form[key] = Number(form[key]);_context.next = 14;break;case 13:return _context.abrupt("return",
+
+                uni.$showMsg('请输入数字'));case 14:_context.next = 5;break;case 16:_context.next = 18;return (
+
+
+
+
+
+                  uni.$http.post('pet_counter/', {
+                    pet_list: form }));case 18:_yield$uni$$http$post = _context.sent;res = _yield$uni$$http$post.data;
+
+                console.log(res);if (!(
+                res.code == 200)) {_context.next = 25;break;}
+                uni.navigateTo({
+                  url: "../count-success/count-success?countForm=".concat(JSON.stringify(form), "&res=").concat(JSON.stringify(res)) });_context.next = 26;break;case 25:throw (
+
+
+                  new Error("请求出错"));case 26:_context.next = 31;break;case 28:_context.prev = 28;_context.t2 = _context["catch"](0);
+
+
+                console.log(_context.t2);case 31:case "end":return _context.stop();}}}, _callee, null, [[0, 28]]);}))();
+
+    },
+    gotoAddPet: function gotoAddPet() {
+      uni.navigateTo({
+        url: "../add_pet/add_pet" });
+
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

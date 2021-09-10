@@ -1,7 +1,7 @@
 <template>
   <view class="search-page">
     <uni-search-bar placeholder="搜索商品" cancelButton='none' :radius="5" v-model="searchValue" @confirm="search"
-                    @input="getSearchSuggest" @clear="clear">
+      @input="getSearchSuggest" @clear="clear">
     </uni-search-bar>
 
     <!-- 搜素历史 -->
@@ -33,7 +33,10 @@
 
     <!-- 搜索结果 -->
     <view class="search-list" v-if="goodsList.length>0">
-      <view class="item" v-for="(item,i) in goodsList" :key='i' @click="gotoGoodsDetail(item)">
+
+      <home-goodsitem :goodsList='goodsList1'></home-goodsitem>
+
+      <!--    <view class="item" v-for="(item,i) in goodsList" :key='i' @click="gotoGoodsDetail(item)">
         <view class="pic">
           <image :src="'https://7n.oripetlife.com/'+item.image"></image>
         </view>
@@ -50,140 +53,155 @@
             <view class="price-dis">￥{{ item.price }}</view>
           </view>
         </view>
-      </view>
+      </view> -->
     </view>
 
   </view>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      timer: null, //防抖
-      is_icon: true,
-      searchValue: '',
-      search_history: JSON.parse(uni.getStorageSync('search_history') || "[]"),
-      suggestList: [],
-      goodsList: [],
-    };
-  },
-  computed: {
-    // ...mapState('home', ['search_history']),
-    // 关键字高亮
-    newSuggest() {
-      var arr = []
-      if (this.searchValue === '') return
-      var reg = new RegExp(this.searchValue, "g")
-      // if (reg === '') return
-      this.suggestList.forEach(item => {
-        arr.push({
-          name: item.name,
-          named: item.name.replace(reg, "<span style='color:#294D7C;'> " + this.searchValue + " </span>")
-        })
-      })
-      return arr
-      // console.log(this.newSuggest)
+  export default {
+    data() {
+      return {
+        timer: null, //防抖
+        is_icon: true,
+        searchValue: '',
+        search_history: JSON.parse(uni.getStorageSync('search_history') || "[]"),
+        suggestList: [],
+        goodsList: [],
+      };
     },
+    computed: {
+      // ...mapState('home', ['search_history']),
+      // 关键字高亮
+      newSuggest() {
+        var arr = []
+        if (this.searchValue === '') return
+        var reg = new RegExp(this.searchValue, "g")
+        // if (reg === '') return
+        this.suggestList.forEach(item => {
+          arr.push({
+            name: item.name,
+            named: item.name.replace(reg, "<span style='color:#294D7C;'> " + this.searchValue + " </span>")
+          })
+        })
+        return arr
+        // console.log(this.newSuggest)
+      },
+      goodsList1() {
+        let goodsList1 = this.goodsList;
+        if (goodsList1 && goodsList1.length) {
+          goodsList1.forEach(item => {
+            item.img = item.image
+          })
+          return goodsList1;
+        } else {
+          return [];
+        }
+      }
 
-  },
-  methods: {
+    },
+    methods: {
 
-    // 搜索建议列表
-    async getSearchSuggest() {
-      this.goodsList = []
-      if (this.searchValue == '') return this.suggestList = []
-      clearTimeout(this.timer)
-      this.timer = setTimeout(async () => {
+      // 搜索建议列表
+      async getSearchSuggest() {
+        this.goodsList = []
+        if (this.searchValue == '') return this.suggestList = []
+        clearTimeout(this.timer)
+        this.timer = setTimeout(async () => {
+          const {
+            data: res
+          } = await uni.$http.post('query_sku/', {
+            query: this.searchValue
+          })
+          // console.log(res)
+          if (res.code !== 200) {
+            this.suggestList = []
+            return uni.$showMsg(res.msg)
+          }
+          this.suggestList = res.lists
+        }, 700)
+      },
+
+      //搜索 商品
+      async onSearch(keyword) {
+
+        // 搜索历史
+        const set = new Set(this.search_history)
+        set.delete(keyword)
+        set.add(keyword)
+        this.search_history = (Array.from(set)).reverse()
+        uni.setStorageSync('search_history', JSON.stringify(this.search_history))
+
+        this.searchValue = keyword
+
         const {
           data: res
-        } = await uni.$http.post('query_sku/', {
-          query: this.searchValue
+        } = await uni.$http.post('query_sku_name/', {
+          query: keyword
         })
-        // console.log(res)
-        if (res.code !== 200) {
-          this.suggestList = []
-          return uni.$showMsg(res.msg)
+        this.suggestList = []
+        let goodsList = res.lists
+
+        for (let i = 0; i < goodsList.length; i++) {
+          if (goodsList[i]['id'] === 32 || goodsList[i]['id'] === 33 || goodsList[i]['id'] === 34) {
+            goodsList[i]['market_price'] = String((Number(goodsList[i]['market_price']) * 4).toFixed(2))
+            goodsList[i]['price'] = String((Number(goodsList[i]['price']) * 4).toFixed(2))
+          }
         }
-        this.suggestList = res.lists
-      }, 700)
-    },
+        this.goodsList = goodsList;
 
-    //搜索 商品
-    async onSearch(keyword) {
+      },
+      search(e) {
+        // console.log(e.value)
+        this.onSearch(e.value)
+      },
+      clear(e) {
+        // console.log(e)
+        this.goodsList = []
+        this.suggestList = []
+      },
 
-      // 搜索历史
-      const set = new Set(this.search_history)
-      set.delete(keyword)
-      set.add(keyword)
-      this.search_history = (Array.from(set)).reverse()
-      uni.setStorageSync('search_history', JSON.stringify(this.search_history))
-
-      this.searchValue = keyword
-
-      const {data: res} = await uni.$http.post('query_sku_name/', {query: keyword})
-      this.suggestList = []
-      let goodsList = res.lists
-
-      for (let i = 0; i < goodsList.length; i++) {
-        if (goodsList[i]['id'] === 32 || goodsList[i]['id'] === 33 || goodsList[i]['id'] === 34) {
-          goodsList[i]['market_price'] = String((Number(goodsList[i]['market_price']) * 4).toFixed(2))
-          goodsList[i]['price'] = String((Number(goodsList[i]['price']) * 4).toFixed(2))
-        }
-      }
-      this.goodsList = goodsList;
-
-    },
-    search(e) {
-      // console.log(e.value)
-      this.onSearch(e.value)
-    },
-    clear(e) {
-      // console.log(e)
-      this.goodsList = []
-      this.suggestList = []
-    },
-
-    // 点击搜索历史
-    history(kw) {
-      // console.log(kw)
-      this.searchValue = kw
-      this.onSearch(kw)
-      const set = new Set(this.search_history)
-      set.delete(kw)
-      set.add(kw)
-      this.search_history = (Array.from(set)).reverse()
-      uni.setStorageSync('search_history', JSON.stringify(this.search_history))
-    },
-
-    // 删除搜索历史
-    clearHistory(item) {
-      // console.log(item)
-      if (!item) {
-        this.search_history = []
-        // uni.setStorageSync('search_history', "[]")
-      } else {
+      // 点击搜索历史
+      history(kw) {
+        // console.log(kw)
+        this.searchValue = kw
+        this.onSearch(kw)
         const set = new Set(this.search_history)
-        set.delete(item)
-        // console.log(set)
-        // set.add(item)
+        set.delete(kw)
+        set.add(kw)
         this.search_history = (Array.from(set)).reverse()
-        // uni.setStorageSync('search_history', JSON.stringify(this.search_history))
-      }
-      uni.setStorageSync('search_history', JSON.stringify(this.search_history))
-    },
+        uni.setStorageSync('search_history', JSON.stringify(this.search_history))
+      },
 
-    gotoGoodsDetail(item) {
-      // console.log(item)
-      // return
-      uni.navigateTo({
-        url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}&goods_img=${item.image}`
-      })
+      // 删除搜索历史
+      clearHistory(item) {
+        // console.log(item)
+        if (!item) {
+          this.search_history = []
+          // uni.setStorageSync('search_history', "[]")
+        } else {
+          const set = new Set(this.search_history)
+          set.delete(item)
+          // console.log(set)
+          // set.add(item)
+          this.search_history = (Array.from(set)).reverse()
+          // uni.setStorageSync('search_history', JSON.stringify(this.search_history))
+        }
+        uni.setStorageSync('search_history', JSON.stringify(this.search_history))
+      },
+
+      gotoGoodsDetail(item) {
+        // console.log(item)
+        // return
+        uni.navigateTo({
+          url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}&goods_img=${item.image}`
+        })
+      }
     }
   }
-}
 </script>
 
 <style lang="scss">
-@import "search";
+  @import "search";
 </style>

@@ -1,8 +1,7 @@
 {
-  "enablePullDownRefresh": false,
+  "enablePullDownRefresh": true,
   "usingComponents": {
-    "uni-icons": "/uni_modules/uni-icons/components/uni-icons/uni-icons",
-    "uni-grid": "/uni_modules/uni-grid/components/uni-grid/uni-grid",
-    "uni-grid-item": "/uni_modules/uni-grid/components/uni-grid-item/uni-grid-item"
+    "my-notlogin": "/components/my-notlogin/my-notlogin",
+    "my-islogin": "/components/my-islogin/my-islogin"
   }
 }

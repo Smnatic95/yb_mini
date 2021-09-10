@@ -4,10 +4,12 @@ export default {
   state: () => ({
     scrollList: [{
         title: '全部'
-      }, {
-        title: '犬主粮',
-        type: 0
-      }, {
+      },
+      //{
+      //   title: '犬主粮',
+      //   type: 0
+      // }, 
+      {
         title: '猫主粮',
         type: 1
       }, {

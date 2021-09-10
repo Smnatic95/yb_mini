@@ -1,0 +1,1 @@
+<view class="popup-box"><image src="/static/pics/banner1-active.jpg" mode="widthFix" data-event-opts="{{[['tap',[['scanCode',['$event']]]]]}}" bindtap="__e"></image></view>

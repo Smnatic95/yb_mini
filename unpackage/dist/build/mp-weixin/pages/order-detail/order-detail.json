@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "订单详情",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "address-item": "/components/address-item/address-item",
+    "goods-item": "/components/goods-item/goods-item"
+  }
+}

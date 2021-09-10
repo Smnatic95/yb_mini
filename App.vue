@@ -24,34 +24,22 @@
           }
         }
       })
-      // }
-      // console.warn('当前组件仅支持 uni_modules 目录结构 ，请升级 HBuilderX 到 3.1.0 版本以上！')
       console.log('App Launch')
-
       this.getGiftList()
       this.getAreas()
-      // this.getAddressList()
     },
-
     onShow: async function() {
       console.log('App Show')
-
       if (!uni.getStorageSync('token')) {
         uni.setStorageSync('token', JSON.stringify(false))
       }
-
-      const [err, res] = await uni.login().catch(err => err)
-      uni.setStorageSync('code', res.code)
     },
-
     onHide: function() {
       console.log('App Hide')
     },
-
     methods: {
       ...mapMutationsCart(['updateGiftList']),
-      ...mapMutationsAddress(['updateAddress', 'updateDefaultAddress','updateAreas']),
-
+      ...mapMutationsAddress(['updateAddress', 'updateDefaultAddress', 'updateAreas']),
       // 赠品列表
       async getGiftList() {
         const {
@@ -61,7 +49,6 @@
         if (res.code !== 200) return
         this.updateGiftList(res.lists)
       },
-
       async getAddressList() {
         const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
         const {
@@ -87,7 +74,6 @@
         this.updateAddress(res.data)
         this.updateDefaultAddress(res.default_address)
       },
-      
       // 省市区列表
       async getAreas() {
         if (uni.getStorageSync('areas')) return
@@ -111,14 +97,17 @@
           }
         })
         this.updateAreas(arr)
-      },
-
-
+      }
     }
   }
 </script>
 
 <style>
+  
+  view{
+        --color-money: tomato;
+  }
+ 
   .page {
     background-color: #f6f6f6;
     min-height: 100vh;
@@ -129,11 +118,12 @@
     vertical-align: middle;
   }
 
-
   @font-face {
     font-family: uniicons;
     font-weight: normal;
     font-style: normal;
     src: url('~@/static/uni.ttf') format('truetype');
   }
+  
+    
 </style>

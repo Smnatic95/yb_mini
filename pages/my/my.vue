@@ -4,7 +4,6 @@
 </template>
 
 <script>
-  // import badgeMix from '@/mixins/tabbar-badge.js'
   import {
     mapState,
     mapMutations,
@@ -39,16 +38,13 @@
     },
 
     async onPullDownRefresh() {
-      // console.log(111)
-      const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
-      // console.log(mobile)
+      const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile;
       if (!mobile) return uni.stopPullDownRefresh()
       const {
         data: res
       } = await uni.$http.get(`user_phone/${mobile}/`)
       if (res.code !== 200) return uni.$showMsg(res.msg)
       uni.stopPullDownRefresh()
-      console.log(res)
       this.undateToken(true)
       this.updateUserInfo(res.user_list[0])
     }
@@ -74,7 +70,7 @@
   }
 
   .page {
-    padding-bottom: 50px;
+    padding-bottom: 2rpx;
   }
 
   .mask {
@@ -128,24 +124,6 @@
               height: 100%;
             }
           }
-
-          // .edit-icon {
-          //   position: absolute;
-          //   right: 0;
-          //   bottom: 0;
-          //   display: flex;
-          //   justify-content: center;
-          //   align-items: center;
-          //   width: 18px;
-          //   height: 18px;
-          //   background: #FFFFFF;
-          //   border-radius: 50%;
-
-          //   .iconfont {
-          //     font-size: 15rpx;
-          //     color: #294D7C;
-          //   }
-          // }
 
         }
 
@@ -254,10 +232,6 @@
     }
 
     .bottom {
-      // position: absolute;
-      // left: 50%;
-      // bottom: 0;
-      // transform: translateX(-50%);
       width: 690rpx;
       display: flex;
       justify-content: space-between;

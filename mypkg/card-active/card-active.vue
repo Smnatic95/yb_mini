@@ -1,12 +1,12 @@
 <template>
   <view class="page">
-    <view v-for="(item,i) in cartList" :key='i'>
-      <text>{{item.title}}x{{item.number}}---￥{{item.price}}</text>
+
+    <view class="xcimg">
+      <image :src="xcimg" mode="widthFix"></image>
     </view>
 
-
     <view class="btn-box">
-      <button @click="showPopup">购买年卡</button>
+      <button @click="showPopup">购买年卡 >></button>
     </view>
 
     <uni-popup ref="popup" type="center">
@@ -20,47 +20,48 @@
   export default {
     data() {
       return {
-        cartList: [{
-          title: '原本成猫粮',
-          number: '12',
-          price: '2388.00'
-        }, {
-          title: '原本成猫粮',
-          number: '12',
-          price: '2388.00'
-        }, {
-          title: '原本成猫粮',
-          number: '12',
-          price: '2388.00'
-        }, {
-          title: '原本成猫粮',
-          number: '12',
-          price: '2388.00'
-        }, ]
+        xcimg: uni.$baseUrl1 + 'yb-poster-001.jpg'
       };
     },
     methods: {
       showPopup() {
-        this.$refs.popup.open()
+        // this.$refs.popup.open();
+        uni.navigateTo({
+          url:'/mypkg/vip/vip'
+        })
       },
     }
   }
 </script>
 
 <style lang="scss">
+  .xcimg {
+    width: 100%;
+
+    image {
+      width: 100%;
+    }
+  }
+
+
   .btn-box {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 50px;
+    display: flex;
+    justify-content: center;
 
     button {
-      height: 50px;
-      margin: 0 30px;
-      line-height: 50px;
+      width: 232rpx;
+      height: 80rpx;
+      line-height: 80rpx;
       color: #FFFFFF;
       background-color: #294D7C;
-      border-radius: 25px;
+      border-radius: 50rpx;
+      font-size: 27rpx;
+      opacity: .9;
+
 
       &::after {
         border: 0;

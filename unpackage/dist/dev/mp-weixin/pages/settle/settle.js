@@ -96,16 +96,16 @@ var components
 try {
   components = {
     addressItem: function() {
-      return __webpack_require__.e(/*! import() | components/address-item/address-item */ "components/address-item/address-item").then(__webpack_require__.bind(null, /*! @/components/address-item/address-item.vue */ 420))
+      return __webpack_require__.e(/*! import() | components/address-item/address-item */ "components/address-item/address-item").then(__webpack_require__.bind(null, /*! @/components/address-item/address-item.vue */ 459))
     },
     goodsItem: function() {
-      return __webpack_require__.e(/*! import() | components/goods-item/goods-item */ "components/goods-item/goods-item").then(__webpack_require__.bind(null, /*! @/components/goods-item/goods-item.vue */ 390))
+      return __webpack_require__.e(/*! import() | components/goods-item/goods-item */ "components/goods-item/goods-item").then(__webpack_require__.bind(null, /*! @/components/goods-item/goods-item.vue */ 422))
     },
     uniIcons: function() {
-      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 340))
+      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 372))
     },
     uniPopup: function() {
-      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup/uni-popup")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 355))
+      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup/uni-popup")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 387))
     }
   }
 } catch (e) {
@@ -242,6 +242,51 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _createNamespacedHelp =
 
 
@@ -256,7 +301,6 @@ var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(
 
 
 
-
 (0, _vuex.createNamespacedHelpers)('address'),mapStateAddress = _createNamespacedHelp2.mapState,mapMutationsAddress = _createNamespacedHelp2.mapMutations;var _default =
 
 {
@@ -267,11 +311,14 @@ var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(
       is_vip: '',
       coupon: 0,
       coupon_id: 0,
-      user_checked_address: {} // 收货地址
-    };
+      user_checked_address: {}, // 收货地址
+      payway: 'wx',
+      paramGoods: null };
+
   },
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({},
-  mapStateCart(['cart_list', 'couponsList'])),
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({},
+  (0, _vuex.mapState)('user', ['userInfo'])),
+  mapStateCart(['cart_list', 'couponsList', 'gift_list'])),
   mapStateAddress(['address_list', 'is_public_address', 'default_address_id'])),
   mapGettersCart(['checkedCount', 'checkedGoodsAmount', 'checkedGoodsAmount_vip'])), {}, {
 
@@ -281,47 +328,81 @@ var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(
       Number(this.coupon)).toFixed(2);
     } }),
 
-  onShow: function onShow() {
+  onLoad: function onLoad(options) {
+    console.log(this.userInfo);
+    if (options && options.goods) {
+      this.paramGoods = JSON.parse(options.goods);
+      console.log('参数', this.paramGoods);
+    }
+  },
+  onShow: function onShow() {var _this = this;
+    uni.$http.get('user_gifts/').then(function (res) {
+      _this.updateGiftList(res.data.lists);
+      _this.addGift();
+    });
     this.is_vip = JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false;
     this.checkedAddress();
     this.couponChanged();
-    this.addGift();
   },
   onUnload: function onUnload() {
     uni.removeStorageSync('user_checked_address');
     this.deleteGift();
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({},
+  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread({},
   mapMutationsAddress(['editCheckedAddress'])),
-  mapMutationsCart(['addGift', 'deleteGift'])), {}, {
+  mapMutationsCart(['addGift', 'deleteGift', 'updateGiftList', 'clearCart', 'removeGoodsById', 'deleteGift'])),
+  (0, _vuex.mapMutations)('user', ['updateUserInfo'])), {}, {
 
     // 收货地址
-    checkedAddress: function checkedAddress() {var _this = this;
+    checkedAddress: function checkedAddress() {var _this2 = this;
       var checked_address_stroge = uni.getStorageSync('user_checked_address');
       if (checked_address_stroge) {
         this.user_checked_address = JSON.parse(checked_address_stroge);
         console.log(this.user_checked_address);
       } else {
-        this.user_checked_address = this.address_list.filter(function (x) {return x.address_id == _this.default_address_id;})[0];
+        this.user_checked_address = this.address_list.filter(function (x) {return x.address_id == _this2.default_address_id;})[0];
       }
       this.countPosterPrice();
     },
 
+    choosePayway: function choosePayway(val) {
+      //不是会员且选择余额支付时
+      if (!this.is_vip && val == 'banlance') {
+        uni.showModal({
+          title: '提示',
+          content: '您还不是会员，无法使用余额支付！请先去开通后重试',
+          cancelText: '暂不考虑',
+          confirmText: '去开通',
+          success: function success(res) {
+            if (res.confirm) {
+              uni.navigateTo({
+                url: '../../mypkg/vip/vip' });
+
+            }
+          } });
+
+        return;
+      }
+      this.payway = val;
+    },
+
+    payWayChange: function payWayChange(e) {
+      this.choosePayway(e.detail.value);
+    },
     // 展示优惠券弹出层
     showCouponsPopup: function showCouponsPopup() {
       this.$refs.popup.open('bottom');
     },
-
     // 切换优惠券
-    couponChanged: function couponChanged(item) {var _this2 = this;
+    couponChanged: function couponChanged(item) {var _this3 = this;
       if (!item) {
         // 初始化
-        var filterRes = this.couponsList.filter(function (item) {return item.min_price <= _this2.checkedGoodsAmount;});
+        var filterRes = this.couponsList.filter(function (item) {return item.min_price <= _this3.checkedGoodsAmount;});
         if (filterRes.length == 0) return this.coupon = 0;
         filterRes.forEach(function (item, i) {
-          if (item.price > _this2.coupon) {
-            _this2.coupon = item.price;
-            _this2.coupon_id = item.coupon_id;
+          if (item.price > _this3.coupon) {
+            _this3.coupon = item.price;
+            _this3.coupon_id = item.coupon_id;
           }
         });
       } else {
@@ -338,49 +419,140 @@ var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(
         }
       }
     },
-
     // 提交订单
-    onSubmit: function onSubmit() {
-      console.log(this.user_checked_address);
+    onSubmit: function onSubmit() {var _this4 = this;
       if (!(this.user_checked_address && this.user_checked_address.address_id)) return uni.$showMsg('请选择收货地址！');
-      this.payWX();
+      var goods_list = [];
+      this.cart_list.filter(function (x) {return x.is_checked;}).forEach(function (x) {
+        goods_list.push({
+          id: Number(x.goods_id),
+          price: x.price,
+          market_price: x.market_price,
+          num: x.goods_count,
+          total_price: (_this4.is_vip ? x.market_price : x.price) * x.goods_count });
+
+      });
+      var form = {
+        address_id: this.user_checked_address.address_id,
+        coupon_price: this.coupon,
+        type: this.coupon_id,
+        posterPrice: this.postage,
+        user_id: uni.getStorageSync('id'),
+        parent_id: uni.getStorageSync('parent_id'),
+        goods_list: goods_list };
+
+
+      if (this.payway == 'wx') {
+        this.payWX(form);
+      } else if (this.payway == 'banlance') {
+        this.payBanlance(form);
+      }
     },
-    payWX: function payWX() {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var goods_list, form, _yield$uni$$http$post, res, res1, params, _yield$uni$requestPay, _yield$uni$requestPay2, err2, res2;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
-                goods_list = [];
-                _this3.cart_list.filter(function (x) {return x.is_checked;}).forEach(function (x) {
-                  goods_list.push({
-                    id: x.goods_id,
-                    price: x.price,
-                    market_price: x.market_price,
-                    num: x.goods_count,
-                    total_price: (_this3.is_vip ? x.market_price : x.price) * x.goods_count });
+    //发起微信支付
+    payWX: function payWX(form) {var _this5 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var _yield$uni$$http$post, res, res1, params, _yield$uni$requestPay, _yield$uni$requestPay2, err2, res2, _yield$uni$$http$get, res3;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
 
-                });
-                form = {
-                  address_id: _this3.user_checked_address.address_id,
-                  coupon_price: _this3.coupon,
-                  type: _this3.coupon_id,
-                  posterPrice: _this3.postage,
-                  user_id: uni.getStorageSync('id'),
-                  parent_id: uni.getStorageSync('parent_id'),
-                  goods_list: goods_list };
 
-                // console.log(form)
-                _context.next = 5;return (
-
-                  uni.$http.post('wx_order/', form));case 5:_yield$uni$$http$post = _context.sent;res = _yield$uni$$http$post.data;_context.next = 9;return (
-                  uni.$http.get('wx_payment/' + res.order_id + '/'));case 9:res1 = _context.sent;
-                params = res1.data.params;_context.next = 13;return (
+                  uni.$http.post('wx_order/', form));case 2:_yield$uni$$http$post = _context.sent;res = _yield$uni$$http$post.data;_context.next = 6;return (
+                  uni.$http.get('wx_payment/' + res.order_id + '/'));case 6:res1 = _context.sent;
+                params = res1.data.params;_context.next = 10;return (
                   uni.requestPayment({
                     "timeStamp": String(params.timeStamp),
                     "nonceStr": params.nonceStr,
                     "package": "prepay_id=" + params.prepay_id,
                     "signType": "MD5",
-                    "paySign": params.sign }));case 13:_yield$uni$requestPay = _context.sent;_yield$uni$requestPay2 = _slicedToArray(_yield$uni$requestPay, 2);err2 = _yield$uni$requestPay2[0];res2 = _yield$uni$requestPay2[1];
+                    "paySign": params.sign }));case 10:_yield$uni$requestPay = _context.sent;_yield$uni$requestPay2 = _slicedToArray(_yield$uni$requestPay, 2);err2 = _yield$uni$requestPay2[0];res2 = _yield$uni$requestPay2[1];
 
-                console.log(err2, res2);case 18:case "end":return _context.stop();}}}, _callee);}))();
+                // //支付失败
+                // if (err2) {
+                //   this.handlePayFail(form.goods_list);
+                //   return;
+                // }
+                // //支付成功
+                // if (res2) {
+                //   this.handlePaySuccess(form.goods_list);
+                //   return;
+                // }
+                console.log('微信支付结果', err2, res2);_context.next = 17;return (
+
+
+
+                  uni.$http.get('wxeck_order/' + res.order_id + '/'));case 17:_yield$uni$$http$get = _context.sent;res3 = _yield$uni$$http$get.data;
+
+                uni.$showMsg(res3.msg);
+
+                if (res3.code === 200) {
+
+                  setTimeout(function () {
+                    _this5.deletbuyedGoods(form.goods_list);
+                    uni.redirectTo({
+                      url: '../../subpkg/orders/orders?index=1' });
+
+                  }, 1500);
+
+                } else if (res3.code === 400) {
+
+                  setTimeout(function () {
+                    _this5.deletbuyedGoods(form.goods_list);
+                    uni.redirectTo({
+                      url: '../../subpkg/orders/orders?index=0' });
+
+                  }, 1500);
+
+                }case 21:case "end":return _context.stop();}}}, _callee);}))();
+
     },
+    //发起余额支付
+    payBanlance: function payBanlance(form) {var _this6 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {var _yield$uni$$http$post2, res, userInfo;return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:_context2.next = 2;return (
 
+
+                  uni.$http.post('mini_balance_payment/', form));case 2:_yield$uni$$http$post2 = _context2.sent;res = _yield$uni$$http$post2.data;
+                //成功
+                if (res.code === 200) {
+                  uni.$showMsg(res.msg);
+
+                  userInfo = _this6.userInfo;
+                  userInfo.money_vip -= _this6.totalPrice;
+                  console.log(userInfo);
+                  _this6.updateUserInfo(userInfo);
+
+                  setTimeout(function () {
+                    _this6.deletbuyedGoods(form.goods_list);
+                    uni.redirectTo({
+                      url: '../../subpkg/orders/orders?index=1' });
+
+                  }, 1500);
+
+                  //失败
+                } else if (res.code === 400) {
+                  uni.$showMsg(res.msg);
+                }case 5:case "end":return _context2.stop();}}}, _callee2);}))();
+    },
+    //支付成功
+    handlePaySuccess: function handlePaySuccess(goods_list) {var _this7 = this;
+      uni.$showMsg('支付成功');
+      setTimeout(function () {
+        _this7.deletbuyedGoods(goods_list);
+        uni.redirectTo({
+          url: '../../subpkg/orders/orders?index=1' });
+
+      }, 1500);
+    },
+    //支付失败
+    handlePayFail: function handlePayFail(goods_list) {var _this8 = this;
+      uni.$showMsg('支付失败，请去订单页重新支付');
+      setTimeout(function () {
+        _this8.deletbuyedGoods(goods_list);
+        uni.redirectTo({
+          url: '../../subpkg/orders/orders?index=0' });
+
+      }, 1500);
+    },
+    //删除购买商品
+    deletbuyedGoods: function deletbuyedGoods(goods_list) {var _this9 = this;
+      goods_list.forEach(function (goods) {
+        _this9.removeGoodsById(goods.id);
+      });
+    },
     // 计算邮费
     countPosterPrice: function countPosterPrice() {
       console.log(this.cart_list.filter(function (x) {return x.is_checked;}));
@@ -456,7 +628,6 @@ var _vuex = __webpack_require__(/*! vuex */ 11);function _interopRequireDefault(
       }
       this.postage = price;
     },
-
 
     gotoAddress: function gotoAddress(type) {
       if (type === 1) {

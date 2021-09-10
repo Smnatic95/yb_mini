@@ -96,10 +96,10 @@ var components
 try {
   components = {
     uniPopup: function() {
-      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup/uni-popup")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 355))
+      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup/uni-popup")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 387))
     },
     saleCode: function() {
-      return __webpack_require__.e(/*! import() | components/sale-code/sale-code */ "components/sale-code/sale-code").then(__webpack_require__.bind(null, /*! @/components/sale-code/sale-code.vue */ 475))
+      return __webpack_require__.e(/*! import() | components/sale-code/sale-code */ "components/sale-code/sale-code").then(__webpack_require__.bind(null, /*! @/components/sale-code/sale-code.vue */ 514))
     }
   }
 } catch (e) {
@@ -156,7 +156,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
 //
 //
 //
@@ -178,29 +178,17 @@ var _default =
 {
   data: function data() {
     return {
-      cartList: [{
-        title: '原本成猫粮',
-        number: '12',
-        price: '2388.00' },
-      {
-        title: '原本成猫粮',
-        number: '12',
-        price: '2388.00' },
-      {
-        title: '原本成猫粮',
-        number: '12',
-        price: '2388.00' },
-      {
-        title: '原本成猫粮',
-        number: '12',
-        price: '2388.00' }] };
-
+      xcimg: uni.$baseUrl1 + 'yb-poster-001.jpg' };
 
   },
   methods: {
     showPopup: function showPopup() {
-      this.$refs.popup.open();
+      // this.$refs.popup.open();
+      uni.navigateTo({
+        url: '/mypkg/vip/vip' });
+
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

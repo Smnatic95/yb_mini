@@ -14,10 +14,10 @@
       </view>
 
       <!-- 轮播图 -->
-      <swiper :indicator-dots="true" autoplay circular class="banner-box">
-        <swiper-item v-for="i in 4" :key='i' @click="showPopup">
+      <swiper :indicator-dots="true" autoplay circular class="banner-box" :interval="5000" :duration="2000">
+        <swiper-item v-for="(i,index) in swiperList" :key='index' @click="swiperClick(i)">
           <view class="banner" style="background-color:skyblue;">
-            <image src="https://7n.oripetlife.com/banner1.jpg" mode="widthFix"></image>
+            <image :src="i.imgurl" mode="widthFix"></image>
           </view>
         </swiper-item>
       </swiper>
@@ -29,15 +29,12 @@
         <view>通</view>
         <view>知</view>
       </view>
-      <swiper :autoplay="true" vertical autoplay circular :interval="3000" :duration="1000">
-        <swiper-item @click="showPopup">
-          <view class="swiper-item">{{parent_ids}}</view>
+      <swiper :autoplay="true" vertical autoplay circular :interval="6000" :duration="1000">
+        <swiper-item>
+          <view class="swiper-item">加入原本享受管家式服务</view>
         </swiper-item>
-        <swiper-item @click="showPopup">
-          <view class="swiper-item">2222222</view>
-        </swiper-item>
-        <swiper-item @click="showPopup">
-          <view class="swiper-item">333333</view>
+        <swiper-item>
+          <view class="swiper-item">后续更多功能敬请期待</view>
         </swiper-item>
       </swiper>
     </view>
@@ -45,7 +42,7 @@
     <!-- 活动 -->
     <view class="gird-box">
       <uni-grid :column="4" :showBorder="false" :square="false">
-        <uni-grid-item>
+        <!-- <uni-grid-item>
           <view class="container" @click="gotoSeckill">
             <view class="pic">
               <image src="/static/images/coupon.png"></image>
@@ -68,19 +65,19 @@
             </view>
             <view class="text">抽奖活动</view>
           </view>
-        </uni-grid-item>
-        <uni-grid-item>
+        </uni-grid-item> -->
+        <!--   <uni-grid-item>
           <view class="container" @click="gotoCardActive">
             <view class="pic">
               <image src="/static/images/coupon.png"></image>
             </view>
             <view class="text">年卡活动</view>
           </view>
-        </uni-grid-item>
+        </uni-grid-item> -->
         <uni-grid-item>
           <view class="container" @click="gotoCount">
             <view class="pic">
-              <image src="/static/images/coupon.png"></image>
+              <image src="/static/images/counter.png"></image>
             </view>
             <view class="text">计算器</view>
           </view>
@@ -105,11 +102,9 @@
               <image :src="'https://7n.oripetlife.com/'+item.img"></image>
             </view>
             <view class="item-name">{{item.name}}</view>
-            <!-- <view class="item-name">titletitletitletitletitletitletitletitletitletitletitle</view> -->
             <view class="bottom">
               <image src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
               <view class="item-price">￥{{item.market_price}}</view>
-              <!-- <view class="item-sales">￥{{item.price}}</view> -->
             </view>
           </view>
         </scroll-view>
@@ -126,56 +121,55 @@
           查看更多<uni-icons type="arrowright" size="13" color=""></uni-icons>
         </view>
       </view>
-      <swiper class="new-swiper" circular autoplay :interval="4000" :duration="2500">
+      <swiper class="new-swiper" circular :autoplay="true" :interval="10000" :duration="2500">
         <swiper-item v-for="(item,i) in newList" :key='i'>
           <view class="swiper-item">
             <view class="container">
 
               <view class="left" @click="gotoGoodsDetail(item[0])">
                 <view class="name">{{item[0].name}}</view>
-                <view class="intro">简介简介简介简介简介简介简介简介简介</view>
-                <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
-                <view class="dis-price">
-                  <text style="font-size: 12px;">
-                  </text>{{item[0].market_price}}
+                <view class="intro">
+                  {{item[0].introduction}}
                 </view>
-                <!-- <view class="price">￥{{item[0].price}}</view> -->
+
+                <view class="price-box-m">
+                  <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png" mode="heightFix"></image>
+                  <text class="price-m">{{item[0].market_price}}</text>
+                </view>
+
                 <view class="pic">
                   <image :src="'https://7n.oripetlife.com/'+item[0].img" mode="widthFix"></image>
                 </view>
+
               </view>
 
               <view class="right">
                 <view @click="gotoGoodsDetail(item[1])">
                   <view class="name">{{item[1].name}}</view>
-                  <view class="intro">简介简介简介简介简介简介简介简介简介</view>
+                  <view class="intro">{{item[1].introduction}}</view>
                   <view class="price-box">
-                    <view class="text">
 
-                      <view class="dis-price">
-
-                        <text style="font-size: 12px;"></text>{{item[1].market_price}}
-                      </view>
-                      <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
-                      <!-- <view class="price">￥{{item[1].price}}</view> -->
+                    <view class="price-box-m">
+                      <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png" mode="heightFix"></image>
+                      <text class="price-m">{{item[1].market_price}}</text>
                     </view>
+
                     <view class="pic">
                       <image :src="'https://7n.oripetlife.com/'+item[1].img" mode="widthFix"></image>
                     </view>
+
                   </view>
                 </view>
                 <view @click="gotoGoodsDetail(item[2])">
                   <view class="name">{{item[2].name}}</view>
-                  <view class="intro">简介简介简介简介简介简介简介简介简介</view>
+                  <view class="intro">{{item[2].introduction}}</view>
                   <view class="price-box">
-                    <view class="text">
 
-                      <view class="dis-price">
-                        <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png" mode=""></image>
-                        <text style="font-size: 12px;"></text>{{item[2].market_price}}
-                      </view>
-                      <!-- <view class="price">￥{{item[2].price}}</view> -->
+                    <view class="price-box-m">
+                      <image class="icon" src="https://7n.oripetlife.com/huiyuanjia.png" mode="heightFix"></image>
+                      <text class="price-m">{{item[0].market_price}}</text>
                     </view>
+
                     <view class="pic">
                       <image :src="'https://7n.oripetlife.com/'+item[2].img" mode="widthFix"></image>
                     </view>
@@ -192,23 +186,50 @@
 
     <!-- 分类 -->
     <view class="scroll-box">
-      <scroll-view class="scroll-view_H" scroll-x="true" scroll-left="0">
-        <view id="demo1" :class="['scroll-view-item_H',i===active?'active':'']" v-for="(item,i) in scrollList" :key='i'
-          @click="activeChanged(item,i)">{{item.title}}</view>
+      <scroll-view class="scroll-view_H" scroll-x="true" scroll-left="0" :scroll-into-view="cateScrollTO"
+        :scroll-with-animation="true">
+        <view :id="'demo'+i" :class="['scroll-view-item_H',i===active?'active':'']" v-for="(item,i) in scrollList"
+          :key='i' @click="activeChanged(item,i)">{{item.title}}</view>
       </scroll-view>
     </view>
 
     <!-- 商品列表 -->
     <home-goodsitem :goodsList='goodsList'></home-goodsitem>
 
-    <uni-popup ref="popup" type="center">
-      <!-- <sale-code></sale-code> -->
-      <view class="popup-box">
-        <scroll-view scroll-y="true">
-          <view class="scroll-item">
-            <image src="https://7n.oripetlife.com/banner1-active.jpg" mode="widthFix"></image>
+    <uni-popup ref="popupAsk" type="center">
+      <view class="box_ask">
+        <view class="title">
+          您可以通过以下方式问诊
+        </view>
+        <view class="menus">
+
+          <view class="menu wechat" @click="getKefuWechat" v-if="userInfo.mobile">
+            <image class="img_menu" src="../../static/images/wechat.png"></image>
+            <view class="title_menu">
+              客服微信
+            </view>
           </view>
-        </scroll-view>
+
+          <button class="menu wechat" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" v-else>
+            <image class="img_menu" src="../../static/images/wechat.png"></image>
+            <view class="title_menu">
+              客服微信
+            </view>
+          </button>
+
+          <button class="menu mini" open-type="contact">
+            <image class="img_menu" src="../../static/images/icon/kefu.png"></image>
+            <view class="title_menu">
+              小程序客服
+            </view>
+          </button>
+
+        </view>
+
+        <view class="box_btn">
+          <view class="btn" @click="this.$refs.popupAsk.close()">取消</view>
+        </view>
+
       </view>
     </uni-popup>
 
@@ -216,39 +237,46 @@
 </template>
 
 <script>
-  // import badgeMix from '@/mixins/tabbar-badge.js'
   import {
     mapState
   } from 'vuex'
-  import badgeMix from '@/mixins/tabbar-badge.js'
-  import shareMix from '@/mixins/share-app.js'
+  import badgeMix from '@/mixins/tabbar-badge.js';
+  import shareMix from '@/mixins/share-app.js';
+  import phoneMix from '@/mixins/get-phone.js';
 
   export default {
-    mixins: [badgeMix, shareMix], // 导入公共js
+    mixins: [badgeMix, shareMix, phoneMix], // 导入公共js
     data() {
       return {
         active: 0,
         goodsListAll: [],
         goodsList: [],
         hotList: [],
-        newList: [
-          [],
-          [],
-          []
-        ],
+        newList: null,
         parent_id: '',
+        swiperList: [{
+          key: 'petDoc',
+          imgurl: uni.$baseUrl1 + 'yb-banner-001.jpg'
+        }, {
+          imgurl: uni.$baseUrl1 + 'yb-banner-002.jpg',
+          url: "/mypkg/vip/vip"
+        }, {
+          imgurl: uni.$baseUrl1 + 'yb-banner-003.jpg',
+          url: "/mypkg/score-goods/score-goods"
+        }],
+        cateScrollTO: 'demo1'
       };
     },
     computed: {
-      ...mapState('home', ['scrollList'])
+      ...mapState('home', ['scrollList']),
+      ...mapState('user', ['userInfo'])
     },
     onLoad() {
-      this.getHotList()
-      this.getNewList()
-      this.getGoodsList()
+      this.getHotList();
+      this.getNewList();
+      this.getGoodsList();
     },
     methods: {
-
       // 热门榜单
       async getHotList() {
         const {
@@ -257,7 +285,6 @@
         // console.log(res)
         if (res.code !== 200) return uni.$showMsg(res.msg)
         this.hotList = res.lists
-
         // 四袋装
         this.hotList.forEach(item => {
           if (item.id === 32 || item.id === 33 || item.id === 34) {
@@ -265,15 +292,10 @@
             item.price = (Number(item.price) * 4).toFixed(2)
           }
         })
-
-
-
         // 售空
         const arr1 = res.lists.filter(x => x.stock > 0)
         const arr2 = res.lists.filter(x => x.stock == 0)
         this.hotList = [...arr1, ...arr2]
-
-        // console.log(this.hotList)
       },
       // 新品
       async getNewList() {
@@ -281,16 +303,18 @@
           data: res
         } = await uni.$http.get('user_news_skus/')
         if (res.code !== 200) return uni.$showMsg(res.msg)
-
+        console.log(res.lists);
+        let newList = [
+          []
+        ];
         res.lists.forEach((item, i) => {
-          if (i <= 2) {
-            this.newList[0].push(item)
-          } else if (i >= 6) {
-            this.newList[2].push(item)
+          if (newList[newList.length - 1].length < 3) {
+            newList[newList.length - 1].push(item);
           } else {
-            this.newList[1].push(item)
+            newList[newList.length] = [item];
           }
         })
+        this.newList = newList;
       },
       // 获取商品列表
       async getGoodsList() {
@@ -300,7 +324,6 @@
         // console.log(res)
         if (res.code !== 200) return uni.$showMsg(res.msg)
         this.goodsListAll = res.lists
-
         // 四袋装
         this.goodsListAll.forEach(item => {
           if (item.id == 32 || item.id == 33 || item.id == 34) {
@@ -308,81 +331,100 @@
             item.price = (Number(item.price) * 4).toFixed(2)
           }
         })
-
-        // 售空
-        // const arr = [...this.goodsListAll.filter(x => x.type == item.type)]
         const arr1 = this.goodsListAll.filter(x => x.stock > 0)
         const arr2 = this.goodsListAll.filter(x => x.stock == 0)
-
         this.goodsList = [...arr1, ...arr2]
-        // console.log(this.goodsList.length)
-
-        // this.goodsList = [...this.goodsListAll]
       },
+
       activeChanged(item, i) {
-        this.active = i
+        this.active = i;
+        this.cateScrollTO = i < 2 ? 'demo0' : 'demo' + (i - 2);
         if (!item.type && item.type != 0) return this.getGoodsList()
         const arr = [...this.goodsListAll.filter(x => x.type == item.type)]
         const arr1 = arr.filter(x => x.stock > 0)
         const arr2 = arr.filter(x => x.stock == 0)
-
         this.goodsList = [...arr1, ...arr2]
-
-        console.log(this.goodsList)
       },
 
-
-      showPopup() {
-        this.$refs.popup.open()
+      async getKefuWechat(e) {
+        let phone_id = this.userInfo && this.userInfo.mobile ? this.userInfo.mobile : '';
+        const {
+          data: res
+        } = await uni.$http.get(`sale_qrcode/${phone_id}/`);
+        let SaleQrcode = uni.$baseUrl1 + res.image;
+        uni.previewImage({
+          urls: [SaleQrcode],
+          current: SaleQrcode
+        })
       },
+
+      swiperClick(swipe) {
+        if (swipe.url) {
+          uni.navigateTo({
+            url: swipe.url
+          })
+        } else if (swipe.key == 'petDoc') {
+          console.log(1111111111);
+          this.$refs.popupAsk.open();
+        }
+      },
+
       gotoSearch() {
         uni.navigateTo({
           url: '/subpkg/search/search'
         })
       },
+
       gotoGoodsDetail(item) {
-        // const goods_id = item.id
         console.log(item)
         uni.navigateTo({
           url: `/subpkg/goods_detail/goods_detail?id=${item.id}&goods_stock=${item.stock}&goods_img=${item.img}&weight=${item.weight}`,
         })
       },
+
       gotoHomeMore(type) {
         // 查看更多
         uni.navigateTo({
           url: '/subpkg/home-more/home-more?type=' + type
         })
       },
+
       gotoSeckill() {
         uni.navigateTo({
           url: '/mypkg/seckill/seckill'
         })
       },
+
       gotoAddress() {
         uni.navigateTo({
           url: '/mypkg/address/address'
         })
       },
+
       gotoCardActive() {
         uni.navigateTo({
           url: '/mypkg/card-active/card-active'
         })
       },
+
       gotoPublic() {
         uni.navigateTo({
           url: '/mypkg/public-welfare/public-welfare'
         })
       },
+
       gotoLottery() {
         uni.navigateTo({
           url: '/mypkg/lottery/lottery'
         })
       },
-      gotoCount(){
+
+      gotoCount() {
         uni.navigateTo({
           url: '/mypkg/count/count'
         })
-      },
+      }
+
     },
 
     onPullDownRefresh() {
@@ -390,14 +432,110 @@
       this.getNewList()
       this.getGoodsList()
       uni.stopPullDownRefresh()
-    },
+    }
 
   }
 </script>
 
 <style lang="scss">
+
   .page {
-    padding-bottom: 50px;
+    padding-bottom: 15rpx;
+  }
+
+  .box_ask {
+    width: 75vw;
+    border-radius: 30rpx;
+    background-color: #fff;
+    font-size: 29rpx;
+    padding-bottom: 10px;
+
+    >.title {
+      text-align: center;
+      height: 100rpx;
+      line-height: 100rpx;
+      color: #555;
+    }
+
+    .menus {
+      display: flex;
+      justify-content: center;
+
+      .menu {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 25rpx;
+        margin-top: 20rpx;
+        padding-right: 25rpx;
+        font-size: 29rpx;
+        background-color: #ffff;
+
+        &.wechat {
+          border-right: 1px solid #eee
+        }
+
+        &.mini {
+          margin-right: 0;
+          padding-right: 0;
+        }
+
+
+        &::after {
+          border: none;
+        }
+
+        .img_menu {
+          width: 60rpx;
+          height: 60rpx;
+        }
+
+        .title_menu {
+          margin-top: 5rpx;
+          height: 30rpx;
+          line-height: 30rpx;
+        }
+
+      }
+    }
+
+    .box_btn {
+      .btn {
+        width: 90%;
+        margin: 70rpx auto 0;
+        height: 70rpx;
+        line-height: 70rpx;
+        text-align: center;
+        background: #F8F8F8;
+        border-radius: 60rpx;
+        border: 1px solid #eee;
+        color: gray;
+      }
+    }
+
+  }
+
+
+  .price-box-m {
+    display: flex;
+    align-items: flex-end;
+    margin-top: 20rpx;
+
+    .icon {
+      height: 26rpx !important;
+      margin-top: 0 !important;
+    }
+
+    .price-m {
+      color: var(--color-money);
+      font-weight: bold;
+      font-size: 32rpx;
+      height: 32rpx;
+      line-height: 32rpx;
+      margin-left: 4rpx;
+    }
   }
 
   .search {
@@ -439,7 +577,7 @@
     background: linear-gradient(top, #49b0f9 0%, #f6f6f6 90%);
 
     swiper {
-      height: 150px;
+      height: 300rpx;
       margin: 0 15px;
       border-radius: 5rpx !important;
       overflow: hidden !important;
@@ -450,7 +588,7 @@
       }
 
       .banner {
-        height: 150px;
+        height: 300rpx;
         border-radius: 5px;
         overflow: hidden;
       }
@@ -462,10 +600,7 @@
   }
 
   // 轮播
-  .banner {
-    // bor
-
-  }
+  .banner {}
 
   // 通告栏
   .notice-box {
@@ -502,6 +637,7 @@
       flex: 1;
       height: 100%;
       color: #8F99A7;
+      font-size: 32rpx;
     }
   }
 
@@ -510,7 +646,7 @@
     background-color: #FFFFFF;
     margin: 10px 15px;
     border-radius: 5px;
-    overflow: hidden;
+    min-height: 180rpx;
 
     uni-grid-item {
       padding-bottom: 10px;
@@ -528,7 +664,7 @@
       .pic {
         width: 100rpx;
         height: 100rpx;
-        margin: 10px 0 3px;
+        margin: 20rpx 0 6rpx;
         border-radius: 50%;
         overflow: hidden;
 
@@ -626,13 +762,13 @@
 
           .item-price {
             font-size: 14px;
-            color: #294D7C;
+            color: var(--color-money);
             font-weight: bold;
           }
 
           .item-sales {
             font-size: 11px;
-            color: #8F99A7;
+            color: var(--color-money);
             text-decoration: line-through;
           }
 
@@ -710,6 +846,11 @@
           display: flex;
           justify-content: space-between;
 
+          .price-box-m {
+            align-self: flex-start;
+            margin-right: 5rpx;
+          }
+
           .text,
           .pic {
             width: 150rpx;
@@ -770,8 +911,9 @@
   .scroll-box {
     position: sticky;
     top: 0;
-    padding: 0 15px;
+    padding: 0 30rpx;
     background-color: #FFFFFF;
+    padding: 12rpx 0;
 
     .scroll-view_H {
       white-space: nowrap;
@@ -779,49 +921,32 @@
 
       .scroll-view-item_H {
         display: inline-block;
-        padding: 12px 8px;
-        font-size: 16px;
+        font-size: 32rpx;
         font-family: PingFang SC;
+        padding: 20rpx 16rpx;
         font-weight: 500;
         color: #8F99A7;
+        transition: all .1s ease-in;
 
         &.active {
           color: #294D7C;
-          font-weight: blod;
+          transform: scale(1.05);
+          position: relative;
         }
+
+        &.active::before {
+          content: '';
+          display: block;
+          position: absolute;
+          bottom: 9rpx;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 50rpx;
+          height: 2rpx;
+          background-color: #294D7C;
+        }
+
       }
-    }
-  }
-
-  .popup-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 650rpx;
-    height: 1000rpx;
-    padding: 50rpx;
-    background-color: #FFFFFF;
-    border-radius: 10px;
-    overflow: hidden;
-    box-sizing: border-box;
-
-    scroll-view {
-      width: 100%;
-      height: 100%;
-      // border-radius: 10px !important;
-      // overflow: hidden !important;
-
-
-      .scroll-item {
-        // border-radius: 10px !important;
-        // overflow: hidden !important;
-      }
-    }
-
-    image {
-      width: 100%;
-      vertical-align: middle;
-      // border-radius: 10px;
     }
   }
 </style>

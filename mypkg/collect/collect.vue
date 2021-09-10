@@ -2,7 +2,7 @@
   <view class="page">
 
     <view class="pic-box">
-      <image src="/static/images/bg1.png" mode="widthFix"></image>
+      <image :src="topImg" mode="widthFix"></image>
     </view>
 
     <view class="goods-item" v-for="item in collectList" :key='item.id'>
@@ -43,6 +43,7 @@
     data() {
       return {
         // collectList: [], // 收藏列表
+        topImg:uni.$baseUrl1+'yb-top-image-4.jpg'
       };
     },
     onLoad() {
@@ -110,10 +111,8 @@
   }
 
   .pic-box {
-    height: 150px;
     margin: 0 10px 10px;
     border-radius: 10px;
-    overflow: hidden;
 
     image {
       width: 100%;

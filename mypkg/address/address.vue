@@ -1,7 +1,7 @@
 <template>
   <view class="page">
     
-    <uni-notice-bar single="true" text="右滑可编辑地址"></uni-notice-bar>
+    <uni-notice-bar single="true" text="左滑可编辑地址"></uni-notice-bar>
 
     <uni-swipe-action>
       <uni-swipe-action-item v-for="(item,i) in address_list" :key='i'>

@@ -1,7 +1,7 @@
 <template>
   <view class="pages">
     <view class="pic">
-      <image src="/static/bg.png" mode=""></image>
+      <image :src=" topImg " mode=""></image>
     </view>
     <home-goodsitem :goodsList='moreList'></home-goodsitem>
   </view>
@@ -13,6 +13,7 @@
       return {
         pageTitle: '',
         moreList: [],
+        topImg:null
       };
     },
 
@@ -20,9 +21,11 @@
       this.pageTitle = option.type || '热门推荐'
       switch (option.type) {
         case 'hot':
+          this.topImg = uni.$baseUrl1+'yb-top-image-1.jpg'
           this.pageTitle = '热门榜单'
           break;
         case 'new':
+           this.topImg = uni.$baseUrl1+'yb-top-image-2.jpg'
           this.pageTitle = '首发新品'
           break;
       }
@@ -69,13 +72,9 @@
   }
 
   .pic {
-    // width: 100%;
-    height: 150px;
-    // margin: 15px;
-
+    min-height: 250rpx;
     overflow: hidden;
-
-    // margin-bottom: 15px;
+    margin-bottom: 25rpx;
     image {
       width: 750rpx;
     }

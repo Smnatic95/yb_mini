@@ -1,7 +1,7 @@
-.integral-page{background-color:#f6f6f6;min-height:100vh}.integral-top,
-.integral-item{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;height:120rpx;padding:0 30rpx;background:#fff}.integral-top .title,
+.integral-page{padding-bottom:50px;background-color:#f6f6f6;min-height:100vh;-webkit-box-sizing:border-box;box-sizing:border-box}.integral-top,
+.integral-item{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;padding:0 30rpx;background:#fff}.integral-top .title,
 .integral-item .title{font-size:30rpx;font-weight:700;color:#000104}.integral-top .title .time,
 .integral-item .title .time{font-size:24rpx;font-weight:500;color:#c0c8d3}.integral-top .num,
 .integral-item .num{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-align:center;-webkit-align-items:center;align-items:center;font-size:44rpx;font-weight:700;color:#ffa424}.integral-top .num image,
 .integral-item .num image{width:52rpx;height:52rpx;margin-right:10rpx}.integral-top .sub,
-.integral-item .sub{color:#80c5cd}.integral-top{margin-bottom:20rpx}.integral-item{margin-bottom:2rpx}.integral-item .num{font-size:32rpx}
+.integral-item .sub{color:#80c5cd}.integral-top{height:120rpx;margin-bottom:20rpx}.integral-item{padding:10px 30rpx;margin-bottom:2rpx}.integral-item .type{color:#333}.integral-item .num{font-size:32rpx}.integral-item .order{font-size:28rpx;font-weight:500;color:#8f99a7}.scroll-box{position:-webkit-sticky;position:sticky;top:0;padding:0 15px;margin-bottom:10px;background-color:#fff}.scroll-box .scroll-view_H{white-space:nowrap;width:100%}.scroll-box .scroll-view_H .scroll-view-item_H{display:inline-block;padding:12px 0;width:20%;text-align:center;font-size:16px;font-family:PingFang SC;font-weight:500;color:#8f99a7}.scroll-box .scroll-view_H .scroll-view-item_H.active{color:#294d7c;font-weight:blod}

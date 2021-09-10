@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "图片裁剪",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "image-cropper": "/wxcomponents/image-cropper/image-cropper"
+  }
+}

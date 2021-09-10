@@ -9,10 +9,10 @@
 		</view>
 		<view class="uni-dialog-button-group">
 			<view class="uni-dialog-button" @click="close">
-				<text class="uni-dialog-button-text">取消</text>
+				<text class="uni-dialog-button-text">{{cancelText}}</text>
 			</view>
 			<view class="uni-dialog-button uni-border-left" @click="onOk">
-				<text class="uni-dialog-button-text uni-button-color">确定</text>
+				<text class="uni-dialog-button-text uni-button-color">{{confirmText}}</text>
 			</view>
 		</view>
 		<view v-if="popup.isDesktop" class="uni-popup-dialog__close" @click="close">
@@ -64,6 +64,14 @@
 				type: [String, Number],
 				default: '请输入内容'
 			},
+      confirmText:{
+        type: String,
+        default: '确定'
+      },
+      cancelText:{
+        type: [String, Number],
+        default: '取消'
+      },
 			/**
 			 * 对话框主题 success/warning/info/error	  默认 success
 			 */

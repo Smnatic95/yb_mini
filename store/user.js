@@ -1,18 +1,15 @@
 export default {
   namespaced: true,
-
   state: () => ({
     userInfo: JSON.parse(uni.getStorageSync('userInfo') || "{}"),
     token: JSON.parse(uni.getStorageSync('token') || "false"),
     collectList: JSON.parse(uni.getStorageSync('collectList') || "false"),
-    signList:JSON.parse(uni.getStorageSync('signList') || "false"),
+    signList: JSON.parse(uni.getStorageSync('signList') || "false"),
   }),
-
   mutations: {
     // 修改用户信息
     updateUserInfo(state, user) {
       state.userInfo = user
-      // console.log(state.userInfo)
       uni.setStorageSync('userInfo', JSON.stringify(state.userInfo))
     },
 
@@ -33,21 +30,27 @@ export default {
       state.collectList = state.collectList.filter(x => x.id !== id)
       uni.setStorageSync('collectList', JSON.stringify(state.collectList))
     },
-    
+
     // 更新签到列表
     updateSignList(state, list) {
       state.signList = list
       uni.setStorageSync('signList', JSON.stringify(state.signList))
     },
     // 签到
-    updateSignStatus(state,i){
-      state.signList[i-1].num=1
+    updateSignStatus(state, i) {
+      state.signList[i - 1].num = 1
       uni.setStorageSync('signList', JSON.stringify(state.signList))
+    },
+    reLoadUserInfo(state) {
+      let state1 = {
+        userInfo: JSON.parse(uni.getStorageSync('userInfo') || "{}"),
+        token: JSON.parse(uni.getStorageSync('token') || "false"),
+        collectList: JSON.parse(uni.getStorageSync('collectList') || "false"),
+        signList: JSON.parse(uni.getStorageSync('signList') || "false"),
+      }
+      Object.keys(state1).forEach((key) => {
+        state[key] = state1[key];
+      })
     }
-
-
   },
-
-
-
 }

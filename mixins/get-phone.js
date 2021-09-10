@@ -1,6 +1,7 @@
 import {
   mapState,
   mapMutations,
+  mapActions,
   createNamespacedHelpers
 } from 'vuex'
 const {
@@ -27,52 +28,53 @@ export default {
     ...mapStateUser(['token']),
     ...mapStateCart(['couponsList']),
   },
-  async onShow() {},
   methods: {
     ...mapMutationsUser(['undateToken', 'updateUserInfo']),
-    ...mapMutationsCart(['updateCouponsList','updateVip']),
+    ...mapMutationsCart(['updateCouponsList', 'updateVip']),
     ...mapMutationsAddress(['updateAddress', 'updateDefaultAddress']),
+    ...mapActions('pet', ['getpetlistFromOrigen']),
 
     async getPhoneNumber(e) {
-      const id = uni.getStorageSync('id')
-      const is_staff = uni.getStorageSync('is_staff')
-      const parent_id = uni.getStorageSync('parent_id')
-
+      const id = uni.getStorageSync('id');
+      const is_staff = uni.getStorageSync('is_staff');
+      const parent_id = uni.getStorageSync('parent_id');
+      const [err, coderes] = await uni.login().catch(err => err)
       if (e.detail.errMsg == "getPhoneNumber:ok") {
         var form = {
-          code: uni.getStorageSync('code'),
+          code: coderes.code,
           encryptedData: e.detail.encryptedData,
           iv: e.detail.iv,
         }
-
-        if (!parent_id && !id && !is_staff) form.parent_id = 0
+        if (!parent_id && !id && !is_staff){
+          form.parent_id = 0
+        }
         if (parent_id == 0) {
           if (is_staff) {
-            form.parent_id = id
-          } else {
-            form.parent_id = 0
+            form.parent_id = id;
           }
         } else {
           form.parent_id = parent_id
         }
-
+        
         const {
           data: res1
-        } = await uni.$http.post('login/', form)
-        // console.log(res1)
+        } = await uni.$http.post('login/', form);
+
         if (res1.code !== 200) {
-          this.undateToken(false)
+          this.undateToken(false);
           uni.$showMsg('授权失败！请重试')
         } else {
-          this.undateToken(true)
-          this.updateUserInfo(res1.user_list[0])
-          this.updateVip(res1.user_list[0].vip_active)
-          uni.setStorageSync('id', res1.id)
-          uni.setStorageSync('is_staff', res1.is_staff)
-          uni.setStorageSync('parent_id', res1.parent_id)
-
-          this.getCouponslList()
-          this.getAddressList()
+          this.undateToken(true);
+          this.updateUserInfo(res1.user_list[0]);
+          this.updateVip(res1.user_list[0].vip_active);
+          uni.setStorageSync('id', res1.id);
+          uni.setStorageSync('is_staff', res1.is_staff);
+          console.log('存储parent_id', res1.parent_id);
+          uni.setStorageSync('parent_id', res1.parent_id);
+          //获取用户数据
+          this.getCouponslList();
+          this.getAddressList();
+          this.getpetlistFromOrigen();
         }
       }
     },
@@ -86,7 +88,7 @@ export default {
       } = await uni.$http.get(`user_coupon/${mobile}/`)
       if (res.code !== 200) return uni.$showMsg(res.msg)
       let arr = res.lists
-      if (res.lists.length > 0) {
+      if (res.lists && res.lists.length > 0) {
         res.lists.forEach(item => {
           if (item.coupon_id == 1) { // 转介绍
             item.price = 30
@@ -143,7 +145,6 @@ export default {
       this.updateAddress(res.data)
       this.updateDefaultAddress(res.default_address)
     },
-
 
   }
 

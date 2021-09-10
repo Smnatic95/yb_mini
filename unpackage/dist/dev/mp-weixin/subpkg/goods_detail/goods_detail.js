@@ -224,6 +224,11 @@
 
 
 
+
+
+
+
+
 var _vuex = __webpack_require__(/*! vuex */ 11);
 
 
@@ -238,10 +243,9 @@ var _vuex = __webpack_require__(/*! vuex */ 11);
 
 
 
-
 var _shareApp = _interopRequireDefault(__webpack_require__(/*! @/mixins/share-app.js */ 29));
-var _getPhone = _interopRequireDefault(__webpack_require__(/*! @/mixins/get-phone.js */ 60));var _mixins$data$computed;function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _createNamespacedHelp = (0, _vuex.createNamespacedHelpers)("user"),mapStateUser = _createNamespacedHelp.mapState,mapMutationsUser = _createNamespacedHelp.mapMutations;var _createNamespacedHelp2 = (0, _vuex.createNamespacedHelpers)("cart"),mapStateCart = _createNamespacedHelp2.mapState,mapMutationsCart = _createNamespacedHelp2.mapMutations; // import badgeMix from '@/mixins/tabbar-badge.js'
-var _default = (_mixins$data$computed = {
+var _getPhone = _interopRequireDefault(__webpack_require__(/*! @/mixins/get-phone.js */ 30));var _mixins$data$computed;function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _createNamespacedHelp = (0, _vuex.createNamespacedHelpers)("user"),mapStateUser = _createNamespacedHelp.mapState,mapMutationsUser = _createNamespacedHelp.mapMutations;var _createNamespacedHelp2 = (0, _vuex.createNamespacedHelpers)("cart"),mapStateCart = _createNamespacedHelp2.mapState,mapMutationsCart = _createNamespacedHelp2.mapMutations;var _default = (_mixins$data$computed = {
+
 
   mixins: [_shareApp.default, _getPhone.default], // 导入公共js
   data: function data() {
@@ -253,7 +257,6 @@ var _default = (_mixins$data$computed = {
       goodsInfo: {},
       is_collect: false,
       num: 0,
-
       goods: {} };
 
   },
@@ -271,14 +274,8 @@ var _default = (_mixins$data$computed = {
   onShow: function onShow() {},
   onLoad: function onLoad(option) {
     this.num = this.total;
-    console.log('传过来的id===', option);
     this.goods_id = option.id;
     this.weight = option.weight;
-    if (option.goods_stock == 0) {
-      this.buttonGroup.forEach(function (item) {
-        item.backgroundColor = '#ccc';
-      });
-    }
     this.goods_stock = option.goods_stock;
     this.goods_img = option.goods_img;
 
@@ -291,113 +288,146 @@ mapStateCart(['cart_list']))), _defineProperty(_mixins$data$computed, "methods",
 
 mapMutationsCart(['addToCart', 'updateGoodsCount', 'undateGoodsState', 'updateAllChecked'])),
 mapMutationsUser(['undateToken', 'updateUserInfo'])), {}, {
-
-
   handleContact: function handleContact(e) {
     console.log(e);
   },
-
   // 立即购买
-  showPopup: function showPopup() {var _this = this;
-    if (!this.goods_stock) return;
-    this.goods = {
-      goods_id: this.goods_id,
-      goods_name: this.goodsInfo.name,
-      goods_intro: this.goodsInfo.introduction,
-      goods_img: 'https://7n.oripetlife.com/' + this.goods_img,
-      price: this.goodsInfo.price,
-      market_price: this.goodsInfo.market_price,
-      goods_count: 1,
-      weight: this.weight,
-      is_checked: true };
-
-    var findRes = this.cart_list.find(function (x) {return x.goods_id == _this.goods_id;});
-    if (findRes) {
-      this.updateGoodsCount(this.goods);
-    } else {
-      this.addToCart(this.goods);
+  showPopup: function showPopup() {
+    if (!this.checkStock()) {
+      return;
     }
-
-    this.$refs.popup.open('bottom');
+    this.goods.goods_count = 1;
+    this.$refs.popup.open();
   },
-  // 切换数量
-  numberChangeHandler: function numberChangeHandler(e) {
-    this.goods.goods_count = e.goods_count;
-    this.updateGoodsCount(e);
-  },
+  //下单
   onSettle: function onSettle() {
+    if (!this.checkStock()) {
+      return;
+    }
+    this.addToCart(this.goods);
+    this.updateGoodsCount(this.goods);
     this.updateAllChecked(false);
     this.goods.is_checked = true;
     this.undateGoodsState(this.goods);
     this.$refs.popup.close();
     uni.navigateTo({
-      url: '/pages/settle/settle' });
+      url: "/pages/settle/settle?goods=".concat(JSON.stringify(this.goods)) });
 
   },
 
-  // 商品详情
-  getGoodsDetail: function getGoodsDetail() {var _this2 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var _yield$uni$$http$get, res;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
-
-
-                uni.$http.get("sku_detail/".concat(_this2.goods_id, "/")));case 2:_yield$uni$$http$get = _context.sent;res = _yield$uni$$http$get.data;if (!(
-              res.code !== 200)) {_context.next = 6;break;}return _context.abrupt("return", uni.$showMsg(res.msg));case 6:
-              _this2.goodsInfo = res.lists[0];case 7:case "end":return _context.stop();}}}, _callee);}))();
+  addToCartHandler_b: function addToCartHandler_b() {
+    if (!this.checkStock()) {
+      return;
+    }
+    this.goods.goods_count = 1;
+    this.$refs.popup_addCar.open();
   },
 
-  // 收藏状态
-  collectCheck: function collectCheck() {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {var mobile, _yield$uni$$http$get2, res;return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:if (
-              _this3.token) {_context2.next = 2;break;}return _context2.abrupt("return");case 2:
-              mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile;_context2.next = 5;return (
+  addToCartHandler: function addToCartHandler() {
+    if (!this.checkStock()) {
+      return;
+    }
+    var goods = {
+      goods_id: this.goods_id,
+      goods_name: this.goodsInfo.name,
+      goods_intro: this.goodsInfo.introduction,
+      goods_img: uni.$baseUrl1 + this.goods_img,
+      price: this.goodsInfo.price,
+      market_price: this.goodsInfo.market_price,
+      goods_count: this.goods.goods_count,
+      weight: this.weight,
+      is_checked: true };
 
+    this.addToCart(goods);
+    uni.$showMsg("添加成功~");
+    this.$refs.popup_addCar.close();
+  },
 
-                uni.$http.get("user_collect_true/".concat(mobile, "/").concat(_this3.goods_id, "/")));case 5:_yield$uni$$http$get2 = _context2.sent;res = _yield$uni$$http$get2.data;if (!(
-
-              res.code !== 200)) {_context2.next = 9;break;}return _context2.abrupt("return", uni.$showMsg(res.msg));case 9:
-              _this3.is_collect = res.flag;case 10:case "end":return _context2.stop();}}}, _callee2);}))();
+  checkStock: function checkStock() {
+    if (this.goods_stock == 0) {
+      uni.$showMsg('宝贝售空了,隔段时间再来看看吧');
+      return false;
+    } else {
+      return 1;
+    }
   },
 
   // 点击收藏
-  collectChanged: function collectChanged() {var _this4 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {var mobile, collect_list, _yield$uni$$http$put, res, _yield$uni$$http$dele;return _regenerator.default.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:
+  collectChanged: function collectChanged() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var mobile, collect_list, _yield$uni$$http$put, res, _yield$uni$$http$dele;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
               mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile;
               collect_list = {
                 phone_id: mobile,
-                sku_id: _this4.goods_id };if (
+                sku_id: _this.goods_id };if (
 
-              _this4.is_collect) {_context3.next = 9;break;}_context3.next = 5;return (
+              _this.is_collect) {_context.next = 9;break;}_context.next = 5;return (
 
 
                 uni.$http.put("user_collect/", {
-                  collect_list: collect_list }));case 5:_yield$uni$$http$put = _context3.sent;res = _yield$uni$$http$put.data;_context3.next = 13;break;case 9:_context3.next = 11;return (
+                  collect_list: collect_list }));case 5:_yield$uni$$http$put = _context.sent;res = _yield$uni$$http$put.data;_context.next = 13;break;case 9:_context.next = 11;return (
 
 
 
 
                 uni.$http.delete("user_collect/", {
-                  collect_list: collect_list }));case 11:_yield$uni$$http$dele = _context3.sent;res = _yield$uni$$http$dele.data;case 13:if (!(
+                  collect_list: collect_list }));case 11:_yield$uni$$http$dele = _context.sent;res = _yield$uni$$http$dele.data;case 13:if (!(
 
 
 
-              res.code !== 200)) {_context3.next = 15;break;}return _context3.abrupt("return", uni.$showMsg(res.msg));case 15:
+              res.code !== 200)) {_context.next = 15;break;}return _context.abrupt("return", uni.$showMsg(res.msg));case 15:
               uni.$showMsg(res.msg);
-              _this4.is_collect = !_this4.is_collect;case 17:case "end":return _context3.stop();}}}, _callee3);}))();
+              _this.is_collect = !_this.is_collect;case 17:case "end":return _context.stop();}}}, _callee);}))();
   },
 
-  // 加购
-  addToCartHandler: function addToCartHandler() {
-    if (!this.goods_stock) return;
-    var goods = {
-      goods_id: this.goods_id,
-      goods_name: this.goodsInfo.name,
-      goods_intro: this.goodsInfo.introduction,
-      goods_img: 'https://7n.oripetlife.com/' + this.goods_img,
-      price: this.goodsInfo.price,
-      market_price: this.goodsInfo.market_price,
-      goods_count: 1,
-      weight: this.weight,
-      is_checked: true };
+  // 收藏状态
+  collectCheck: function collectCheck() {var _this2 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {var mobile, _yield$uni$$http$get, res;return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:if (
+              _this2.token) {_context2.next = 2;break;}return _context2.abrupt("return");case 2:
+              mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile;_context2.next = 5;return (
 
-    this.addToCart(goods);
-    uni.$showMsg("商品添加成功~");
+
+                uni.$http.get("user_collect_true/".concat(mobile, "/").concat(_this2.goods_id, "/")));case 5:_yield$uni$$http$get = _context2.sent;res = _yield$uni$$http$get.data;if (!(
+
+              res.code !== 200)) {_context2.next = 9;break;}return _context2.abrupt("return", uni.$showMsg(res.msg));case 9:
+              _this2.is_collect = res.flag;case 10:case "end":return _context2.stop();}}}, _callee2);}))();
+  },
+
+  // 商品详情
+  getGoodsDetail: function getGoodsDetail() {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {var _yield$uni$$http$get2, res;return _regenerator.default.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:_context3.next = 2;return (
+
+
+                uni.$http.get("sku_detail/".concat(_this3.goods_id, "/")));case 2:_yield$uni$$http$get2 = _context3.sent;res = _yield$uni$$http$get2.data;if (!(
+              res.code !== 200)) {_context3.next = 6;break;}return _context3.abrupt("return", uni.$showMsg(res.msg));case 6:
+
+              res.lists[0].de_image = res.lists[0].de_image.filter(function (item) {return item;});
+              console.log(res.lists[0].de_image);
+              res.lists[0].de_image = res.lists[0].de_image.map(function (item) {
+                return uni.$baseUrl1 + item;
+              });
+              res.lists[0].image = res.lists[0].image.map(function (item) {
+                return uni.$baseUrl1 + item;
+              });
+
+              _this3.goodsInfo = res.lists[0];
+              _this3.goods = {
+                goods_id: _this3.goods_id,
+                goods_name: _this3.goodsInfo.name,
+                goods_intro: _this3.goodsInfo.introduction,
+                goods_img: uni.$baseUrl1 + _this3.goods_img,
+                price: _this3.goodsInfo.price,
+                market_price: _this3.goodsInfo.market_price,
+                goods_count: 1,
+                weight: _this3.weight,
+                is_checked: true };
+
+              uni.setNavigationBarTitle({
+                title: _this3.goodsInfo.name,
+                complete: function complete(err) {
+                  console.log(err);
+                } });case 13:case "end":return _context3.stop();}}}, _callee3);}))();
+
+  },
+
+  numberChangeHandler: function numberChangeHandler(e) {
+    this.goods.goods_count = e.goods_count;
   },
 
   gotoCart: function gotoCart() {
@@ -420,6 +450,29 @@ mapMutationsUser(['undateToken', 'updateUserInfo'])), {}, {
     var goods_id = 2;
     uni.navigateTo({
       url: '/subpkg/comments_list/comments_list?id=' + goods_id });
+
+  },
+  previewDetailImg: function previewDetailImg(index) {
+    var de_image = this.goodsInfo.de_image;
+
+    uni.previewImage({
+      urls: de_image,
+      current: de_image[index],
+      fail: function fail(err) {
+        console.log(err);
+      } });
+
+  },
+  previewSwiperImg: function previewSwiperImg(index) {
+    var image = this.goodsInfo.image;
+
+    uni.previewImage({
+      urls: image,
+      current: image[index],
+      fail: function fail(err) {
+        console.log(err);
+      } });
+
 
   } })), _mixins$data$computed);exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
@@ -551,16 +604,16 @@ var components
 try {
   components = {
     uniIcons: function() {
-      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 340))
+      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 372))
     },
     uniBadge: function() {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-badge/components/uni-badge/uni-badge */ "uni_modules/uni-badge/components/uni-badge/uni-badge").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-badge/components/uni-badge/uni-badge.vue */ 427))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-badge/components/uni-badge/uni-badge */ "uni_modules/uni-badge/components/uni-badge/uni-badge").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-badge/components/uni-badge/uni-badge.vue */ 466))
     },
     uniPopup: function() {
-      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup/uni-popup")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 355))
+      return Promise.all(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-popup/components/uni-popup/uni-popup")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 387))
     },
     goodsItem: function() {
-      return __webpack_require__.e(/*! import() | components/goods-item/goods-item */ "components/goods-item/goods-item").then(__webpack_require__.bind(null, /*! @/components/goods-item/goods-item.vue */ 390))
+      return __webpack_require__.e(/*! import() | components/goods-item/goods-item */ "components/goods-item/goods-item").then(__webpack_require__.bind(null, /*! @/components/goods-item/goods-item.vue */ 422))
     }
   }
 } catch (e) {

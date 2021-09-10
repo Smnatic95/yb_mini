@@ -4,7 +4,7 @@
     <view class="title">签到成功</view>
     <view class="text">连续签到 <text>{{total}}</text> 天</view>
     <view class="text">今日增加 <text>{{integral}}</text> 积分</view>
-    <view class="btn">明天提醒我</view>
+    <!-- <view class="btn">明天提醒我</view> -->
     <view class="text2">明日签到可获得<text> {{next_integral}} </text>积分</view>
   </view>
 </template>

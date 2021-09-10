@@ -1,14 +1,12 @@
 <template>
   <view class="page">
-
-    <view class="box1">
+    <!-- <view class="box1">
       <view class="bg">
         <image src="/static/images/bg1.png"></image>
       </view>
       <view class="content">
         <view class="user">
           <view class="avatar">
-            <!-- <image :src="userInfo.avatar"></image> -->
             <open-data type="userAvatarUrl" mode="aspectFill"></open-data>
           </view>
           <view class="uname">
@@ -17,7 +15,7 @@
         </view>
         <view class="text">
           <text>开通会员即享权益</text>
-          <button open-type="contact">联系客服开通</button>
+          <button @click="contactSaler">{{btnkefuToa}}</button>
         </view>
       </view>
     </view>
@@ -47,8 +45,8 @@
 
     <view class="coupons-box">
       <view class="title">
-        <view >优惠券</view>
-        <view >开通即自动领取</view>
+        <view>优惠券</view>
+        <view>开通即自动领取</view>
       </view>
 
       <scroll-view class="scroll-view_H" scroll-x="true">
@@ -72,20 +70,27 @@
         </view>
       </scroll-view>
     </view>
+ -->
 
-    <view class="btn-box">
-      <button  open-type="contact">联系客服开通</button>
+    <view class="box_vipu">
+      <image :src="vipadImg" mode="widthFix"></image>
     </view>
 
-   <!-- <uni-popup ref="popup" type="center">
-      <sale-code></sale-code>
-    </uni-popup> -->
+    <view class="btn-box">
+      <button @click="contactSaler">{{btnkefuToa}}</button>
+    </view>
+
+    <uni-popup ref="kefupopup" type="center">
+      <image class="SaleQrcode" :src="SaleQrcode" mode="widthFix"></image>
+    </uni-popup>
 
   </view>
+
+
 </template>
 
 <script>
-  import signPopup from '../sign-popup/sign-popup.vue'
+  import signPopup from '../sign-popup/sign-popup.vue';
 
   import {
     mapState
@@ -95,18 +100,41 @@
     components: {
       signPopup
     },
+    onLoad() {
+      if (this.userInfo.mobile) {
+        this.getSaleQrcode(this.userInfo.mobile);
+      } else {
+        
+      }
+    },
     data() {
-      return {};
+      return {
+        SaleQrcode: null,
+        vipadImg:uni.$baseUrl1+'yb-poster-003.jpg'
+      };
     },
     computed: {
-      ...mapState('user', ['userInfo'])
+      ...mapState('user', ['userInfo']),
+      btnkefuToa() {
+        return !this.userInfo.vip_active ? '联系客服开通' : '联系客服';
+      }
     },
     methods: {
-      showPopup() {
-        // console.log('popup')
-        this.$refs.popup.open()
+      async getSaleQrcode(phone_id) {
+        const {
+          data: res
+        } = await uni.$http.get(`sale_qrcode/${phone_id}/`);
+        console.log(uni.$baseUrl1 + res.image);
+        this.SaleQrcode = uni.$baseUrl1 + res.image;
       },
-
+      contactSaler() {
+        // this.$refs.kefupopup.open();
+        let ig = this.SaleQrcode;
+        uni.previewImage({
+          urls: [ig],
+          current: ig
+        })
+      }
     }
   }
 </script>
@@ -114,8 +142,23 @@
 <style lang="scss">
   @import '@/static/iconfont/iconfont.css';
 
+  $kfbtnHeight: 80rpx;
+
   .page {
-    padding-bottom: 50px;
+    background-color: #060817;
+    padding-bottom: $kfbtnHeight;
+  }
+
+  .box_vipu {
+    width: 100vw;
+
+    image {
+      width: 100vw;
+    }
+  }
+
+  .SaleQrcode {
+    width: 50vw;
   }
 
   .box1 {
@@ -174,8 +217,8 @@
 
       font-size: 24rpx;
       color: #ae5a2a;
-      
-      button{
+
+      button {
         height: 50rpx;
         line-height: 50rpx;
         margin: 0;
@@ -183,7 +226,8 @@
         color: #ae5a2a;
         background-color: #FFFFFF;
         border-radius: 25rpx;
-        &::after{
+
+        &::after {
           border: 0;
         }
       }
@@ -198,7 +242,6 @@
         // -webkit-border-radius: 11px;
         border-radius: 22rpx;
         // background-color: #fff;
-
       }
     }
   }
@@ -234,8 +277,6 @@
           color: #89735b;
         }
       }
-
-
     }
 
     .privilege {
@@ -356,14 +397,24 @@
   }
 
   .btn-box {
+    position: fixed;
+    bottom: 30rpx;
+    width: 70vw;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
     background-color: #FFFFFF;
-    margin-top: 10px;
-    padding: 30rpx 20rpx;
+    border-radius: 30rpx;
+    overflow: hidden;
+
 
     button {
-      height: 80rpx;
+      width: 100%;
+      height: $kfbtnHeight;
+      line-height: $kfbtnHeight;
       color: #5d3324 !important;
-      background: linear-gradient(90deg, #fee2b7, #fdc383);
+      font-size: 32rpx;
+      background: linear-gradient(90deg, #73E0C3, #A8C6E8);
 
       &::after {
         border: unset;

@@ -24,6 +24,51 @@
       <view>小计:￥<text>{{is_vip?checkedGoodsAmount_vip:checkedGoodsAmount}}</text></view>
     </view>
 
+    <!--选择支付方式-->
+    <!--   <view class="payway_choose">
+      <view class="title">
+        选择支付方式
+      </view>
+      <view class="payway wxpay" @click="choosePayway('wx')">
+        <view class="pull_left">
+          微信支付
+        </view>
+        <view class="pull_right">
+          <text class="iconfont icon-duihao" v-if="payway=='wx'"></text>
+        </view>
+      </view>
+      <view class="payway banlance" @click="choosePayway('banlance')">
+        <view class="pull_left">
+          余额支付
+        </view>
+        <view class="pull_right">
+          <view class="iconfont icon-duihao" v-if="payway=='banlance'"></view>
+        </view>
+      </view>
+    </view> -->
+    <!--选择支付方式-->
+    <view class="payway_choose1">
+      <view class="title">
+        支付方式 :
+      </view>
+
+      <radio-group class="list_payway" @change="payWayChange">
+        <label class="item_payway">
+          <view>
+            <radio value="wx" :checked="payway === 'wx'" />
+          </view>
+          <view>微信支付</view>
+        </label>
+        <label class="item_payway">
+          <view>
+            <radio value="banlance" :checked="payway === 'banlance'" />
+          </view>
+          <view>余额支付</view>
+        </label>
+      </radio-group>
+
+    </view>
+
     <!-- 优惠券 -->
     <view class="coupons-box">
       <!-- <view class="item">
@@ -90,7 +135,6 @@
     mapMutations: mapMutationsCart
   } = createNamespacedHelpers('cart')
   const {
-    // mapGetters: mapGettersAddress,
     mapState: mapStateAddress,
     mapMutations: mapMutationsAddress
   } = createNamespacedHelpers('address')
@@ -104,10 +148,13 @@
         coupon: 0,
         coupon_id: 0,
         user_checked_address: {}, // 收货地址
+        payway: 'wx',
+        paramGoods: null
       };
     },
     computed: {
-      ...mapStateCart(['cart_list', 'couponsList', ]),
+      ...mapState('user', ['userInfo']),
+      ...mapStateCart(['cart_list', 'couponsList', 'gift_list']),
       ...mapStateAddress(['address_list', 'is_public_address', 'default_address_id']),
       ...mapGettersCart(['checkedCount', 'checkedGoodsAmount', 'checkedGoodsAmount_vip']),
 
@@ -117,11 +164,21 @@
           Number(this.coupon)).toFixed(2)
       },
     },
+    onLoad(options) {
+      console.log(this.userInfo);
+      if (options && options.goods) {
+        this.paramGoods = JSON.parse(options.goods);
+        console.log('参数', this.paramGoods);
+      }
+    },
     onShow() {
+      uni.$http.get('user_gifts/').then(res => {
+        this.updateGiftList(res.data.lists);
+        this.addGift();
+      })
       this.is_vip = JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false
-      this.checkedAddress()
-      this.couponChanged()
-      this.addGift()
+      this.checkedAddress();
+      this.couponChanged();
     },
     onUnload() {
       uni.removeStorageSync('user_checked_address')
@@ -129,7 +186,8 @@
     },
     methods: {
       ...mapMutationsAddress(['editCheckedAddress', ]),
-      ...mapMutationsCart(['addGift', 'deleteGift']),
+      ...mapMutationsCart(['addGift', 'deleteGift', 'updateGiftList', 'clearCart', 'removeGoodsById','deleteGift']),
+      ...mapMutations('user',['updateUserInfo']),
 
       // 收货地址
       checkedAddress() {
@@ -143,11 +201,34 @@
         this.countPosterPrice()
       },
 
+      choosePayway(val) {
+        //不是会员且选择余额支付时
+        if (!this.is_vip && val == 'banlance') {
+          uni.showModal({
+            title: '提示',
+            content: '您还不是会员，无法使用余额支付！请先去开通后重试',
+            cancelText: '暂不考虑',
+            confirmText: '去开通',
+            success(res) {
+              if (res.confirm) {
+                uni.navigateTo({
+                  url: '../../mypkg/vip/vip'
+                })
+              }
+            }
+          })
+          return
+        }
+        this.payway = val;
+      },
+
+      payWayChange(e) {
+        this.choosePayway(e.detail.value);
+      },
       // 展示优惠券弹出层
       showCouponsPopup() {
         this.$refs.popup.open('bottom')
       },
-
       // 切换优惠券
       couponChanged(item) {
         if (!item) {
@@ -163,8 +244,8 @@
         } else {
           // 切换
           if (this.checkedGoodsAmount >= item.min_price) {
-            this.coupon = item.price
-            this.coupon_id = item.coupon_id
+            this.coupon = item.price;
+            this.coupon_id = item.coupon_id;
             console.log(item)
             this.$refs.popup.close()
           } else {
@@ -174,14 +255,9 @@
           }
         }
       },
-
       // 提交订单
       onSubmit() {
-        console.log(this.user_checked_address)
-        if (!(this.user_checked_address && this.user_checked_address.address_id)) return uni.$showMsg('请选择收货地址！')
-        this.payWX()
-      },
-      async payWX() {
+        if (!(this.user_checked_address && this.user_checked_address.address_id)) return uni.$showMsg('请选择收货地址！');
         const goods_list = []
         this.cart_list.filter(x => x.is_checked).forEach(x => {
           goods_list.push({
@@ -201,22 +277,121 @@
           parent_id: uni.getStorageSync('parent_id'),
           goods_list: goods_list
         }
-        const { data: res } = await uni.$http.post('wx_order/', form)
-        var res1 = await uni.$http.get('wx_payment/' + res.order_id + '/')
-        const params = res1.data.params
+
+        if (this.payway == 'wx') {
+          this.payWX(form)
+        } else if (this.payway == 'banlance') {
+          this.payBanlance(form);
+        }
+      },
+      //发起微信支付
+      async payWX(form) {
+        const {
+          data: res
+        } = await uni.$http.post('wx_order/', form);
+        var res1 = await uni.$http.get('wx_payment/' + res.order_id + '/');
+        const params = res1.data.params;
         const [err2, res2] = await uni.requestPayment({
           "timeStamp": String(params.timeStamp),
           "nonceStr": params.nonceStr,
           "package": "prepay_id=" + params.prepay_id,
           "signType": "MD5",
-          "paySign": params.sign,
-        })
-        console.log(err2, res2)
-      },
+          "paySign": params.sign
+        });
+        // //支付失败
+        // if (err2) {
+        //   this.handlePayFail(form.goods_list);
+        //   return;
+        // }
+        // //支付成功
+        // if (res2) {
+        //   this.handlePaySuccess(form.goods_list);
+        //   return;
+        // }
+        console.log('微信支付结果', err2, res2);
 
+        const {
+          data: res3
+        } = await uni.$http.get('wxeck_order/' + res.order_id + '/');
+
+        uni.$showMsg(res3.msg);
+
+        if (res3.code === 200) {
+
+          setTimeout(() => {
+            this.deletbuyedGoods(form.goods_list);
+            uni.redirectTo({
+              url: '../../subpkg/orders/orders?index=1'
+            })
+          }, 1500)
+
+        } else if (res3.code === 400) {
+
+          setTimeout(() => {
+            this.deletbuyedGoods(form.goods_list);
+            uni.redirectTo({
+              url: '../../subpkg/orders/orders?index=0'
+            })
+          }, 1500)
+
+        }
+
+      },
+      //发起余额支付
+      async payBanlance(form) {
+        const {
+          data: res
+        } = await uni.$http.post('mini_balance_payment/', form);
+        //成功
+        if (res.code === 200) {
+          uni.$showMsg(res.msg);
+          
+          let userInfo = this.userInfo;
+          userInfo.money_vip -= this.totalPrice;
+          console.log(userInfo);
+          this.updateUserInfo(userInfo);
+          
+          setTimeout(() => {
+            this.deletbuyedGoods(form.goods_list);
+            uni.redirectTo({
+              url: '../../subpkg/orders/orders?index=1'
+            })
+          }, 1500);
+          
+          //失败
+        } else if (res.code === 400) {
+          uni.$showMsg(res.msg);
+        }
+      },
+      //支付成功
+      handlePaySuccess(goods_list) {
+        uni.$showMsg('支付成功');
+        setTimeout(() => {
+          this.deletbuyedGoods(goods_list);
+          uni.redirectTo({
+            url: '../../subpkg/orders/orders?index=1'
+          })
+        }, 1500)
+      },
+      //支付失败
+      handlePayFail(goods_list) {
+        uni.$showMsg('支付失败，请去订单页重新支付');
+        setTimeout(() => {
+          this.deletbuyedGoods(goods_list);
+          uni.redirectTo({
+            url: '../../subpkg/orders/orders?index=0'
+          })
+        }, 1500)
+      },
+      //删除购买商品
+      deletbuyedGoods(goods_list) {
+        goods_list.forEach((goods) => {
+          this.removeGoodsById(goods.id);
+        });
+      },
       // 计算邮费
       countPosterPrice() {
-        console.log(this.cart_list.filter(x=>x.is_checked))
+        console.log(this.cart_list.filter(x => x.is_checked))
         // console.log(this.user_checked_address)
         const province_id = this.user_checked_address.address[0].value - 0
         // console.log(province_id)
@@ -233,15 +408,15 @@
 
 
         // 猫砂
-        let maosha = this.cart_list.filter(x=>x.is_checked).some(item => item.type == 4)
+        let maosha = this.cart_list.filter(x => x.is_checked).some(item => item.type == 4)
         // 试吃
-        let shichi = this.cart_list.filter(x=>x.is_checked).some(item => item.type == 7 || item.type == 8)
+        let shichi = this.cart_list.filter(x => x.is_checked).some(item => item.type == 7 || item.type == 8)
 
         let price = 0
         if (area1) {
           // 新疆 西藏
           let sum_weight = 0
-          this.cart_list.filter(x=>x.is_checked).forEach(item => {
+          this.cart_list.filter(x => x.is_checked).forEach(item => {
             sum_weight += (item.weight - 0) * item.goods_count
           })
           // console.log(sum_weight);
@@ -251,13 +426,13 @@
         } else {
           // console.log(this.cart_list.filter(x=>x.is_checked));
           let ms_num = 0
-          this.cart_list.filter(x=>x.is_checked).forEach(item => {
+          this.cart_list.filter(x => x.is_checked).forEach(item => {
             if (item.type == 4) ms_num = item.goods_count
           })
           if (area2) {
             if (province_id == 150000) {
               var sum = 0
-              this.cart_list.filter(x=>x.is_checked).forEach(item => {
+              this.cart_list.filter(x => x.is_checked).forEach(item => {
                 sum += item.goods_count
               })
               if (this.totalPrice < 60 && sum < 4) {
@@ -290,7 +465,6 @@
         this.postage = price
       },
 
-
       gotoAddress(type) {
         if (type === 1) {
           uni.navigateTo({
@@ -305,8 +479,7 @@
         }
       },
 
-    },
-
+    }
   }
 </script>
 
@@ -320,6 +493,70 @@
 
       &::after {
         border: 0;
+      }
+    }
+  }
+
+  .payway_choose1 {
+    margin: 10px;
+    padding-bottom: 10px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    padding: 30rpx 20rpx;
+    align-items: center;
+
+    .title {
+      margin-right: 20rpx;
+    }
+
+    .list_payway {
+      display: flex;
+
+      .item_payway {
+        display: flex;
+        align-items: center;
+        margin-right: 10rpx;
+
+        radio {
+          transform: scale(.6);
+        }
+      }
+    }
+
+  }
+
+  .payway_choose {
+    margin: 10px;
+    padding-bottom: 10px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    overflow: hidden;
+
+    .title {
+      font-size: 32rpx;
+      text-align: center;
+      margin-top: 20rpx;
+    }
+
+    .payway {
+      display: flex;
+      height: 80rpx;
+      line-height: 80rpx;
+      justify-content: space-between;
+      padding: 10px 15px 0;
+      box-sizing: border-box;
+
+      .pull_left {
+        font-size: 26rpx;
+      }
+
+      .pull_right {
+        .iconfont {
+          font-size: 30rpx;
+          font-weight: bold;
+        }
       }
     }
   }
