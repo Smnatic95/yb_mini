@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "",
-  "enablePullDownRefresh": false,
-  "usingComponents": {
-    "home-goodsitem": "/components/home-goodsitem/home-goodsitem"
-  }
-}

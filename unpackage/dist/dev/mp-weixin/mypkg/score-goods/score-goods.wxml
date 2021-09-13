@@ -1,1 +1,0 @@
-<view class="page"><image class="score_image" src="{{score_image}}" mode="widthFix"></image></view>

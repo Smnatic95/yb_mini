@@ -38,14 +38,15 @@ export default {
       const id = uni.getStorageSync('id');
       const is_staff = uni.getStorageSync('is_staff');
       const parent_id = uni.getStorageSync('parent_id');
-      const [err, coderes] = await uni.login().catch(err => err)
+
+
       if (e.detail.errMsg == "getPhoneNumber:ok") {
         var form = {
-          code: coderes.code,
+          code: getApp().globalData.wxcode,
           encryptedData: e.detail.encryptedData,
           iv: e.detail.iv,
         }
-        if (!parent_id && !id && !is_staff){
+        if (!parent_id && !id && !is_staff) {
           form.parent_id = 0
         }
         if (parent_id == 0) {
@@ -55,11 +56,10 @@ export default {
         } else {
           form.parent_id = parent_id
         }
-        
+        console.log(form);
         const {
           data: res1
         } = await uni.$http.post('login/', form);
-
         if (res1.code !== 200) {
           this.undateToken(false);
           uni.$showMsg('授权失败！请重试')
@@ -69,7 +69,6 @@ export default {
           this.updateVip(res1.user_list[0].vip_active);
           uni.setStorageSync('id', res1.id);
           uni.setStorageSync('is_staff', res1.is_staff);
-          console.log('存储parent_id', res1.parent_id);
           uni.setStorageSync('parent_id', res1.parent_id);
           //获取用户数据
           this.getCouponslList();

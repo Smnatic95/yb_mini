@@ -36,11 +36,13 @@ export default {
       state.signList = list
       uni.setStorageSync('signList', JSON.stringify(state.signList))
     },
+    
     // 签到
     updateSignStatus(state, i) {
       state.signList[i - 1].num = 1
       uni.setStorageSync('signList', JSON.stringify(state.signList))
     },
+    
     reLoadUserInfo(state) {
       let state1 = {
         userInfo: JSON.parse(uni.getStorageSync('userInfo') || "{}"),
@@ -52,5 +54,5 @@ export default {
         state[key] = state1[key];
       })
     }
-  },
+  }
 }

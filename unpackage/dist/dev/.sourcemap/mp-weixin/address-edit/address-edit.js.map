@@ -1,1 +1,0 @@
-{"version":3,"sources":["uni-app:///main.js"],"names":["createPage","Page"],"mappings":";;;;;;;;;;kDAAA;AACA;AACA,0N;AACAA,UAAU,CAACC,oBAAD,CAAV,C","file":"address-edit/address-edit.js","sourcesContent":["import 'uni-pages';\nimport Vue from 'vue'\nimport Page from './address-edit/address-edit.vue'\ncreatePage(Page)"],"sourceRoot":""}

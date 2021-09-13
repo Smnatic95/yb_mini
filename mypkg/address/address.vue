@@ -1,6 +1,6 @@
 <template>
   <view class="page">
-    
+
     <uni-notice-bar single="true" text="左滑可编辑地址"></uni-notice-bar>
 
     <uni-swipe-action>
@@ -42,12 +42,12 @@
     },
 
     onLoad(option) {
-      // console.log(option)
-      this.from = option.from
-      this.type = option.type
-
-      // this.getAreas()
-      this.getAddressList()
+      console.log(option);
+      this.from = option.from;
+      this.type = option.type;
+    },
+    onShow() {
+      this.getAddressList();
     },
 
     computed: {
@@ -92,35 +92,10 @@
             value: (item.district_id).toString()
           })
         })
-        // console.log(res.data)
-        this.updateAddress(res.data)
-        this.updateDefaultAddress(res.default_address)
+        console.log(res);
+        this.updateAddress(res.data);
+        this.updateDefaultAddress(res.default_address);
       },
-
-      // // 省市区列表
-      // async getAreas() {
-      //   if (uni.getStorageSync('areas')) return
-      //   const {
-      //     data: res
-      //   } = await uni.$http.get('areas/')
-      //   // console.log(res)
-      //   if (res.code !== 200) return uni.$showMsg(res.errmsg)
-      //   const arr = res.options
-      //   arr.forEach(item => {
-      //     item.text = item.label
-      //     if (item.children) {
-      //       item.children.forEach(item2 => {
-      //         item2.text = item2.label
-      //         if (item2.children) {
-      //           item2.children.forEach(item3 => {
-      //             item3.text = item3.label
-      //           })
-      //         }
-      //       })
-      //     }
-      //   })
-      //   uni.setStorageSync('areas', JSON.stringify(arr))
-      // },
 
       // 添加地址
       addAddress() {
@@ -132,8 +107,7 @@
 
       // 删除地址
       async deleteAddressHandler(id) {
-        if (id == this.default_address_id) return uni.$showMsg('默认地址不允许删除')
-        
+        if (id == this.default_address_id) return uni.$showMsg('默认地址不允许删除');
         const {
           data: res
         } = await uni.$http.delete(`address/${id}/`)
@@ -162,8 +136,8 @@
   }
 
   @import '../../static/iconfont/iconfont.css';
-  
-  uni-notice-bar{
+
+  uni-notice-bar {
     text-align: center;
   }
 

@@ -38,7 +38,9 @@
     },
 
     async onPullDownRefresh() {
-      const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile;
+      const mobile = JSON.parse(
+        uni.getStorageSync('userInfo') || "{}"
+      ).mobile;
       if (!mobile) return uni.stopPullDownRefresh()
       const {
         data: res

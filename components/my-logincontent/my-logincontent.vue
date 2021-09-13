@@ -276,8 +276,8 @@
     },
     methods: {
       ...mapMutationsUser(['undateToken', 'updateUserInfo', 'reLoadUserInfo']),
-      ...mapMutations('cart',['reloadCart']),
-      ...mapMutations('pet',['updatePetList']),
+      ...mapMutations('cart', ['reloadCart']),
+      ...mapMutations('pet', ['updatePetList']),
       // 退出登录
       logOut() {
         this.$refs.popup.open('top')
@@ -292,20 +292,15 @@
           } = uni.getStorageInfoSync();
           let initKeys = ['__DC_STAT_UUID', 'isIphoneX', 'code', 'areas', 'goods_list'],
             deleteKeys = storageKeyList.filter(item1 => !initKeys.some(item2 => item2 == item1));
-           
-           console.log(deleteKeys) 
-            
           deleteKeys.forEach((key) => {
-            console.log(key);
             uni.removeStorageSync(key);
           })
-          
           this.reLoadUserInfo();
           this.reloadCart();
           this.updatePetList([]);
           uni.$showMsg('退出成功！');
           this.$refs.popup.close();
-          
+          getApp().getwxCode();
         } catch (e) {
           console.log(e);
         }

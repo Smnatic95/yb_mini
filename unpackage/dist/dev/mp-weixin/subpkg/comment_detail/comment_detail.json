@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "评价详情",
-  "enablePullDownRefresh": false,
-  "usingComponents": {
-    "my-comment": "/subpkg/my-comment/my-comment"
-  }
-}

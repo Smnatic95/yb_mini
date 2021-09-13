@@ -16,7 +16,6 @@
       <view class="integral">
         <image src="/static/images/sign.png" mode=""></image>
         <text class="text2">{{bonus}}</text>
-        <!-- <uni-icons type="arrowright" size="12" color="#FFA424"></uni-icons> -->
       </view>
     </view>
 
@@ -25,8 +24,6 @@
         <view class="sign-item" v-for="(item,i) in signList" :key='i'>
           <view class="date" v-if="item.num==0">{{i+1}}</view>
           <view class="date active" v-else>{{i+1}}</view>
-          <!-- <image src="/static/images/sign.png" v-else></image> -->
-          <!-- <view class="code">+{{is_vip?'15':'5'}}</view> -->
         </view>
       </view>
 
@@ -71,19 +68,15 @@
     },
     data() {
       return {
-        // bonus: JSON.parse(uni.getStorageSync('userInfo')).bonus_money,
-        // dateList: ['第1天', '第2天', '第3天', '第4天', '第5天', '第6天', '第7天', ],
         day: 0, // 当前天数
         integral: 0, // 今日签到积分
         total: 0, // 连续签到天数
         total_day: 0, // 当天前总天数
         next_integral: 0,
-        // signList: [],
       };
     },
     onLoad() {
-      this.getSignHistory()
-      // this.getUserInfo()
+      this.getSignHistory();
     },
     computed: {
       ...mapStateCart(['is_vip']),
@@ -96,57 +89,45 @@
       ...mapMutationsUser(['updateSignList', 'updateSignStatus', 'updateUserInfo']),
 
       showPopup() {
-        var date = new Date()
-        var d = date.getDate()
-
+        var date = new Date();
+        var d = date.getDate();
+        console.log(d)
         // 连续签到
-        let arr = this.signList.filter((x, i) => i <= d - 1)
-        arr = arr.reverse()
-        console.log(arr)
-        this.total_day = arr.length
-        const idx = arr.findIndex((x, i) => i >= 1 && x.num == 0)
-        console.log(idx)
-        arr.splice(idx)
-        console.log(arr)
+        let arr = this.signList.filter((x, i) => i <= d - 1).reverse();
+        this.total_day = arr.length;
+        const idx = arr.findIndex((x, i) => i >= 1 && x.num == 0);
+        arr.splice(idx);
+        this.total = arr.length;
+        this.day = d;
 
-        // if (this.signList[d - 1].num !== 0) {
-        this.total = arr.length
-        // } else {
-        //   this.total = arr.length + 1
-        // }
+        if (this.total == 10) {
+          this.integral = this.is_vip ? 40 : 20
+        } else if (this.total == 20) {
+          this.integral = this.is_vip ? 100 : 50
+        } else if (this.total == this.signList.length) { // 最后一天
+          this.integral = this.is_vip ? 200 : 100
+        } else {
+          this.integral = this.is_vip ? 4 : 2
+        }
 
-        this.day = d
-        // if (this.total == this.total_day) {
-          if (this.total == 10) {
-            this.integral = this.is_vip ? 40 : 20
-          } else if (this.total == 20) {
-            this.integral = this.is_vip ? 100 : 50
-          } else if (this.total == this.signList.length) { // 最后一天
-            this.integral = this.is_vip ? 200 : 100
-          } else {
-            this.integral = this.is_vip ? 4 : 2
-          }
-
-          if (this.total == 9) {
-            this.next_integral = this.is_vip ? 40 : 20
-          } else if (this.total == 19) {
-            this.next_integral = this.is_vip ? 100 : 40
-          } else if (this.total == this.signList.length - 1) {
-            this.next_integral = this.is_vip ? 200 : 100
-          } else {
-            this.next_integral = this.is_vip ? 4 : 2
-          }
-        // } else {
-        //   this.integral = this.is_vip ? 4 : 2
-        //   this.next_integral = this.is_vip ? 4 : 2
-        // }
+        if (this.total == 9) {
+          this.next_integral = this.is_vip ? 40 : 20
+        } else if (this.total == 19) {
+          this.next_integral = this.is_vip ? 100 : 40
+        } else if (this.total == this.signList.length - 1) {
+          this.next_integral = this.is_vip ? 200 : 100
+        } else {
+          this.next_integral = this.is_vip ? 4 : 2
+        }
 
         // 已签到
-        if (this.signList[d - 1].num !== 0) return
-        this.onSign(d)
+        if (this.signList[d - 1].num !== 0) return;
+        console.log('今日未签到,onSign()');
+        this.onSign(d);
       },
+
       async onSign(d) {
-        const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
+        const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile;
         const {
           data: res
         } = await uni.$http.post(`user_sign_in_day/`, {
@@ -156,23 +137,20 @@
             num: this.integral
           }
         })
-        // console.log(res)
-        if (res.code !== 200) return uni.$showMsg(res.msg)
-
+        if (res.code !== 200) return uni.$showMsg(res.msg);
         uni.$showMsg(res.msg)
-        this.updateSignStatus(d)
-        this.$refs.popup.open()
-        this.getUserInfo()
+        this.updateSignStatus(d);
+        this.$refs.popup.open();
+        this.getUserInfo();
       },
+
       // 更新用户信息
       async getUserInfo() {
         const {
           data: res
-        } = await uni.$http.get(`user_phone/${this.userInfo.mobile}`)
-        // console.log(res)
+        } = await uni.$http.get(`user_phone/${this.userInfo.mobile}/`);
         this.updateUserInfo(res.user_list[0])
       },
-
 
       getDate() {
         var date = new Date()
@@ -185,14 +163,15 @@
       },
 
       async getSignHistory() {
-        const mobile = JSON.parse(uni.getStorageSync('userInfo')).mobile
+        const mobile = JSON.parse(uni.getStorageSync('userInfo') || {}).mobile;
         const {
           data: res
-        } = await uni.$http.get(`user_sign_in/${mobile}/`)
+        } = await uni.$http.get(`user_sign_in/${mobile}/`);
         if (res.code !== 200) return
+        console.log(res.sign_list);
         this.updateSignList(res.sign_list);
         this.showPopup();;
-      },
+      }
 
     }
   }
@@ -400,9 +379,6 @@
         margin-top: 30rpx;
       }
     }
-
-
-
 
   }
 </style>

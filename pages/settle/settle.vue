@@ -165,19 +165,19 @@
       },
     },
     onLoad(options) {
-      console.log(this.userInfo);
       if (options && options.goods) {
         this.paramGoods = JSON.parse(options.goods);
         console.log('参数', this.paramGoods);
       }
     },
     onShow() {
+      console.log('onshow')
       uni.$http.get('user_gifts/').then(res => {
         this.updateGiftList(res.data.lists);
         this.addGift();
       })
       this.is_vip = JSON.parse(uni.getStorageSync('userInfo') || "{}").vip_active || false
-      this.checkedAddress();
+      this.getCheckedAddress();
       this.couponChanged();
     },
     onUnload() {
@@ -186,19 +186,21 @@
     },
     methods: {
       ...mapMutationsAddress(['editCheckedAddress', ]),
-      ...mapMutationsCart(['addGift', 'deleteGift', 'updateGiftList', 'clearCart', 'removeGoodsById','deleteGift']),
-      ...mapMutations('user',['updateUserInfo']),
+      ...mapMutationsCart(['addGift', 'deleteGift', 'updateGiftList', 'clearCart', 'removeGoodsById', 'deleteGift']),
+      ...mapMutations('user', ['updateUserInfo']),
 
       // 收货地址
-      checkedAddress() {
-        var checked_address_stroge = uni.getStorageSync('user_checked_address')
+      getCheckedAddress() {
+        console.log('获取收获地址----');
+        var checked_address_stroge = uni.getStorageSync('user_checked_address');
         if (checked_address_stroge) {
-          this.user_checked_address = JSON.parse(checked_address_stroge)
-          console.log(this.user_checked_address)
+          this.user_checked_address = JSON.parse(checked_address_stroge);
         } else {
-          this.user_checked_address = this.address_list.filter(x => x.address_id == this.default_address_id)[0]
+          this.user_checked_address = this.address_list.filter(x => x.address_id == this.default_address_id)[0];
         }
-        this.countPosterPrice()
+        if (this.user_checked_address) {
+          this.countPosterPrice();
+        }
       },
 
       choosePayway(val) {
@@ -345,19 +347,19 @@
         //成功
         if (res.code === 200) {
           uni.$showMsg(res.msg);
-          
+
           let userInfo = this.userInfo;
           userInfo.money_vip -= this.totalPrice;
           console.log(userInfo);
           this.updateUserInfo(userInfo);
-          
+
           setTimeout(() => {
             this.deletbuyedGoods(form.goods_list);
             uni.redirectTo({
               url: '../../subpkg/orders/orders?index=1'
             })
           }, 1500);
-          
+
           //失败
         } else if (res.code === 400) {
           uni.$showMsg(res.msg);

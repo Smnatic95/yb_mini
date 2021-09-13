@@ -1,1 +1,0 @@
-{"version":3,"sources":["uni-app:///main.js"],"names":["createPage","Page"],"mappings":";;;;;;;;;;kDAAA;AACA;AACA,iO;AACAA,UAAU,CAACC,iBAAD,CAAV,C","file":"subpkg/logistics-template/my-orders.js","sourcesContent":["import 'uni-pages';\nimport Vue from 'vue'\nimport Page from './subpkg/logistics-template/my-orders.vue'\ncreatePage(Page)"],"sourceRoot":""}

@@ -1,1 +1,0 @@
-<view class="pages"><view class="pic"><image src="{{topImg}}" mode></image></view><home-goodsitem vue-id="7d977244-1" goodsList="{{moreList}}" bind:__l="__l"></home-goodsitem></view>
