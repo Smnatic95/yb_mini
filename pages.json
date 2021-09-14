@@ -115,7 +115,16 @@
           "enablePullDownRefresh": false
         }
       }
-    ]
+        ,{
+                    "path" : "order-evaluate/order-evaluate",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "发表评价",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
   }, {
     "root": "mypkg",
     "pages": [{

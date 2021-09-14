@@ -248,6 +248,8 @@
 </script>
 
 <style>
+  @import '/static/iconfont/iconfont.css';
+  
   view {
     --color-money: tomato;
   }

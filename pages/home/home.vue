@@ -926,7 +926,7 @@
         padding: 20rpx 16rpx;
         font-weight: 500;
         color: #8F99A7;
-        transition: all .1s ease-in;
+        transition: all .05s ease-in;
 
         &.active {
           color: #294D7C;

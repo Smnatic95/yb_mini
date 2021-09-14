@@ -1,7 +1,8 @@
 <template>
   <view class="box-crop-pic">
     <image-cropper ref="imagecropper" @tapcut="mycut" @load="cropperload" :imgSrc="imgSrc" :limit_move='true'
-      :disable_width="100" :disable_height="100" :export_scale="1" :quality="1" img_width="100%" :disable_rotate="true">
+      :width="200" :height="200" :max_width="500" :max_height="1000" :min_width="100" :min_height="100" :disable_ratio="disable_ratio" :export_scale="1"
+      :quality="1" img_width="100%" :disable_rotate="true">
     </image-cropper>
     <view class="bottom_actions">
       <view class="btn_done" @click="handledoneclick">
@@ -15,19 +16,23 @@
   export default {
     data() {
       return {
-        imgSrc: null
+        imgSrc: null,
+        disable_ratio: true
       }
     },
     onLoad(options) {
+      console.log(options)
       this.imgSrc = options.imgSrc ? options.imgSrc :
-        'https://img.souutu.com/2021/0902/20210902014611190.jpg.260.343.jpg'
+        'https://img.souutu.com/2021/0902/20210902014611190.jpg.260.343.jpg';
+      if (options.dad == 'evaluate') {
+        this.disable_ratio = false
+      }
     },
     methods: {
       cropperload(e) {
         console.log('cropper加载完毕');
       },
       mycut(e) {
-        console.log(e.detail.url);
         uni.previewImage({
           urls: [e.detail.url],
           current: e.detail.url,
@@ -37,6 +42,9 @@
         })
       },
       handledoneclick() {
+        uni.showLoading({
+          title: '图片上传中'
+        })
         this.$refs.imagecropper.getImg((obj) => {
           uni.uploadFile({
             url: uni.$baseUrl + 'pet_image/',
@@ -44,31 +52,29 @@
             fileType: 'image',
             name: 'data',
             success: (res) => {
-              console.log('上传成功===uploadImage success, res is:', res.data)
-              let requesData = JSON.parse(res.data);         
+              uni.hideLoading();
+              let requesData = JSON.parse(res.data);
               var pages = getCurrentPages(); //当前页
               var beforePage = pages[pages.length - 2]; //上个页面
-              beforePage.$vm.addPetForm.avatar = requesData.image;
+              beforePage.$vm.onCropedImg(requesData.image);
               uni.showToast({
                 title: '上传成功',
                 icon: 'success',
                 duration: 1000
-              })            
+              })
               setTimeout(() => {
                 uni.navigateBack();
-              },1000)
+              }, 1000)
             },
-            fail: (err) => {   
-              console.log('上传失败uploadImage fail', err);
+            fail: (err) => {
+              uni.hideLoading();
               uni.showModal({
                 content: err.errMsg,
                 showCancel: false
               });
-              
+
             }
           })
-
-
         })
       }
     }

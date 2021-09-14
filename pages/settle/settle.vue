@@ -52,20 +52,20 @@
         支付方式 :
       </view>
 
-      <radio-group class="list_payway" @change="payWayChange">
-        <label class="item_payway">
+      <view class="list_payway">
+        <view class="item_payway" @click="payWayChange('wx')">
           <view>
             <radio value="wx" :checked="payway === 'wx'" />
           </view>
           <view>微信支付</view>
-        </label>
-        <label class="item_payway">
+        </view>
+        <view class="item_payway" @click="payWayChange('banlance')">
           <view>
             <radio value="banlance" :checked="payway === 'banlance'" />
           </view>
           <view>余额支付</view>
-        </label>
-      </radio-group>
+        </view>
+      </view>
 
     </view>
 
@@ -206,7 +206,7 @@
       choosePayway(val) {
         //不是会员且选择余额支付时
         if (!this.is_vip && val == 'banlance') {
-          uni.showModal({
+          return uni.showModal({
             title: '提示',
             content: '您还不是会员，无法使用余额支付！请先去开通后重试',
             cancelText: '暂不考虑',
@@ -219,13 +219,12 @@
               }
             }
           })
-          return
         }
         this.payway = val;
       },
 
-      payWayChange(e) {
-        this.choosePayway(e.detail.value);
+      payWayChange(val) {
+        this.choosePayway(val);
       },
       // 展示优惠券弹出层
       showCouponsPopup() {

@@ -82,7 +82,6 @@
     mapMutations,
     mapActions
   } from 'vuex'
-  // import imageCropper from '../../components/image-cropper/image-cropper.wxml'
   export default {
     data() {
       const currentDate = this.getDate({
@@ -108,9 +107,6 @@
         pet_info_init_is_default: null
       };
     },
-    /*components: {
-      imageCropper
-    },*/
     computed: {
       isCatChecked() {
         return this.addPetForm.type == 1;
@@ -215,6 +211,9 @@
       // 默认改变
       deaultChange() {
         this.addPetForm.is_default = !this.addPetForm.is_default
+      },
+      onCropedImg(imgsrc){
+        this.addPetForm.avatar = imgsrc;
       },
       //提交成功回调
       successCallback() {
