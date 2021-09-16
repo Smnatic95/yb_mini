@@ -1,23 +1,67 @@
 const dateUtil = {
-  //获取当前月份的总天数
-  getDays: () => {
-    var date = new Date();
-    //将当前月份加1，下移到下一个月
-    date.setMonth(date.getMonth() + 1);
-    //将当前的日期置为0，
-    date.setDate(0);
-    //再获取天数即取上个月的最后一天的天数
-    var days = date.getDate();
-    return days;
-  },
   /**
    * 获取某个月的总天数
    * 
    */
   getDaysOfMonth: (year, month) => {
-    var date = new Date(year, month, 0);
-    var days = date.getDate();
-    return days;
+    return new Date(year, month, 0).getDate();
+  },
+  /**
+   * 将时间戳格式化
+   * @param number timestamp  eg:1465963958000 length:13
+   * @param string Fmt  eg:Y-m-d H:i:s
+   * @param boolean hasZero  eg:true|false
+   * @returns {string}
+   */
+  timeFormat: (timestamp, Fmt, hasZero) => {
+    var date = (typeof timestamp != 'undefined' && timestamp != '') ? new Date(timestamp.toString().length == 10 ?
+      Number(timestamp + '000') : timestamp) : new Date()
+    hasZero = (typeof hasZero === 'boolean') ? hasZero : true
+    var Y = date.getFullYear()
+    var m = (hasZero && date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+    var d = (hasZero && date.getDate() < 10) ? '0' + date.getDate() : date.getDate()
+    var H = (hasZero && date.getHours() < 10) ? '0' + date.getHours() : date.getHours()
+    var i = (hasZero && date.getMinutes() < 10) ? '0' + date.getMinutes() : date.getMinutes()
+    var s = (hasZero && date.getSeconds() < 10) ? '0' + date.getSeconds() : date.getSeconds()
+    var formatTime = ''
+    switch (Fmt) {
+      case 'YmdHis':
+        formatTime = Y + m + d + H + i + s
+        break
+      case 'Y-m-d H:i:s':
+        formatTime = Y + '-' + m + '-' + d + ' ' + H + ':' + i + ':' + s
+        break
+      case 'Y/m/d H:i:s':
+        formatTime = Y + '/' + m + '/' + d + ' ' + H + ':' + i + ':' + s
+        break
+      case 'Y-m-d H:i':
+        formatTime = Y + '-' + m + '-' + d + ' ' + H + ':' + i
+        break
+      case 'Y-m-d H':
+        formatTime = Y + '-' + m + '-' + d + ' ' + H
+        break
+      case 'Y-m-d':
+        formatTime = Y + '-' + m + '-' + d
+        break
+      case 'Ymd':
+        formatTime = Y + m + d
+        break
+      case 'H:i:s':
+        formatTime = H + ':' + i + ':' + s
+        break
+      default:
+        formatTime = Y + '-' + m + '-' + d + ' ' + H + ':' + i + ':' + s
+        break
+    }
+    return formatTime
+  },
+  /**
+   * 时间字符串转时间戳
+   * @param string dateStr  eg:2016-06-16 16:15:59
+   * @returns {number}
+   */
+  dateStr2timestamp: (dateStr) => {
+    return (typeof dateStr === 'string') ? Date.parse(new Date(dateStr)) : Date.parse(new Date())
   }
 
 }

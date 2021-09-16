@@ -1,7 +1,9 @@
 import date from './date.js';
+import dataType from './dataType.js';
 
 const pUtil = {
-  date
+  date,
+  dataType
 }
 
 export default pUtil

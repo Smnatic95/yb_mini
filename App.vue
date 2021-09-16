@@ -15,6 +15,9 @@
       wxcode: null
     },
     onLaunch: function() {
+
+      console.log( uni.$pUtil.date.getDaysOfMonth(2021,9)  )
+      
       let _self = this;
       uni.getSystemInfo({
         success: res => {
@@ -26,7 +29,6 @@
           }
         }
       })
-      uni.$pUtil.date.log(11111111111);
       this.getGiftList();
       this.getAreas();
     },
