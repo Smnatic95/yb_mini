@@ -2,10 +2,15 @@ import Vue from 'vue'
 import App from './App'
 import store from './store/store.js'
 
+import pUtil  from '@/static/util/index.js'
+
 
 Vue.filter("tofixed2",(data)=>{
   return data.toFixed(2);
 })
+
+uni.$pUtil = pUtil;
+
 
 // 配置网络请求
 import {

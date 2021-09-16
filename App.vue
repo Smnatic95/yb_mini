@@ -26,7 +26,7 @@
           }
         }
       })
-      console.log('App Launch')
+      uni.$pUtil.date.log(11111111111);
       this.getGiftList();
       this.getAreas();
     },
@@ -36,9 +36,6 @@
       }
       this.getwxCode();
       this.autoUpdate();
-    },
-    onHide: function() {
-
     },
     methods: {
       ...mapMutationsCart(['updateGiftList']),
@@ -249,7 +246,7 @@
 
 <style>
   @import '/static/iconfont/iconfont.css';
-  
+
   view {
     --color-money: tomato;
   }
